@@ -3,3 +3,4 @@
 
 ## Developers
 JonElliot Antognoni - jonantognoni@knights.ucf.edu
+Lauren Bravine - laurenashley@knights.ucf.edu
