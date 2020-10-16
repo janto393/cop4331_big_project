@@ -2,4 +2,4 @@
 
 
 ## Developers
-JonElliot Antognoni
+JonElliot Antognoni - jonantognoni@knights.ucf.edu
