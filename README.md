@@ -2,6 +2,13 @@
 
 
 ## Developers
-JonElliot Antognoni - jonantognoni@knights.ucf.edu
-Lauren Bravine - laurenashley@knights.ucf.edu
-Mahad Ibrahim - mahadibrahim@knights.ucf.edu
+<h3> Group Manager </h3>
+JonElliot Antognoni - jonantognoni@knights.ucf.edu <br/>
+
+<h3> Front-End </h3>
+Lauren Bravine - laurenashley@knights.ucf.edu <br/>
+Mahad Ibrahim - mahadibrahim@knights.ucf.edu <br/>
+
+<h3> API </h3>
+
+<h3> Database </h3>
