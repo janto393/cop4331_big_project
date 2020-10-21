@@ -8,6 +8,7 @@ JonElliot Antognoni - jonantognoni@knights.ucf.edu <br/>
 <h3> Front-End </h3>
 Lauren Bravine - laurenashley@knights.ucf.edu <br/>
 Mahad Ibrahim - mahadibrahim@knights.ucf.edu <br/>
+Camilo Romero - cromero048@knights.ucf.edu <br/>
 
 <h3> API </h3>
 
