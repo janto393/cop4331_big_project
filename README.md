@@ -13,3 +13,4 @@ Camilo Romero - cromero048@knights.ucf.edu <br/>
 <h3> API </h3>
 
 <h3> Database </h3>
+Anthony Mompoint - anthonymompoint@knights.ucf.edu <br/>
