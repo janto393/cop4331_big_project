@@ -1,0 +1,14 @@
+{
+  $jsonSchema: {
+    bsonType: 'object',
+    required: [
+      'question'
+    ],
+    properties: {
+      question: {
+        bsonType: 'string',
+        description: 'Predetermined recovery question.'
+      }
+    }
+  }
+}
