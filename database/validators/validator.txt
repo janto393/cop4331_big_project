@@ -1,0 +1,63 @@
+{
+  $jsonSchema:
+  {
+    bsonType: "object",
+    required: [username, password, firstName, lastName, email, recoverQuestion1, recoverAnswer1, recoverQuestion2, recoverAnswer2, recoverQuestion3, recoverAnswer3, isVerified],
+    properties:
+    {
+      username:
+      {
+        bsonType: "string",
+        description: "Must be unique (case insensitive."
+      },
+      password:
+      {
+        bsonType: "string",
+        description: "Case sensitive"
+      },
+      firstName:
+      {
+        bsonType: "string"
+      },
+      lastName:
+      {
+        bsonType: "string"
+      },
+      email:
+      {
+        bsonType: "string"
+      },
+      recoverQuestion1:
+      {
+        bsonType: "objectId"
+      },
+      recoverAnswer1:
+      {
+        bsonType: "string",
+        description: "case insensitive"
+      },
+      recoverQuestion2:
+      {
+        bsonType: "objectId",
+      },
+      recoverAnswer2:
+      {
+        bsonType: "string",
+        description: "case insensitive"
+      },
+      recoverQuestion3:
+      {
+        bsonType: "objectid"
+      },
+      recoverAnswer3:
+      {
+        bsonType: "string",
+        description: "case insensitive"
+      },
+      isVerified:
+      {
+        bsonType: "bool"
+      }
+    }
+  }
+}
