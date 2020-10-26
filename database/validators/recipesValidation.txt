@@ -1,0 +1,23 @@
+{
+  $jsonSchema:
+  {
+    bsonType: 'object',
+    required: ['publicRecipe', 'title', 'author'],
+    properties:
+    {
+      publicRecipe:
+      {
+        bsonType: 'bool'
+      },
+      title:
+      {
+        bsonType: 'string'
+      },
+      author:
+      {
+        bsonType: 'objectId',
+        description: 'Acts as foreign key linking User to Recipe'
+      }
+    }
+  }
+}
