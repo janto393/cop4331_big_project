@@ -1,0 +1,14 @@
+{
+  $jsonSchema:
+  {
+    bsonType: "objectId",
+    required: ["name"],
+    properties:
+    {
+      name:
+      {
+        bsonType: "string"
+      }
+    }
+  }
+}
