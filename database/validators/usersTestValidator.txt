@@ -36,29 +36,18 @@
       email: {
         bsonType: 'string'
       },
-      recoverQuestion1: {
-        bsonType: 'objectId'
-      },
-      recoverAnswer1: {
-        bsonType: 'string',
-        description: 'case insensitive'
-      },
-      recoverQuestion2: {
-        bsonType: 'objectId'
-      },
-      recoverAnswer2: {
-        bsonType: 'string',
-        description: 'case insensitive'
-      },
-      recoverQuestion3: {
-        bsonType: 'objectId'
-      },
-      recoverAnswer3: {
-        bsonType: 'string',
-        description: 'case insensitive'
+      phoneNumber: {
+        bsonType: 'int'
       },
       isVerified: {
         bsonType: 'bool'
+      },
+      favoriteRecipes: {
+        bsonType: 'array',
+        description: 'Array of recipe objects',
+        items: {
+          bsonType: 'objectId'
+        }
       }
     }
   }
