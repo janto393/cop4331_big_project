@@ -1,0 +1,10 @@
+{
+  $jsonSchema: {
+    bsonType: 'objectId',
+    properties: {
+      name: {
+        bsonType: 'string'
+      }
+    }
+  }
+}
