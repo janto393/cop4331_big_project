@@ -1,39 +1,40 @@
 {
-  $jsonSchema:
-  {
+  $jsonSchema: {
     bsonType: 'object',
-    required:
-    ['publicRecipe', 'title', 'author'],
-    properties:
-    {
-      publicRecipe:
-      {
+    required: [
+      'publicRecipe',
+      'title',
+      'author'
+    ],
+    properties: {
+      publicRecipe: {
         bsonType: 'bool'
       },
-      title:
-      {
+      title: {
         bsonType: 'string'
       },
-      author:
-      {
+      author: {
         bsonType: 'objectId',
         description: 'Acts as foreign key linking User to Recipe'
       },
-      instructions:
-      {
+      instructions: {
         bsonType: 'array',
         description: 'Each element in array is a step',
-        items:
-        {
+        items: {
           bsonType: 'string'
         }
       },
-      ingredients:
-      {
+      categories: {
+        bsonType: 'array',
+        items: {
+          bsonType: 'objectId',
+          description: 'acts as a foreign key to the categories collection'
+        }
+      },
+      ingredients: {
         bsonType: 'array',
         description: 'Each element acts as foreign key linking ingredient object to recipe. Stored as mutable tuple with ingredient ID, and amount/unit in both metric and imperial',
-        items:
-        [
+        items: [
           {
             bsonType: 'objectId',
             description: 'Ingredient name (foreign key)'
