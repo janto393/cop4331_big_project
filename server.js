@@ -1,30 +1,25 @@
-const express = require('express');
+// Program dependencies
 const bodyParser = require('body-parser');
 const cors = require('cors');
-
-// // var mongodbUri = require('mongodb-uri');
-// var uri = 'mongodb+srv://App_Systems:COP4331@cop4331-big-project.sgmpq.mongodb.net/test';
-// // var uriObject = mongodbUri.parse(uri);
-// var uriObject = mongodb.parse(uri);
-
-const path = require('path');           
-const PORT = process.env.PORT || 5000;  
+require('dotenv').config();
+const express = require('express');
+const MongoClient = require('mongodb').MongoClient;
+const path = require('path');
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+// Environment variables
+const PORT = process.env.PORT || 5000;
 app.set('port', (process.env.PORT || 5000));
-
-const MongoClient = require('mongodb').MongoClient;
-
-require('dotenv').config();
-
 const url = process.env.MONGODB_URI;
 
+// Initialize database object and connect
 const client = new MongoClient(url);
 client.connect();
-// 2 Q
+
+// login endpoint
 app.post('/login', async (req, res, next) => 
 {
   // incoming: username, password
@@ -61,8 +56,9 @@ app.post('/login', async (req, res, next) =>
   res.status(200);
   res.json(ret);
 });
-// 3 Q
-app.post('/registerUSer', async (req, res, next) =>
+
+// Register Endpoint
+app.post('/registerUser', async (req, res, next) =>
 {
   // incoming: userId, color
   // outgoing: userID, username, email, firstName, lastName, profilePicture
@@ -108,6 +104,7 @@ app.post('/registerUSer', async (req, res, next) =>
   res.status(200).json(ret);
 });
 
+// User verification endpoint
 app.post('/verifyUser', async (req, res, next) => 
 {
   // incoming: username, password
@@ -133,6 +130,7 @@ app.post('/verifyUser', async (req, res, next) =>
   res.status(200).json(ret);
 });
 
+// update profile endpoint
 app.post('/updateProfile', async (req, res, next) =>{
     var error = '';
     const { userID, username, password, firstName, lastName, profilePicture} = req.body;
