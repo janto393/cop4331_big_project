@@ -72,4 +72,52 @@ app.use((req, res, next) =>
   next();
 });
 
+// login endpoint
+app.post('/login', async (req, res, next) => 
+{
+  // incoming: username, password
+  // outgoing: userID, username, email, firstName, lastName, profilePicture
+  // isVerified, favoriteRecipes, error
+
+ var error = '';
+ const { username, password } = req.body;
+ const db = client.db();
+ // IDK name of db for users.
+ const results = await db.collection('Users').find({username:username, password:password}).toArray();
+ var userID = -1;
+ var email = '';
+ var firstName = '';
+ var lastName = '';
+ var profilePicture = ''; // Does picture get stored in database as a string?
+ var isVerified = false;
+ var favoriteRecipes = null;
+ 
+ if( results.length > 0 )
+	{
+		userID = results[0].userID;
+		username = results[0].username;
+		email = results[0].email;
+		firstName = results[0].firstName;
+		lastName = results[0].lastName;
+		profilePicture = results[0].profilePicture;
+		isVerified = results[0].isVerified;
+		favoriteRecipes = results[0].favoriteRecipes;
+	}
+
+  var ret = {
+							userID : userID,
+							username : username,
+							email : email,
+							firstName : firstName,
+							lastName:lastName,
+							profilePicture : profilePicture,
+							isVerified : isVerified,
+							favoriteRecipes : favoriteRecipes,
+							error : ''
+						};
+
+  res.status(200);
+  res.json(ret);
+});
+
 app.listen(5000); // start Node + Express server on port 5000
