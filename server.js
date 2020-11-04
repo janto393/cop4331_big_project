@@ -2,6 +2,11 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+// // var mongodbUri = require('mongodb-uri');
+// var uri = 'mongodb+srv://App_Systems:COP4331@cop4331-big-project.sgmpq.mongodb.net/test';
+// // var uriObject = mongodbUri.parse(uri);
+// var uriObject = mongodb.parse(uri);
+
 const path = require('path');           
 const PORT = process.env.PORT || 5000;  
 
@@ -14,12 +19,13 @@ app.set('port', (process.env.PORT || 5000));
 const MongoClient = require('mongodb').MongoClient;
 
 require('dotenv').config();
+
 const url = process.env.MONGODB_URI;
 
 const client = new MongoClient(url);
 client.connect();
 // 2 Q
-app.post('/api/login', async (req, res, next) => 
+app.post('/login', async (req, res, next) => 
 {
   // incoming: username, password
   // outgoing: userID, username, email, firstName, lastName, profilePicture
@@ -31,7 +37,6 @@ app.post('/api/login', async (req, res, next) =>
  // IDK name of db for users.
  const results = await db.collection('Users').find({username:username,password:password}).toArray();
  var userID = -1;
- var username = '';
  var email = '';
  var firstName = '';
  var lastName = '';
@@ -56,7 +61,7 @@ app.post('/api/login', async (req, res, next) =>
   res.status(200).json(ret);
 });
 // 3 Q
-app.post('/api/registerUSer', async (req, res, next) =>
+app.post('/registerUSer', async (req, res, next) =>
 {
   // incoming: userId, color
   // outgoing: userID, username, email, firstName, lastName, profilePicture
@@ -81,10 +86,6 @@ app.post('/api/registerUSer', async (req, res, next) =>
   // Cardlist??  card
   cardList.push( user );
   var userID = -1;
-  var username = '';
-  var email = '';
-  var firstName = '';
-  var lastName = '';
   var profilePicture = ''; // Does picture get stored in database as a string?
   var isVerified = false;
   var favoriteRecipes = NULL;
@@ -106,7 +107,7 @@ app.post('/api/registerUSer', async (req, res, next) =>
   res.status(200).json(ret);
 });
 
-app.post('/api/verifyUser', async (req, res, next) => 
+app.post('/verifyUser', async (req, res, next) => 
 {
   // incoming: username, password
   // outgoing: userID, success
@@ -131,7 +132,7 @@ app.post('/api/verifyUser', async (req, res, next) =>
   res.status(200).json(ret);
 });
 
-app.post('/api/updateProfile', async (req, res, next) =>{
+app.post('/updateProfile', async (req, res, next) =>{
     var error = '';
     const { userID, username, password, firstName, lastName, profilePicture} = req.body;
 
