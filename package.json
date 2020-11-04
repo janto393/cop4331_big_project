@@ -40,9 +40,7 @@
 		"cors": "^2.8.5",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
-		"mongodb": "^3.6.2",
-		"mongodb-uri": "^0.9.7",
-		"mongoose": "^5.6.6"
+		"mongodb": "^3.6.2"
 	},
 	"license": "ISC",
 	"bugs": {
