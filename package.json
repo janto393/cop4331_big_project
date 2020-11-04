@@ -31,11 +31,8 @@
 		}
 	],
 	"directories": {
-		"bin": "./bin",
 		"doc": "./doc",
-		"lib": "./lib",
-		"man": "./man",
-		"api": "./api",
+		"fornt-end": "./front-end",
 		"test": "./test"
 	},
 	"dependencies": {
