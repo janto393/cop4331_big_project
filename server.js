@@ -42,7 +42,7 @@ app.post('/login', async (req, res, next) =>
  var lastName = '';
  var profilePicture = ''; // Does picture get stored in database as a string?
  var isVerified = false;
- var favoriteRecipes = NULL;
+ var favoriteRecipes = null;
  
  if( results.length > 0 )
   {
@@ -58,7 +58,8 @@ app.post('/login', async (req, res, next) =>
 
   var ret = { userID:userID, username:username, email:email, firstName:firstName, lastName:lastName, 
     profilePicture:profilePicture, isVerified:isVerified, favoriteRecipes:favoriteRecipes, error:''};
-  res.status(200).json(ret);
+  res.status(200);
+  res.json(ret);
 });
 // 3 Q
 app.post('/registerUSer', async (req, res, next) =>
