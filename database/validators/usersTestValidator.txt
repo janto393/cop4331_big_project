@@ -6,13 +6,8 @@
       'password',
       'firstName',
       'lastName',
+			'profilePicture',
       'email',
-      'recoverQuestion1',
-      'recoverAnswer1',
-      'recoverQuestion2',
-      'recoverAnswer2',
-      'recoverQuestion3',
-      'recoverAnswer3',
       'isVerified'
     ],
     properties: {
@@ -35,9 +30,6 @@
       },
       email: {
         bsonType: 'string'
-      },
-      phoneNumber: {
-        bsonType: 'int'
       },
       isVerified: {
         bsonType: 'bool'
