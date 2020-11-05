@@ -6,9 +6,10 @@
       'password',
       'firstName',
       'lastName',
-			'profilePicture',
+      'profilePicture',
       'email',
-      'isVerified'
+      'isVerified',
+      'favoriteRecipes'
     ],
     properties: {
       username: {
