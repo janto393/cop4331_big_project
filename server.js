@@ -53,7 +53,14 @@ app.post('/registerUser', async (request, response, next) =>
   // outgoing: userID, username, email, firstName, lastName, profilePicture
   // isVerified, favoriteRecipes, error
 	
-  const { username, password, email, firstName, lastName} = request.body;
+	const { username,
+					password,
+					email,
+					firstName,
+					lastName,
+					profilePicture
+				} = request.body;
+
   const INVALID_USER = -1;
   var result = null;
 
@@ -63,7 +70,7 @@ app.post('/registerUser', async (request, response, next) =>
                         email : '',
                         firstName : '',
                         lastName : '',
-                        // profilePicture : profilePicture,
+                        profilePicture : profilePicture,
                         isVerified : false,
                         favoriteRecipes : [],
                         error : ''
@@ -75,7 +82,7 @@ app.post('/registerUser', async (request, response, next) =>
                     email : email,
                     firstName : firstName,
                     lastName : lastName,
-                    // profilePicture : profilePicture,
+                    profilePicture : profilePicture,
                     isVerified : false,
                     favoriteRecipes : []
                   };
@@ -125,7 +132,7 @@ app.post('/registerUser', async (request, response, next) =>
     returnPackage.email = result.email;
     returnPackage.firstName = result.firstName;
     returnPackage.lastName = result.lastName;
-    // returnPackage.profilePicture = result.profilePicture;
+    returnPackage.profilePicture = result.profilePicture;
     returnPackage.isVerified = result.isVerified;
     returnPackage.favoriteRecipes = result.favoriteRecipes;
   }
