@@ -19,6 +19,18 @@ const url = process.env.MONGODB_URI;
 const client = new MongoClient(url, { useUnifiedTopology: true });
 client.connect();
 
+// // fetches user from the database
+// async function getUser(criteria)
+// {
+// 	const db = client.db(process.env.APP_DATABASE);
+
+// 	return new Promise((resolve, reject) => {
+// 		db.collection(process.env.COLLECTION_USERS).find(criteria, (err, results) => {
+// 			(err) ? reject(err) : resolve(results);
+// 		});
+// 	});
+// }
+
 // Access Control Logic
 app.use((req, res, next) => 
 {
@@ -33,13 +45,6 @@ app.use((req, res, next) =>
   );
   next();
 });
-
-// async function queryDatabase(collection, criteria)
-// {
-//   // const dbCluster = await client.connect(url);
-//   const db = client.db(process.env.APP_DATABASE);
-//   return db.collection(collection).find(criteria);
-// }
 
 // Register Endpoint
 app.post('/registerUser', async (request, response, next) =>
@@ -76,41 +81,34 @@ app.post('/registerUser', async (request, response, next) =>
                   };
 
   // Check if user name is already taken.
-  // try 
-  // {
-  //   const db = client.db(process.env.APP_DATABASE);
-  //   const checkUser = {
-  //                       username : username
-  //                     };
-  //   const curser = db.collection('Users_Test').find(checkUser);
-  //   if (curser.count() > 0 )
-  //   {
-  //     throw "User name already taken.";
-  //   }
-  // }
-  // catch(e)
-  // {
-  //   returnPackage.error = e.toString();
-  //   response.status(400).json(returnPackage);
-  //   return;
-  // }
+  try 
+  {
+		const db = client.db(process.env.APP_DATABASE);
+		
+    const criteria = {
+                        username : username
+                      };
+		const data = await db.collection(process.env.COLLECTION_USERS).findOne(criteria);
+		
+    if (data)
+    {
+      throw "User name already taken.";
+    }
+  }
+  catch(e)
+  {
+    returnPackage.error = e.toString();
+    response.status(400).json(returnPackage);
+    return;
+  }
 
   // Inserts new user record. 
   try
   {
     const db = client.db(process.env.APP_DATABASE);
-    db.collection('Users_Test').insertOne(newUser);
+    db.collection(process.env.COLLECTION_USERS).insertOne(newUser);
 
-    var myPromise = () => {
-      return new Promise((resolve, reject) => {
-        db.collection('Users_Test').find(newUser).toArray(function(err, data) {
-            err 
-              ? reject(err) 
-              : resolve(data[0]);
-          });
-      });
-  };
-    result = await myPromise();
+		var result = await db.collection(process.env.COLLECTION_USERS).findOne(newUser);
   }
   catch(e)
   {
@@ -118,8 +116,7 @@ app.post('/registerUser', async (request, response, next) =>
     response.status(500).json(returnPackage);
     return;
   }
-  console.log(result);
-  console.log(result.userID);
+
   // Assigns return package values. 
   if (result)
   {
