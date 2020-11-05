@@ -6,14 +6,10 @@
       'password',
       'firstName',
       'lastName',
+      'profilePicture',
       'email',
-      'recoverQuestion1',
-      'recoverAnswer1',
-      'recoverQuestion2',
-      'recoverAnswer2',
-      'recoverQuestion3',
-      'recoverAnswer3',
-      'isVerified'
+      'isVerified',
+      'favoriteRecipes'
     ],
     properties: {
       username: {
@@ -31,13 +27,10 @@
         bsonType: 'string'
       },
       profilePicture: {
-        bsonType: 'binData'
+        bsonType: 'string'
       },
       email: {
         bsonType: 'string'
-      },
-      phoneNumber: {
-        bsonType: 'int'
       },
       isVerified: {
         bsonType: 'bool'
