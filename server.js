@@ -34,61 +34,106 @@ app.use((req, res, next) =>
   next();
 });
 
+// async function queryDatabase(collection, criteria)
+// {
+//   // const dbCluster = await client.connect(url);
+//   const db = client.db(process.env.APP_DATABASE);
+//   return db.collection(collection).find(criteria);
+// }
+
 // Register Endpoint
-app.post('/registerUser', async (req, res, next) =>
+app.post('/registerUser', async (request, response, next) =>
 {
   // incoming: userId, color
   // outgoing: userID, username, email, firstName, lastName, profilePicture
   // isVerified, favoriteRecipes, error
 	
-  const { username, password, email, firstName, lastName} = req.body;
+  const { username, password, email, firstName, lastName} = request.body;
+  const INVALID_USER = -1;
+  var result = null;
 
-  const newUser = {username:username, password:password, email:email, 
-    firstName:firstName, lastName:lastName};
-  var error = '';
+  var returnPackage = {
+                        userID : INVALID_USER,
+                        username : '',
+                        email : '',
+                        firstName : '',
+                        lastName : '',
+                        // profilePicture : profilePicture,
+                        isVerified : false,
+                        favoriteRecipes : [],
+                        error : ''
+                      };
 
+  const newUser = {
+                    username : username, 
+                    password : password, 
+                    email : email,
+                    firstName : firstName,
+                    lastName : lastName,
+                    // profilePicture : profilePicture,
+                    isVerified : false,
+                    favoriteRecipes : []
+                  };
+
+  // Check if user name is already taken.
+  // try 
+  // {
+  //   const db = client.db(process.env.APP_DATABASE);
+  //   const checkUser = {
+  //                       username : username
+  //                     };
+  //   const curser = db.collection('Users_Test').find(checkUser);
+  //   if (curser.count() > 0 )
+  //   {
+  //     throw "User name already taken.";
+  //   }
+  // }
+  // catch(e)
+  // {
+  //   returnPackage.error = e.toString();
+  //   response.status(400).json(returnPackage);
+  //   return;
+  // }
+
+  // Inserts new user record. 
   try
   {
-    const db = client.db();
-    // IDK name of db.
-    const result = db.collection('Users').insertOne(newUser);
+    const db = client.db(process.env.APP_DATABASE);
+    db.collection('Users_Test').insertOne(newUser);
+
+    var myPromise = () => {
+      return new Promise((resolve, reject) => {
+        db.collection('Users_Test').find(newUser).toArray(function(err, data) {
+            err 
+              ? reject(err) 
+              : resolve(data[0]);
+          });
+      });
+  };
+    result = await myPromise();
   }
   catch(e)
   {
-    error = e.toString();
+    returnPackage.error = e.toString();
+    response.status(500).json(returnPackage);
+    return;
   }
-  // Cardlist??  card
-  cardList.push( user );
-  var userID = -1;
-  var profilePicture = ''; // Does picture get stored in database as a string?
-  var isVerified = false;
-  var favoriteRecipes = NULL;
-
-  if (results.length > 0)
+  console.log(result);
+  console.log(result.userID);
+  // Assigns return package values. 
+  if (result)
   {
-    userID = results[0].userID;
-    username = results[0].username;
-    email = results[0].email;
-    firstName = results[0].firstName;
-    lastName = results[0].lastName;
-    profilePicture = results[0].profilePicture;
-    isVerified = results[0].isVerified;
-    favoriteRecipes = results[0].favoriteRecipes;
+    returnPackage.userID = result.userID;
+    returnPackage.username = result.username;
+    returnPackage.email = result.email;
+    returnPackage.firstName = result.firstName;
+    returnPackage.lastName = result.lastName;
+    // returnPackage.profilePicture = result.profilePicture;
+    returnPackage.isVerified = result.isVerified;
+    returnPackage.favoriteRecipes = result.favoriteRecipes;
   }
-
-	var ret = {
-							userID : userID,
-							username : username,
-							email : email,
-							firstName : firstName,
-							lastName : lastName,
-							profilePicture : profilePicture,
-							isVerified : isVerified,
-							favoriteRecipes : favoriteRecipes,
-							error : ''
-						};
-  res.status(200).json(ret);
-	}
+  response.status(200).json(returnPackage);
+}
 );
 
 app.listen(5000); // start Node + Express server on port 5000
