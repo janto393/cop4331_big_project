@@ -19,18 +19,6 @@ const url = process.env.MONGODB_URI;
 const client = new MongoClient(url, { useUnifiedTopology: true });
 client.connect();
 
-// // fetches user from the database
-// async function getUser(criteria)
-// {
-// 	const db = client.db(process.env.APP_DATABASE);
-
-// 	return new Promise((resolve, reject) => {
-// 		db.collection(process.env.COLLECTION_USERS).find(criteria, (err, results) => {
-// 			(err) ? reject(err) : resolve(results);
-// 		});
-// 	});
-// }
-
 // Access Control Logic
 app.use((req, res, next) => 
 {
