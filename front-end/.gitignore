@@ -1,7 +1,0 @@
-<<<<<<< HEAD
-# ignore node_modules folder
-node_modules/*
-=======
-# Ignore node modules directory
-node_modules/*
->>>>>>> 62e5e01dd6e75ee73edb00269ba3175355fb6a91
