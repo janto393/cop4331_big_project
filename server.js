@@ -6,6 +6,16 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+// Environment variables
+const PORT = process.env.PORT || 5000;
+app.set('port', (process.env.PORT || 5000));
+const url = process.env.MONGODB_URI;
+
+// Initialize database object and connect
+const client = new MongoClient(url, { useUnifiedTopology: true });
+client.connect();
+
+// Access Control Logic
 app.use((req, res, next) => 
 {
   res.setHeader('Access-Control-Allow-Origin', '*');
