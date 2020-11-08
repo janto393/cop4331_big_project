@@ -23,7 +23,10 @@
     "Mahad Ibrahim",
     "Camilo Romero",
     "Anthony Mompoint"
-  ],
+	],
+	"files":[
+		"./"
+	],
   "directories": {
     "doc": "doc",
     "test": "test"
