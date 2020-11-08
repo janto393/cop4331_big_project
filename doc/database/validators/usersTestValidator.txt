@@ -27,7 +27,7 @@
         bsonType: 'string'
       },
       profilePicture: {
-        bsonType: 'binData'
+        bsonType: 'string'
       },
       email: {
         bsonType: 'string'
