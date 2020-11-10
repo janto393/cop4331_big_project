@@ -32,7 +32,7 @@
 	],
 	"directories": {
 		"doc": "./doc",
-		"fornt-end": "./front-end",
+		"front-end": "./front-end",
 		"test": "./test"
 	},
 	"dependencies": {
@@ -46,7 +46,8 @@
 		"heroku": "^7.47.0",
 		"mongodb": "^3.6.2",
 		"react": "^16.14.0",
-		"react-dom": "^16.14.0"
+		"react-dom": "^16.14.0",
+		"react-router-dom": "^5.2.0"
 	},
 	"license": "ISC",
 	"bugs": {
