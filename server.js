@@ -58,6 +58,7 @@ app.post('/createRecipe', async (request, response, next) =>
                       };
 
   const newRecipe = {
+                    userID : userID,
                     title : title, 
                     publicRecipe : publicRecipe, 
                     isMetric : isMetric,
