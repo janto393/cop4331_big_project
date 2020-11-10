@@ -34,76 +34,47 @@ app.use((req, res, next) =>
   next();
 });
 
-// Register Endpoint
-app.post('/registerUser', async (request, response, next) =>
+// update user Endpoint
+app.post('/updateUser', async (request, response, next) =>
 {
-  // incoming: userId, color
-  // outgoing: userID, username, email, firstName, lastName, profilePicture
-  // isVerified, favoriteRecipes, error
+  // incoming: userId, username, firstName, lastName, profilePicture
+  // outgoing: userID, success
 	
-	const { username,
-					password,
-					email,
+  const { 
+          userID, 
+          username,
+          password,
 					firstName,
 					lastName,
-					profilePicture
+					// profilePicture
 				} = request.body;
 
   const INVALID_USER = -1;
   var result = null;
+  var success;
 
+  var searchUser = {
+                      userID : userID
+                  };
   var returnPackage = {
                         userID : INVALID_USER,
-                        username : '',
-                        email : '',
-                        firstName : '',
-                        lastName : '',
-                        profilePicture : profilePicture,
-                        isVerified : false,
-                        favoriteRecipes : [],
-                        error : ''
+                        success : false
                       };
 
-  const newUser = {
-                    username : username, 
-                    password : password, 
-                    email : email,
-                    firstName : firstName,
-                    lastName : lastName,
-                    profilePicture : profilePicture,
-                    isVerified : false,
-                    favoriteRecipes : []
-                  };
+  const updateUser = { $set:{
+                      username : username,
+                      password: password,
+                      firstName : firstName,
+                      lastName : lastName,
+                      // profilePicture : profilePicture,
+                  }};
 
-  // Check if user name is already taken.
-  try 
-  {
-		const db = client.db(process.env.APP_DATABASE);
-		
-    const criteria = {
-                        username : username
-                      };
-		const data = await db.collection(process.env.COLLECTION_USERS).findOne(criteria);
-		
-    if (data)
-    {
-      throw "User name already taken.";
-    }
-  }
-  catch(e)
-  {
-    returnPackage.error = e.toString();
-    response.status(400).json(returnPackage);
-    return;
-  }
-
-  // Inserts new user record. 
+  // Update user record. 
   try
   {
     const db = client.db(process.env.APP_DATABASE);
-    db.collection(process.env.COLLECTION_USERS).insertOne(newUser);
-
-		var result = await db.collection(process.env.COLLECTION_USERS).findOne(newUser);
+    var result = await db.collection(process.env.COLLECTION_USERS).updateOne(searchUser, updateUser);
+    
   }
   catch(e)
   {
@@ -111,21 +82,15 @@ app.post('/registerUser', async (request, response, next) =>
     response.status(500).json(returnPackage);
     return;
   }
-
+  console.log(result);
   // Assigns return package values. 
   if (result)
   {
     returnPackage.userID = result.userID;
-    returnPackage.username = result.username;
-    returnPackage.email = result.email;
-    returnPackage.firstName = result.firstName;
-    returnPackage.lastName = result.lastName;
-    returnPackage.profilePicture = result.profilePicture;
-    returnPackage.isVerified = result.isVerified;
-    returnPackage.favoriteRecipes = result.favoriteRecipes;
+    success = true;
+    returnPackage.success = success;
   }
   response.status(200).json(returnPackage);
-}
-);
+});
 
 app.listen(process.env.PORT || 5000); // start Node + Express server on port 5000
