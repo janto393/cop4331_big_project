@@ -29,8 +29,8 @@
   ],
   "directories": {
     "doc": "doc",
-	"test": "test",
-	"frontend": "front-end"
+    "test": "test",
+    "frontend": "front-end"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
