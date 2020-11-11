@@ -37,7 +37,7 @@ app.use((req, res, next) =>
 // Create new recipe endpoint. 
 app.post('/createRecipe', async (request, response, next) =>
 {
-  // incoming: userID, publicRecipe, isMetric, title, instructions, ingredientsByRecipe
+  // incoming: userID, publicRecipe, isMetric, title, instructions, ingredients
   // outgoing: recipeID, ingredients, error
 	
   const { userID,
@@ -45,7 +45,7 @@ app.post('/createRecipe', async (request, response, next) =>
           isMetric,
           title,
           instructions,
-          ingredientsByRecipe
+          ingredients
 				} = request.body;
 
   const INVALID_RECIPE = -1;
@@ -53,78 +53,51 @@ app.post('/createRecipe', async (request, response, next) =>
 
   var returnPackage = {
                         recipeID : INVALID_RECIPE,
-                        ingredients : [],
                         error : ''
                       };
 
   const newRecipe = {
-                    userID : userID,
-                    title : title, 
-                    publicRecipe : publicRecipe, 
-                    isMetric : isMetric,
-                    instructions : instructions,
-                    ingredientsByRecipe : ingredientsByRecipe
+											author : userID,
+											title : title, 
+											publicRecipe : publicRecipe, 
+											isMetric : isMetric,
+											instructions : instructions,
+											ingredients : ingredients
                   };
 
-  // Check if recipe name is already taken.
-  try 
-  {
-		const db = client.db(process.env.APP_DATABASE);
-		
-    const criteria = {
-                        title : title
-                      };
-		const data = await db.collection(process.env.COLLECTION_RECIPES).findOne(criteria);
-		
-    if (data)
-    {
-      throw "Recipe name taken.";
-    }
-  }
-  catch(e)
-  {
-    returnPackage.error = e.toString();
-    response.status(400).json(returnPackage);
-    return;
-  }
-
-  // Seperate function to insert incredients to db if they don't exist already. 
+  // Seperate function to insert ingredients to db if they don't exist already. 
   // Travse through array of objects 
-  var i;
-  for (i = 0; i < ingredientsByRecipe.length; i++)
+  for (var i = 0; i < ingredients.length; i++)
   {
-    var searchInd = {
-                      name : ingredientsByRecipe[i].name
+    var criteria = {
+                      name : ingredients[i].name
                     };
 
     try
     {
       const db = client.db(process.env.APP_DATABASE);
-      var result = await db.collection(process.env.COLLECTION_INGRDIENTS).findOne(searchInd);
+      result = await db.collection(process.env.COLLECTION_INGRDIENTS).findOne(criteria);
     }
     catch(e)
     {
       console.log(e.toString());
-    }
-    // If ingredient exist then don't add to list again.
-    if (result)
+		}
+		
+    // Insert the ingredient if it doesn't exist
+    if (!result)
     {
-      continue;
-    }
-    // If ingredient doesn't exist, add to collection. 
-    else
-    {
-      // Essentially same code as for register. Add seperate function.
+			continue;
+			// Essentially same code as for register. Add seperate function.
       try
       {
         const db = client.db(process.env.APP_DATABASE);
-        db.collection(process.env.COLLECTION_INGRDIENTS).insertOne(ingredientsByRecipe[i]);
+        db.collection(process.env.COLLECTION_INGRDIENTS).insertOne(criteria);
 
-        var result = await db.collection(process.env.COLLECTION_INGRDIENTS).findOne(ingredientsByRecipe[i]);
+        var result = await db.collection(process.env.COLLECTION_INGRDIENTS).findOne(criteria);
       }
       catch(e)
       {
-        console.log(e.toString());
+        returnPackage.error = e.toString();
       }
     }
   }
@@ -136,7 +109,7 @@ app.post('/createRecipe', async (request, response, next) =>
     const db = client.db(process.env.APP_DATABASE);
     db.collection(process.env.COLLECTION_RECIPES).insertOne(newRecipe);
 
-		var result = await db.collection(process.env.COLLECTION_RECIPES).findOne(newRecipe);
+		result = await db.collection(process.env.COLLECTION_RECIPES).findOne(newRecipe);
   }
   catch(e)
   {
@@ -154,9 +127,5 @@ app.post('/createRecipe', async (request, response, next) =>
   response.status(200).json(returnPackage);
 }
 );
-app.listen(5000); // start Node + Express server on port 5000
-
-
-
 
 app.listen(process.env.PORT || 5000); // start Node + Express server on port 5000
