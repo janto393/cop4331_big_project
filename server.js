@@ -128,4 +128,57 @@ app.post('/registerUser', async (request, response, next) =>
 }
 );
 
+// Matches metric to imperial unit for conversion package
+app.post('/fromMetricToImperial', async (request, response, next) =>
+{
+	/*
+		Incoming:
+		{
+			unit : string
+		}
+
+		Output:
+		{
+			unit : string
+		}
+	*/
+
+	var returnPackage = {
+												unit : ''
+											};
+	
+	// ml to tsp
+	if (request.body.unit.localeCompare('ml'))
+	{
+		returnPackage.unit = 'tsp';
+	}
+
+	// l to gallons
+	else if (request.body.unit.localeCompare('l'))
+	{
+		returnPackage.unit = 'gal';
+	}
+
+	// g to oz
+	else if (request.body.unit.localeCompare('g'))
+	{
+		returnPackage.unit = 'oz';
+	}
+
+	// kg to lb
+	else if (request.body.unit.localeCompare('kg'))
+	{
+		returnPackage.unit = 'lb';
+	}
+
+	// c to f
+	else if (request.body.unit.localeCompare('c'))
+	{
+		returnPackage.unit = 'f';
+	}
+
+
+	response.status(200).json(returnPackage);
+});
+
 app.listen(process.env.PORT || 5000); // start Node + Express server on port 5000
