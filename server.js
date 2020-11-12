@@ -41,67 +41,86 @@ app.post('/createRecipe', async (request, response, next) =>
   // incoming: userID, publicRecipe, isMetric, title, instructions, ingredients
   // outgoing: recipeID, ingredients, error
 	
-  const {
-					userID,
-          publicRecipe,
-          isMetric,
-          title,
-          instructions,
-          ingredients
-				} = request.body;
+	// Ingredients array offset constants (defined by location in the database validator)
+	const INGREDIENT_NAME_INDEX = 0;
+	const AMOUNT_METRIC_INDEX = 1;
+	const UNIT_METRIC_INDEX = 2;
+	const AMOUNT_IMPERIAL_INDEX = 3;
+	const UNIT_IMPERIAL_INDEX = 4;
+
+  var recipe = request.body;
 
   const INVALID_RECIPE = -1;
   var result = null;
 
   var returnPackage = {
-                        recipeID : INVALID_RECIPE,
+												recipeID : INVALID_RECIPE,
+												success : false,
                         error : ''
                       };
 
   const newRecipe = {
-											author : userID,
-											title : title, 
-											publicRecipe : publicRecipe, 
-											isMetric : isMetric,
-											instructions : instructions,
-											ingredients : ingredients
+											author : recipe.userID,
+											title : recipe.title, 
+											publicRecipe : recipe.publicRecipe, 
+											isMetric : recipe.isMetric,
+											instructions : recipe.instructions,
+											ingredients : recipe.ingredients
                   };
 
-  // Seperate function to insert ingredients to db if they don't exist already. 
-  // Travse through array of objects 
+  // Traverse through ingredients for recipe
   for (var i = 0; i < ingredients.length; i++)
   {
-    var criteria = {
-                      name : ingredients[i].name
-                    };
+		// Add ingredients to database if not already
+    {
+			var criteria = {
+											name : recipe.ingredients[i][INGREDIENT_NAME_INDEX]
+										 };
 
-    try
-    {
-      const db = client.db(process.env.APP_DATABASE);
-      result = await db.collection(process.env.COLLECTION_INGRDIENTS).findOne(criteria);
-    }
-    catch(e)
-    {
-      console.log(e.toString());
+			try
+			{
+				const db = client.db(process.env.APP_DATABASE);
+				result = await db.collection(process.env.COLLECTION_INGRDIENTS).findOne(criteria);
+			}
+			catch(e)
+			{
+				returnPackage.error = e.toString();
+			}
+			
+			// Insert the ingredient if it doesn't exist
+			if (!result)
+			{
+				try
+				{
+					const db = client.db(process.env.APP_DATABASE);
+					db.collection(process.env.COLLECTION_INGRDIENTS).insertOne(criteria);
+
+					result = await db.collection(process.env.COLLECTION_INGRDIENTS).findOne(criteria);
+				}
+				catch(e)
+				{
+					returnPackage.error = e.toString();
+				}
+			}
 		}
 		
-    // Insert the ingredient if it doesn't exist
-    if (!result)
-    {
-			continue;
-			// Essentially same code as for register. Add seperate function.
-      try
-      {
-        const db = client.db(process.env.APP_DATABASE);
-        db.collection(process.env.COLLECTION_INGRDIENTS).insertOne(criteria);
 
-        var result = await db.collection(process.env.COLLECTION_INGRDIENTS).findOne(criteria);
-      }
-      catch(e)
-      {
-        returnPackage.error = e.toString();
-      }
-    }
+		// Convert units and measurement system values for each ingredient
+		{
+			// convert from metric to imperial
+			if (isMetric)
+			{
+				var amount = unitConversion.convert(ingredients[i][AMOUNT_METRIC_INDEX]).from(ingredients[i][UNIT_METRIC_INDEX]).to(ingredients[i][UNIT_IMPERIAL_INDEX]).toBest();
+				recipe.ingredients[i][AMOUNT_IMPERIAL_INDEX] = amount;
+			}
+
+			// convert from imperial to metric
+			else
+			{
+				var amount = unitConversion.convert(ingredients[i][AMOUNT_IMPERIAL_INDEX]).from(ingredients[i][UNIT_IMPERIAL_INDEX]).to(ingredients[i][UNIT_METRIC_INDEX]).toBest();
+				recipe.ingredients[i][AMOUNT_METRIC_INDEX] = amount;
+			}
+		}
   }
   
 
