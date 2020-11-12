@@ -128,4 +128,52 @@ app.post('/registerUser', async (request, response, next) =>
 }
 );
 
+app.post('/findIngredient', async (request, response, next) => {
+	/*
+		Incoming:
+		{
+			name : string
+		}
+
+		Outgoing:
+		{
+			ingredientID : string,
+			name : string,
+			error : string
+		}
+	*/
+
+	returnPackage = {
+										ingredientID : '',
+										name : '',
+										error : ''
+									};
+
+	// look for ingredient in database
+	try
+	{
+		const db = await client.db(process.env.APP_DATABASE);
+
+		const criteria = {
+											 name : request.body.name.toLowerCase()
+										 };
+
+		var result = await db.collection(process.env.COLLECTION_INGREDIENTS).findOne(criteria);
+
+		if (result)
+		{
+			returnPackage.ingredientID = result._id;
+			returnPackage.name = result.name;
+		}
+	}
+	catch (e)
+	{
+		returnPackage.error = e.toString();
+		response.status(500).json(returnPackage);
+		return;
+	}
+
+	response.status(200).json(returnPackage);
+});
+
 app.listen(process.env.PORT || 5000); // start Node + Express server on port 5000
