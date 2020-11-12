@@ -144,37 +144,44 @@ app.post('/fromMetricToImperial', async (request, response, next) =>
 	*/
 
 	var returnPackage = {
-												unit : ''
+												unit : '',
+												error : ''
 											};
 	
 	// ml to tsp
-	if (request.body.unit.localeCompare('ml'))
+	if (request.body.unit == 'ml')
 	{
 		returnPackage.unit = 'tsp';
 	}
 
 	// l to gallons
-	else if (request.body.unit.localeCompare('l'))
+	else if (request.body.unit == 'l')
 	{
 		returnPackage.unit = 'gal';
 	}
 
 	// g to oz
-	else if (request.body.unit.localeCompare('g'))
+	else if (request.body.unit == 'g')
 	{
 		returnPackage.unit = 'oz';
 	}
 
 	// kg to lb
-	else if (request.body.unit.localeCompare('kg'))
+	else if (request.body.unit == 'kg')
 	{
 		returnPackage.unit = 'lb';
 	}
 
 	// c to f
-	else if (request.body.unit.localeCompare('c'))
+	else if (request.body.unit == 'c')
 	{
 		returnPackage.unit = 'f';
+	}
+
+	// Unit could not be converted
+	else
+	{
+		returnPackage.error = 'Unit could not be compared.';
 	}
 
 
