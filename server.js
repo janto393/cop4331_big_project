@@ -139,7 +139,8 @@ app.post('/fromMetricToImperial', async (request, response, next) =>
 
 		Output:
 		{
-			unit : string
+			unit : string,
+			error : string
 		}
 	*/
 
@@ -184,6 +185,70 @@ app.post('/fromMetricToImperial', async (request, response, next) =>
 		returnPackage.error = 'Unit could not be compared.';
 	}
 
+
+	response.status(200).json(returnPackage);
+});
+
+// Matches imperial to metric units for conversion package
+app.post('/fromImperialToMetric', async (request, response, next) =>
+{
+	/*
+		Icomming:
+		{
+			unit : string
+		}
+
+		Outgoing:
+		{
+			unit : string,
+			error : string
+		}
+	*/
+
+	var returnPackage = {
+												unit : '',
+												error : ''
+											};
+
+	// lb to kg
+	if (request.body.unit == 'lb')
+	{
+		returnPackage.unit = 'kg';
+	}
+
+	// oz to g
+	else if (request.body.unit == 'oz')
+	{
+		returnPackage.unit = 'g';
+	}
+
+	// fl-oz, cup, quart, tsp, tbsp to ml
+	else if ((request.body.unit == 'fl-oz') ||
+					 (request.body.unit == 'cup') ||
+					 (request.body.unit == 'qt') ||
+					 (request.body.unit == 'tsp') ||
+					 (request.body.unit == 'tbsp'))
+	{
+		returnPackage.unit = 'ml';
+	}
+
+	// gallon to liter
+	else if (request.body.unit == 'gal')
+	{
+		returnPackage.unit = 'l';
+	}
+
+	// farenheit to celsius
+	else if (request.body.unit == 'f')
+	{
+		returnPackage.unit = 'c';
+	}
+
+	// Unit could not be converted
+	else
+	{
+		returnPackage.error = 'Unit could not be compared.';
+	}
 
 	response.status(200).json(returnPackage);
 });
