@@ -128,4 +128,80 @@ app.post('/registerUser', async (request, response, next) =>
 }
 );
 
+app.post('/addIngredient', async (request, response, next) =>
+{
+	/*
+		Incoming:
+		{
+			name : string
+		}
+
+		Outgoing:
+		{
+			ingredientID : objectID,
+			success : bool,
+			error : ''
+		}
+	*/
+
+	var returnPackage = {
+												ingredientID : null,
+												success : false,
+												error : ''
+											};
+
+	// ensure we are not inserting a duplicate
+	try
+	{
+		const db = await client.db(process.env.APP_DATABASE);
+
+		const criteria = {
+											 name : request.body.name.toLowerCase()
+										 };
+
+		var result = await db.collection(process.env.COLLECTION_INGREDIENTS).findOne(criteria);
+
+		// exit if ingredient is ready added
+		if (result)
+		{
+			returnPackage.ingredientID = result._id;
+			returnPackage.success = true;
+			response.status(200).json(returnPackage);
+			return;
+		}
+	}
+	catch (e)
+	{
+		returnPackage.error = e.toString();
+		response.status(500).json(returnPackage);
+		return;
+	}
+
+	// insert the ingredient to the database
+	try
+	{
+		const db = await client.db(process.env.APP_DATABASE);
+		
+		const criteria = {
+											 name : request.body.name.toLowerCase()
+										 };
+
+		db.collection(process.env.COLLECTION_INGREDIENTS).insertOne(criteria);
+
+		// need to search it in the database to get the id of the ingredient
+		var result = await db.collection(process.env.COLLECTION_INGREDIENTS).findOne(criteria);
+
+		returnPackage.ingredientID = result._id;
+		returnPackage.success = true;
+	}
+	catch (e)
+	{
+		returnPackage.error = e.toString();
+		response.status(500).json(returnPackage);
+		return;
+	}
+
+	response.status(200).json(returnPackage);
+});
+
 app.listen(process.env.PORT || 5000); // start Node + Express server on port 5000
