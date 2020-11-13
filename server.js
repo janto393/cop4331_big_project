@@ -34,6 +34,7 @@ app.use((req, res, next) =>
   next();
 });
 
+// Add Ingredient Endpoint
 app.post('/addIngredient', async (request, response, next) =>
 {
 	/*
@@ -109,6 +110,8 @@ app.post('/addIngredient', async (request, response, next) =>
 	response.status(200).json(returnPackage);
 });
 
+
+// Find Ingredient Endpoint
 app.post('/findIngredient', async (request, response, next) => {
 	/*
 		Incoming:
@@ -156,6 +159,7 @@ app.post('/findIngredient', async (request, response, next) => {
 
 	response.status(200).json(returnPackage);
 });
+
 
 // Register Endpoint
 app.post('/registerUser', async (request, response, next) =>
@@ -251,49 +255,128 @@ app.post('/registerUser', async (request, response, next) =>
 }
 );
 
-app.post('/findIngredient', async (request, response, next) => {
+
+// Matches metric to imperial unit for conversion package
+app.post('/fromMetricToImperial', async (request, response, next) =>
+{
 	/*
 		Incoming:
 		{
-			name : string
+			unit : string
 		}
 
-		Outgoing:
+		Output:
 		{
-			ingredientID : string,
-			name : string,
+			unit : string,
 			error : string
 		}
 	*/
 
-	returnPackage = {
-										ingredientID : '',
-										name : '',
-										error : ''
-									};
-
-	// look for ingredient in database
-	try
+	var returnPackage = {
+												unit : '',
+												error : ''
+											};
+	
+	// ml to tsp
+	if (request.body.unit == 'ml')
 	{
-		const db = await client.db(process.env.APP_DATABASE);
-
-		const criteria = {
-											 name : request.body.name.toLowerCase()
-										 };
-
-		var result = await db.collection(process.env.COLLECTION_INGREDIENTS).findOne(criteria);
-
-		if (result)
-		{
-			returnPackage.ingredientID = result._id;
-			returnPackage.name = result.name;
-		}
+		returnPackage.unit = 'tsp';
 	}
-	catch (e)
+
+	// l to gallons
+	else if (request.body.unit == 'l')
 	{
-		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
-		return;
+		returnPackage.unit = 'gal';
+	}
+
+	// g to oz
+	else if (request.body.unit == 'g')
+	{
+		returnPackage.unit = 'oz';
+	}
+
+	// kg to lb
+	else if (request.body.unit == 'kg')
+	{
+		returnPackage.unit = 'lb';
+	}
+
+	// c to f
+	else if (request.body.unit == 'c')
+	{
+		returnPackage.unit = 'f';
+	}
+
+	// Unit could not be converted
+	else
+	{
+		returnPackage.error = 'Unit could not be compared.';
+	}
+
+
+	response.status(200).json(returnPackage);
+});
+
+
+// Matches imperial to metric units for conversion package
+app.post('/fromImperialToMetric', async (request, response, next) =>
+{
+	/*
+		Icomming:
+		{
+			unit : string
+		}
+
+		Outgoing:
+		{
+			unit : string,
+			error : string
+		}
+	*/
+
+	var returnPackage = {
+												unit : '',
+												error : ''
+											};
+
+	// lb to kg
+	if (request.body.unit == 'lb')
+	{
+		returnPackage.unit = 'kg';
+	}
+
+	// oz to g
+	else if (request.body.unit == 'oz')
+	{
+		returnPackage.unit = 'g';
+	}
+
+	// fl-oz, cup, quart, tsp, tbsp to ml
+	else if ((request.body.unit == 'fl-oz') ||
+					 (request.body.unit == 'cup') ||
+					 (request.body.unit == 'qt') ||
+					 (request.body.unit == 'tsp') ||
+					 (request.body.unit == 'tbsp'))
+	{
+		returnPackage.unit = 'ml';
+	}
+
+	// gallon to liter
+	else if (request.body.unit == 'gal')
+	{
+		returnPackage.unit = 'l';
+	}
+
+	// farenheit to celsius
+	else if (request.body.unit == 'f')
+	{
+		returnPackage.unit = 'c';
+	}
+
+	// Unit could not be converted
+	else
+	{
+		returnPackage.error = 'Unit could not be compared.';
 	}
 
 	response.status(200).json(returnPackage);
