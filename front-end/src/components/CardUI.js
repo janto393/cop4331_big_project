@@ -3,14 +3,33 @@ import CardDeck from 'react-bootstrap/CardDeck';
 import Card from 'react-bootstrap/Card';
 import Button from 'react-bootstrap/Button';
 
-// import PageTitle from '../components/PageTitle';
-// import LoggedInName from '../components/LoggedInName';
-import CardUI from '../components/CardUI';
 
-const MyRecipesPage = () =>
+function CardUI()
 {
+    // var card = '';
+    // var search = '';
+
+    // const [message,setMessage] = useState('');
+    // const [searchResults,setResults] = useState('');
+    // const [cardList,setCardList] = useState('');
+
+    // const addCard = async event => 
+    // {
+	//     event.preventDefault();
+
+    //      alert('addCard() ' + card.value);
+
+    // };
+
+    // const searchCard = async event => 
+    // {
+    //     event.preventDefault();
+        
+    //     alert('searchCard() ' + search.value);
+    // };
+
     return(
-      <div id="cardUIDiv">
+        <div id="cardUIDiv">
             <div id ="cardrows" class="row">
                 <div class="col-sm">
                     <CardDeck>
@@ -59,6 +78,6 @@ const MyRecipesPage = () =>
             </div>
         </div>
     );
-};
+}
 
-export default MyRecipesPage;
+export default CardUI;
