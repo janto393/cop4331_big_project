@@ -40,13 +40,23 @@ app.post('/createRecipe', async (request, response, next) =>
 {
   // incoming: userID, publicRecipe, isMetric, title, instructions, ingredientsByRecipe
   // outgoing: recipeID, ingredients, error
+
+  // JSON query package
+  // {
+  //   "author": "5fa613c408e77205a8e4aebe",
+  //   "publicRecipe": false,
+  //   "isMetric": true,
+  //   "title": "Gingerbread man",
+  //   "instructions": ["Mix ingredients", "Bake for 10 mins"],
+  //   "ingredients": [{}]
+  // }
 	
   const { publicRecipe,
           isMetric,
           title,
           author,
           instructions,
-          ingredientsByRecipe
+          ingredients
 				} = request.body;
 
   const INVALID_RECIPE = -1;
@@ -65,9 +75,8 @@ app.post('/createRecipe', async (request, response, next) =>
                     publicRecipe : publicRecipe, 
                     isMetric : isMetric,
                     instructions : instructions, // array of strings with each index representing a step.
-                    ingredientsByRecipe : ingredientsByRecipe // array of objects
+                    ingredients : [] // array of objects
                   };
-  console.log(typeof instructions);
   // Check if recipe name is already taken.
   try 
   {
@@ -98,52 +107,19 @@ app.post('/createRecipe', async (request, response, next) =>
   //    -if yes, insert amount and search for metric unit in Unit_metric database.
   //    -if no, insert amount and search for imperial unit in Unit_imperial database.
 
-  
+
   // ingredientsByRecipe api?
   // var i;
-  // var ingredientID;
-  // for (i = 0; i < ingredientsByRecipe.length; i++)
+  // var name;
+  // var amount;
+  // var units;
+  // for (i = 0; i < ingredients.length; i++)
   // {
-  //   var searchInd = {
-  //                     name : ingredientsByRecipe[i].name
-  //                   };
-
-  //   // Possible issue what if the ingredient already exists and how does the ingredient id get acquired by front-end?
-
-  //   // Checks if ingredient already exists. 
-  //   try
-  //   {
-  //     const db = client.db(process.env.APP_DATABASE);
-  //     var result = await db.collection(process.env.COLLECTION_INGRDIENTS).findOne(searchInd);
-  //   }
-  //   catch(e)
-  //   {
-  //     console.log(e.toString());
-  //   }
-
-
-  //   // If ingredient exist then don't add to list again.
-  //   if (result)
-  //   {
-  //     ingredientID = result._id;
-  //   }
-  //   // If ingredient doesn't exist, add to collection. 
-  //   else
-  //   {
-  //     // Need to find id of metric units/imperial units. 
-  //     try
-  //     {
-  //       const db = client.db(process.env.APP_DATABASE);
-  //       db.collection(process.env.COLLECTION_INGRDIENTS).insertOne(ingredientsByRecipe[i]);
-
-  //       var result = await db.collection(process.env.COLLECTION_INGRDIENTS).findOne(ingredientsByRecipe[i]);
-  //     }
-  //     catch(e)
-  //     {
-  //       console.log(e.toString());
-  //     }
-  //     ingredientID = result._id;
-  //   }
+  //   name = objectID(ingredients[i].name);
+  //   amount = ingredients[i].amount;
+  //   units = objectID(ingredients[i].units);
+  //   newRecipe.ingredients[i] = {name : name, amount : amount, units : units}
+  //   console.log(newRecipe.ingredients[i]);
   // }
   
 
