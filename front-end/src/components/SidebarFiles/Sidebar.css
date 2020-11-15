@@ -29,6 +29,7 @@
     top: 0;
     left: -100%;
     transition: 850ms;
+    z-index: 9999;
 }
 
 .side-menu.active{
@@ -74,4 +75,8 @@
 
 span{
     margin-left: 16px;
+}
+
+#logoutButton{
+    width: 80%;
 }

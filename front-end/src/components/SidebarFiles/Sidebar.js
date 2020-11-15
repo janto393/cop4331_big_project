@@ -4,6 +4,7 @@ import { FaBars, FaTimes } from "react-icons/fa";
 import { SidebarData } from './SidebarData';
 import { IconContext } from 'react-icons';
 import './Sidebar.css';
+import LoggedInName from '../LoggedInName';
 
 
 function Sidebar(){
@@ -37,6 +38,7 @@ function Sidebar(){
                                 </li>
                             )
                         })}
+                        <LoggedInName />
                     </ul>
                 </nav>
             </IconContext.Provider>

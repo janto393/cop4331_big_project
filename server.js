@@ -32,6 +32,68 @@ app.use((req, res, next) =>
     'GET, POST, PATCH, DELETE, OPTIONS'
   );
   next();
+}); 
+
+app.post('/login', async (request, response, next) => 
+{
+  // incoming: username, password
+  // outgoing: userID, username, email, firstName, lastName, profilePicture
+  // isVerified, favoriteRecipes, error
+
+ var error = '';
+ const { username, password } = request.body;
+ var userID = -1;
+ var email = '';
+ var firstName = '';
+ var lastName = '';
+//  var profilePicture = ''; // Does picture get stored in database as a string?
+ var isVerified = false;
+ var favoriteRecipes = null;
+
+ try 
+  {
+		const db = client.db('cooking_app_test');
+		
+    const criteria = {
+                      username:username, 
+                      password:password
+                      };
+		var results = await db.collection('Users_Test').findOne(criteria);
+  }
+  catch(e)
+  {
+    console.log('results empty');
+
+    returnPackage.error = e.toString();
+    response.status(400).json(returnPackage);
+    return;
+  }
+
+ console.log(results);
+ if( results )
+	{
+		userID = results.userID;
+		email = results.email;
+		firstName = results.firstName;
+		lastName = results.lastName;
+		// profilePicture = results.profilePicture;
+		isVerified = results.isVerified;
+		favoriteRecipes = results.favoriteRecipes;
+	}
+
+  var ret = {
+							userID : userID,
+							username : results.username,
+							email : email,
+							firstName : firstName,
+							lastName:lastName,
+							// profilePicture : profilePicture,
+							isVerified : isVerified,
+							favoriteRecipes : favoriteRecipes,
+							error : ''
+						};
+
+  response.status(200).json(ret);
 });
 
 // Register Endpoint
@@ -129,4 +191,4 @@ app.post('/registerUser', async (request, response, next) =>
 );
 
 
-app.listen(process.env.PORT || 5000); // start Node + Express server on port 5000
+app.listen(PORT || 5000); // start Node + Express server on port 5000

@@ -12,13 +12,22 @@ import SettingsPage from './pages/SettingsPage';
 
 // -== SideBar Component for each page
 import Sidebar from './components/SidebarFiles/Sidebar';
+import LoginPage from './pages/LoginPage';
 
-function App() {
-  return (
-    <Router >
-      <Sidebar />
-      <Switch>
-        <Route path="/" exact>
+// -== SideBar Component not present for login
+const LoginContainer = () => (
+  <div>
+      <Route path="/" exact>
+          <LoginPage />
+      </Route>
+  </div>
+)
+
+// -== SideBar Component present for all other pages
+const DefaultContainer = () => (
+  <div>
+    <Sidebar />
+        <Route path="/recipes" exact>
           <RecipesPage />
         </Route>
         <Route path="/myrecipes" exact>
@@ -33,7 +42,20 @@ function App() {
         <Route path="/accountSettings" exact>
           <SettingsPage />
         </Route>
-        <Redirect to="/" />
+        <Redirect to="/recipes" />
+  </div>
+)
+
+function App() {
+  return (
+    <Router >
+      <Switch>
+        <Route path="/" exact>
+          <LoginContainer />
+        </Route>
+        <Route>
+          <DefaultContainer />
+        </Route>
       </Switch>  
     </Router>
   );

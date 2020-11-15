@@ -33,7 +33,7 @@ function CardUI()
             <div id ="cardrows" class="row">
                 <div class="col-sm">
                     <CardDeck>
-                    <Card border="danger" style={{ width: '40rem' }}>
+                    <Card border="danger" style={{ width: '18rem' }}>
                         <Card.Img variant="top" src="holder.js/100px160" />
                         <Card.Body>
                         <Card.Title>Card title</Card.Title>
