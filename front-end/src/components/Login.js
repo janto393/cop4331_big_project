@@ -24,7 +24,7 @@ function Login()
     {
         event.preventDefault();
 
-        var obj = {login:loginName.value,password:loginPassword.value};
+        var obj = {username:loginName.value,password:loginPassword.value};
         var js = JSON.stringify(obj);
 
         try
@@ -35,13 +35,13 @@ function Login()
             var res = JSON.parse(await response.text());
             console.log(res);
 
-            if( res.id <= 0 )
+            if( res.userID <= 0 )
             {
                 setMessage('User/Password combination incorrect');
             }
             else
             {
-                var user = {firstName:res.firstName,lastName:res.lastName,id:res.id}
+                var user = {firstName:res.firstName,lastName:res.lastName,id:res.userID}
                 localStorage.setItem('user_data', JSON.stringify(user));
 
                 setMessage('');
