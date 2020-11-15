@@ -42,6 +42,12 @@ app.post('/login', async (request, response, next) =>
   // outgoing: userID, username, email, firstName, lastName, profilePicture
   // isVerified, favoriteRecipes, error
 
+  // JSON Package
+  // {
+  //   "username": "RickL",
+  //   "password": "google123"
+  // }
+
  const { username, password } = request.body;
 
  const INVALID_USER = -1;
