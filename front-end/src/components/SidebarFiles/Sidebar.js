@@ -5,6 +5,7 @@ import { SidebarData } from './SidebarData';
 import { IconContext } from 'react-icons';
 import './Sidebar.css';
 import LoggedInName from '../LoggedInName';
+import Logout from '../Logout';
 
 
 function Sidebar(){
@@ -19,7 +20,7 @@ function Sidebar(){
                     <Link to="#" className ="menu-bars">
                         <FaBars onClick = {showSidebar}/>
                     </Link>
-                    <h1 className="usersname">[Name here]</h1>
+                    <h1 className="usersname"><LoggedInName /></h1>
                 </div>
                 <nav className = {showbar ? 'side-menu active' :'side-menu'}>
                     <ul className = 'side-menu-items' onClick = {showSidebar}>
@@ -38,7 +39,7 @@ function Sidebar(){
                                 </li>
                             )
                         })}
-                        <LoggedInName />
+                        <Logout />
                     </ul>
                 </nav>
             </IconContext.Provider>
