@@ -42,15 +42,20 @@ app.post('/login', async (request, response, next) =>
   // outgoing: userID, username, email, firstName, lastName, profilePicture
   // isVerified, favoriteRecipes, error
 
- var error = '';
  const { username, password } = request.body;
- var userID = -1;
- var email = '';
- var firstName = '';
- var lastName = '';
-//  var profilePicture = ''; // Does picture get stored in database as a string?
- var isVerified = false;
- var favoriteRecipes = null;
+
+ const INVALID_USER = -1;
+ var returnPackage = {
+                      userID : INVALID_USER,
+                      username : '',
+                      email : '',
+                      firstName : '',
+                      lastName : '',
+                      // profilePicture : profilePicture,
+                      isVerified : false,
+                      favoriteRecipes : [],
+                      error : ''
+};
 
  try 
   {
@@ -60,7 +65,7 @@ app.post('/login', async (request, response, next) =>
                       username:username, 
                       password:password
                       };
-		var results = await db.collection(process.env.COLLECTION_USERS).findOne(criteria);
+		var result = await db.collection(process.env.COLLECTION_USERS).findOne(criteria);
   }
   catch(e)
   {
@@ -69,31 +74,20 @@ app.post('/login', async (request, response, next) =>
     return;
   }
 
- console.log(results);
- if( results )
+ console.log(result);
+ if( result )
 	{
-		userID = results.userID;
-		email = results.email;
-		firstName = results.firstName;
-		lastName = results.lastName;
-		// profilePicture = results.profilePicture;
-		isVerified = results.isVerified;
-		favoriteRecipes = results.favoriteRecipes;
+    returnPackage.userID = result.userID;
+    returnPackage.username = result.username;
+		returnPackage.email = result.email;
+		returnPackage.firstName = result.firstName;
+		returnPackage.lastName = result.lastName;
+		// returnPackage.profilePicture = result.profilePicture;
+		returnPackage.isVerified = result.isVerified;
+		returnPackage.favoriteRecipes = result.favoriteRecipes;
 	}
 
-  var ret = {
-							userID : userID,
-							username : results.username,
-							email : email,
-							firstName : firstName,
-							lastName:lastName,
-							// profilePicture : profilePicture,
-							isVerified : isVerified,
-							favoriteRecipes : favoriteRecipes,
-							error : ''
-						};
-
-  response.status(200).json(ret);
+  response.status(200).json(returnPackage);
 });
 
 app.listen(process.env.PORT || 5000); // start Node + Expresponses server on port 5000
