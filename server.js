@@ -172,6 +172,59 @@ app.post('/fetchUnits', async (request, response, next) => {
 });
 
 
+// Fetches recipes according to title
+app.post('/fetchRecipes', async (request, response, next) => {
+	/*
+		Incoming:
+		{
+			title : string,
+			currentPage : integer,
+			pageCapacity : integer
+		}
+
+		Outgoing:
+		{
+			recipes : array,
+			numInPage : integer,
+			totalNumRecipes : integer,
+			error : string
+		}
+	*/
+
+	// Determines how many results have already been displayed and skips them
+	const skipOffset = (request.body.currentPage - 1) * request.body.pageCapacity;
+
+	var returnPackage = {
+												recipes : [],
+												numInPage : 0,
+												totalNumRecipes : 0,
+												error : ''
+											};
+
+	// Query database based on title
+	try
+	{
+		const db = await client.db(process.env.APP_DATABASE);
+
+		var criteria = {
+										 title : request.body.title.toLowerCase()
+									 };
+
+		var result = db.collection(process.env.COLLECTION_RECIPES).find(criteria).skip(skipOffset).limit(request.body.pageCapacity).toArray();
+
+		returnPackage.recipes = result;
+	}
+	catch (e)
+	{
+		returnPackage.error = e.toString();
+		response.status(500).json(returnPackage);
+		return;
+	}
+
+	response.status(200).json(returnPackage);
+});
+
+
 // Find Ingredient Endpoint
 app.post('/findIngredient', async (request, response, next) => {
 	/*
