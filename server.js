@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 const express = require('express');
+const { ObjectID } = require('mongodb');
 const MongoClient = require('mongodb').MongoClient;
 const path = require('path');
 
@@ -344,6 +345,91 @@ app.post('/fromMetricToImperial', async (request, response, next) =>
 		returnPackage.error = 'Unit could not be compared.';
 	}
 
+
+	response.status(200).json(returnPackage);
+});
+
+
+// Modify Recipe Endpoint
+app.post('/modifyRecipe', async (request, response, next) =>
+{
+	/*
+		Incoming (NULL indicates no change in field):
+		{
+			recipeID : string,
+			publicRecipe : bool || NULL,
+			title : string || NULL,
+			instructions : [] || NULL,
+			categories : [] || NULL,
+			ingredients : [] || NULL
+		}
+
+		Outgoing:
+		{
+			success : bool,
+			recipeID : string,
+			error : string
+		}
+	*/
+
+	// Empty package on initialization, fields will be populated as changes to recipe are parsed
+	var updatePackage = {$set : {}};
+
+	const criteria = {_id : ObjectID(recipeID)};
+
+	var returnPackage = {
+												success : false,
+												recipeID : '',
+												error : ''
+											};
+
+	
+	// Check if publicRecipe changed
+	if (request.body.publicRecipe != null)
+	{
+		updatePackage.$set.publicRecipe = request.body.publicRecipe;
+	}
+
+	// Check if title changed
+	if (request.body.title != null)
+	{
+		updatePackage.$set.title = request.body.title.toLower();
+	}
+
+	// Check if instructions changed
+	if (request.body.title != null)
+	{
+		updatePackage.$set.title = request.body.instructions;
+	}
+
+	// Check if categories changed
+	if (request.body.categories != null)
+	{
+		updatePackage.$set.body.categories = request.body.categories;
+	}
+
+	// Check if ingredients changed
+	if (request.body.ingredients != null)
+	{
+		updatePackage.$set.body.ingredients = request.body.ingredients;
+	}
+
+	// Update recipe if needed
+	if (Object.keys(updatePackage.$set).length > 0)
+	{
+		// update recipe in the database
+		try
+		{
+			const db = client.db(process.env.APP_DATABASE);
+			db.collection(process.env.COLLECTION_RECIPES).updateOne(criteria, updatePackage);
+		}
+		catch (e)
+		{
+			returnPackage.error = e.toString();
+			response.status(500).json(returnPackage);
+			return;
+		}
+	}
 
 	response.status(200).json(returnPackage);
 });
