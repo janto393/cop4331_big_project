@@ -10,9 +10,6 @@
       publicRecipe: {
         bsonType: 'bool'
       },
-      isMetric: {
-        bsonType: 'bool'
-      },
       title: {
         bsonType: 'string'
       },
