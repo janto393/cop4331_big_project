@@ -1,5 +1,6 @@
 // Program dependencies
 const bodyParser = require('body-parser');
+const unitConversion = require('convert-units');
 const cors = require('cors');
 require('dotenv').config();
 const express = require('express');
@@ -99,6 +100,87 @@ app.post('/addIngredient', async (request, response, next) =>
 
 		returnPackage.ingredientID = result._id;
 		returnPackage.success = true;
+	}
+	catch (e)
+	{
+		returnPackage.error = e.toString();
+		response.status(500).json(returnPackage);
+		return;
+	}
+
+	response.status(200).json(returnPackage);
+});
+
+
+// Converts units between mesurement systems
+app.post('/convertUnit', async (request, response, next) => {
+	/*
+		Incoming:
+		{
+			isMetric : boolean,
+			unit : string,
+			value : integer
+		}
+
+		Outgoing:
+		{
+			success : bool,
+			value : integer,
+			unit : string,
+			unitID : string,
+			error : string
+		}
+	*/
+
+	var returnPackage = {
+												value : 0,
+												unit : '',
+												unitID : '',
+												error : ''
+											};
+
+	var params = {
+									unit : request.body.unit
+								};
+
+	var answer;
+	var collection;
+
+	// match the unit to the other system's units
+	if (request.body.isMetric)
+	{
+		answer = fromMetricToImperial(params);
+		collection = process.env.COLLECTION_IMPERIAL_UNITS;
+	}
+	else
+	{
+		answer = fromImperialToMetric(params);
+		collection = process.env.COLLECTION_METRIC_UNITS;
+	}
+
+	// Exit if bad unit was given
+	if (answer.error != '')
+	{
+		returnPackage.error = 'Bad unit given.';
+		response.status(400).json(returnPackage);
+		return;
+	}
+
+	returnPackage.unit = answer.unit;
+	returnPackage.value = unitConversion(request.body.value).from(request.body.unit).to(answer.unit);
+
+	// Find the unit in the database to return the _id field
+	try
+	{
+		const db = await client.db(process.env.APP_DATABASE);
+
+		const criteria = {
+											 unit : answer.unit
+										 };
+
+		var result = await db.collection(collection).findOne(criteria);
+
+		returnPackage.unitID = result._id;
 	}
 	catch (e)
 	{
@@ -222,133 +304,6 @@ app.post('/findIngredient', async (request, response, next) => {
 });
 
 
-// Matches imperial to metric units for conversion package
-app.post('/fromImperialToMetric', async (request, response, next) =>
-{
-	/*
-		Icomming:
-		{
-			unit : string
-		}
-
-		Outgoing:
-		{
-			unit : string,
-			error : string
-		}
-	*/
-
-	var returnPackage = {
-												unit : '',
-												error : ''
-											};
-
-	// lb to kg
-	if (request.body.unit == 'lb')
-	{
-		returnPackage.unit = 'kg';
-	}
-
-	// oz to g
-	else if (request.body.unit == 'oz')
-	{
-		returnPackage.unit = 'g';
-	}
-
-	// fl-oz, cup, quart, tsp, tbsp to ml
-	else if ((request.body.unit == 'fl-oz') ||
-					 (request.body.unit == 'cup') ||
-					 (request.body.unit == 'qt') ||
-					 (request.body.unit == 'tsp') ||
-					 (request.body.unit == 'tbsp'))
-	{
-		returnPackage.unit = 'ml';
-	}
-
-	// gallon to liter
-	else if (request.body.unit == 'gal')
-	{
-		returnPackage.unit = 'l';
-	}
-
-	// farenheit to celsius
-	else if (request.body.unit == 'f')
-	{
-		returnPackage.unit = 'c';
-	}
-
-	// Unit could not be converted
-	else
-	{
-		returnPackage.error = 'Unit could not be compared.';
-	}
-
-	response.status(200).json(returnPackage);
-});
-
-
-// Matches metric to imperial unit for conversion package
-app.post('/fromMetricToImperial', async (request, response, next) =>
-{
-	/*
-		Incoming:
-		{
-			unit : string
-		}
-
-		Output:
-		{
-			unit : string,
-			error : string
-		}
-	*/
-
-	var returnPackage = {
-												unit : '',
-												error : ''
-											};
-	
-	// ml to tsp
-	if (request.body.unit == 'ml')
-	{
-		returnPackage.unit = 'tsp';
-	}
-
-	// l to gallons
-	else if (request.body.unit == 'l')
-	{
-		returnPackage.unit = 'gal';
-	}
-
-	// g to oz
-	else if (request.body.unit == 'g')
-	{
-		returnPackage.unit = 'oz';
-	}
-
-	// kg to lb
-	else if (request.body.unit == 'kg')
-	{
-		returnPackage.unit = 'lb';
-	}
-
-	// c to f
-	else if (request.body.unit == 'c')
-	{
-		returnPackage.unit = 'f';
-	}
-
-	// Unit could not be converted
-	else
-	{
-		returnPackage.error = 'Unit could not be compared.';
-	}
-
-
-	response.status(200).json(returnPackage);
-});
-
-
 // Register Endpoint
 app.post('/registerUser', async (request, response, next) =>
 {
@@ -442,5 +397,133 @@ app.post('/registerUser', async (request, response, next) =>
   response.status(200).json(returnPackage);
 }
 );
+
+//////////////////////////////////////////////////////////////////////////////////
+// Begin Internal Helper Functions
+//////////////////////////////////////////////////////////////////////////////////
+
+// Matches unit from imperial to metric
+function fromImperialToMetric(incoming)
+{
+	/*
+		Icomming:
+		{
+			unit : string
+		}
+
+		Outgoing:
+		{
+			unit : string,
+			error : string
+		}
+	*/
+
+	var returnPackage = {
+												unit : '',
+												error : ''
+											};
+
+	// lb to kg
+	if (incoming.unit == 'lb')
+	{
+		returnPackage.unit = 'kg';
+	}
+
+	// oz to g
+	else if (incoming.unit == 'oz')
+	{
+		returnPackage.unit = 'g';
+	}
+
+	// fl-oz, cup, quart, tsp, tbsp to ml
+	else if ((incoming.unit == 'fl-oz') ||
+					 (incoming.unit == 'cup') ||
+					 (incoming.unit == 'qt') ||
+					 (incoming.unit == 'tsp') ||
+					 (incoming.unit == 'tbsp'))
+	{
+		returnPackage.unit = 'ml';
+	}
+
+	// gallon to liter
+	else if (incoming.unit == 'gal')
+	{
+		returnPackage.unit = 'l';
+	}
+
+	// farenheit to celsius
+	else if (incoming.unit == 'f')
+	{
+		returnPackage.unit = 'c';
+	}
+
+	// Unit could not be converted
+	else
+	{
+		returnPackage.error = 'Unit could not be compared.';
+	}
+
+	return returnPackage;
+};
+
+function fromMetricToImperial(incoming)
+{
+	/*
+		Incoming:
+		{
+			unit : string
+		}
+
+		Output:
+		{
+			unit : string,
+			error : string
+		}
+	*/
+
+	var returnPackage = {
+												unit : '',
+												error : ''
+											};
+	
+	// ml to tsp
+	if (incoming.unit == 'ml')
+	{
+		returnPackage.unit = 'tsp';
+	}
+
+	// l to gallons
+	else if (incoming.unit == 'l')
+	{
+		returnPackage.unit = 'gal';
+	}
+
+	// g to oz
+	else if (incoming.unit == 'g')
+	{
+		returnPackage.unit = 'oz';
+	}
+
+	// kg to lb
+	else if (incoming.unit == 'kg')
+	{
+		returnPackage.unit = 'lb';
+	}
+
+	// c to f
+	else if (incoming.unit == 'c')
+	{
+		returnPackage.unit = 'f';
+	}
+
+	// Unit could not be converted
+	else
+	{
+		returnPackage.error = 'Unit could not be compared.';
+	}
+
+	return returnPackage;
+};
+
 
 app.listen(process.env.PORT || 5000); // start Node + Express server on port 5000
