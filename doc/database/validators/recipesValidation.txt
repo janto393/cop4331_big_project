@@ -1,0 +1,73 @@
+{
+  $jsonSchema: {
+    bsonType: 'object',
+    required: [
+      'picture',
+      'publicRecipe',
+      'title',
+      'author',
+      'instructions',
+      'categories',
+      'ingredients'
+    ],
+    properties: {
+      picture: {
+        bsonType: 'string',
+        description: 'Stored by front-end in the server filesystem. This string represents the URI to the image.'
+      },
+      publicRecipe: {
+        bsonType: 'bool'
+      },
+      title: {
+        bsonType: 'string'
+      },
+      author: {
+        bsonType: 'objectId',
+        description: 'Acts as foreign key linking User to Recipe'
+      },
+      instructions: {
+        bsonType: 'array',
+        description: 'Each element in array is a step',
+        items: {
+          bsonType: 'string'
+        }
+      },
+      categories: {
+        bsonType: 'array',
+        items: {
+          bsonType: 'objectId',
+          description: 'acts as a foreign key to the categories collection'
+        }
+      },
+      ingredients: {
+        bsonType: 'array',
+        description: 'Each element acts as foreign key linking ingredient object to recipe. Stored as mutable tuple with ingredient ID, and amount/unit in both metric and imperial',
+        items: {
+          bsonType: 'array',
+          items: [
+            {
+              bsonType: 'objectId',
+              description: 'Ingredient name (foreign key)'
+            },
+            {
+              bsonType: 'double',
+              description: 'Amount (in metric)'
+            },
+            {
+              bsonType: 'objectId',
+              description: 'units type (in metric)'
+            },
+            {
+              bsonType: 'double',
+              description: 'Amount (in imperial)'
+            },
+            {
+              bsonType: 'objectId',
+              description: 'units type (in imperial)'
+            }
+          ]
+        }
+      }
+    }
+  }
+}
