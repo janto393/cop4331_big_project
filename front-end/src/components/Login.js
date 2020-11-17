@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import Grid from 'react-bootstrap/Container';
 
 function Login()
 {
@@ -56,16 +60,26 @@ function Login()
     };
 
     return(
-      <div id="loginDiv">
-        <form onSubmit={doLogin}>
-        <span id="inner-title">PLEASE LOG IN</span><br />
-        <input type="text" id="loginName" placeholder="Username"  ref={(c) => loginName = c} /><br />
-        <input type="password" id="loginPassword" placeholder="Password" ref={(c) => loginPassword = c}  /><br />
-        <input type="submit" id="loginButton" value = "Do It"
-          onClick={doLogin} />
-        </form>
-        <span id="loginResult">{message}</span>
-     </div>
+        <Grid>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+          <h1 component="h1" >
+            Sign in
+          </h1>
+          <Form onSubmit={doLogin}>
+                <Form.Control required type="username" placeholder="Username" ref={(c) => loginName = c} />
+                <Form.Control required type="password" placeholder="Password" ref={(c) => loginPassword = c}/>
+                <Button type="submit" variant="primary" onClick={doLogin} >
+                Sign In
+                </Button>
+            <Grid>
+                <Link href="#">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+            </Grid>
+            <span id="loginResult">{message}</span>
+          </Form>
+        </div>
+    </Grid>
     );
 };
 

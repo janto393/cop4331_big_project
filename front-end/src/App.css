@@ -43,3 +43,15 @@
   padding: 0;
   font-family: 'Lato', sans-serif;
 }
+
+.createRecipe{
+  margin-left: 16%;
+  margin-right: 16%;
+  background-color: pink;
+}
+
+.pages{
+  background: url("cuttingboard.jpg") no-repeat center fixed;
+  background-size: cover;
+  height: 100vh;
+}

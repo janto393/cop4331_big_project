@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button} from 'react-bootstrap';
+import Button from 'react-bootstrap/Button';
 import './SidebarFiles/Sidebar.css';
 
 function Logout()
@@ -9,7 +9,7 @@ function Logout()
       event.preventDefault();
         localStorage.removeItem("user_data")
         window.location.href = '/';
-    };    
+    };
 
   return(
     <div>
@@ -19,6 +19,5 @@ function Logout()
   );
 
 };
-
 
 export default Logout;

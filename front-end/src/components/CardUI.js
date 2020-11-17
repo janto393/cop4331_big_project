@@ -6,6 +6,11 @@ import Button from 'react-bootstrap/Button';
 
 function CardUI()
 {
+    var _ud = localStorage.getItem('user_data');
+    var ud = JSON.parse(_ud);
+    var id = ud.userID;
+    var firstName = ud.firstName;
+    var lastName = ud.lastName;  
     // var card = '';
     // var search = '';
 
@@ -28,54 +33,59 @@ function CardUI()
     //     alert('searchCard() ' + search.value);
     // };
 
+    const cardInfo = [
+        {
+            image:"",
+            title:"Recipe title",
+            text:"instructions"
+        },
+        {
+            image:"",
+            title:"Recipe title",
+            text:"instructions"
+        },
+        {
+            image:"",
+            title:"Recipe title",
+            text:"instructions"
+        },
+        {
+            image:"",
+            title:"Recipe title",
+            text:"instructions"
+        },
+        {
+            image:"",
+            title:"Recipe title",
+            text:"instructions"
+        },
+        {
+            image:"",
+            title:"Recipe title",
+            text:"instructions"
+        }
+    ];
+
+    const renderCard = (card, index) => {
+        return(
+            <Card border="danger" style={{ width: '18rem' }} key = {index} >
+                        <Card.Img variant="top" src={card.image} />
+                        <Card.Body>
+                        <Card.Title>{card.title}</Card.Title>
+                        <Card.Text>{card.text}</Card.Text>
+                        </Card.Body>
+                        <Card.Footer>
+                        <Button variant = "danger">View</Button>
+                        </Card.Footer>
+                    </Card>
+        );
+    };
+
     return(
         <div id="cardUIDiv">
-            <div id ="cardrows" class="row">
-                <div class="col-sm">
-                    <CardDeck>
-                    <Card border="danger" style={{ width: '18rem' }}>
-                        <Card.Img variant="top" src="holder.js/100px160" />
-                        <Card.Body>
-                        <Card.Title>Card title</Card.Title>
-                        <Card.Text>
-                            This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This content is a little bit longer.
-                        </Card.Text>
-                        </Card.Body>
-                        <Card.Footer>
-                        <Button variant = "danger">View</Button>
-                        </Card.Footer>
-                    </Card>
-                    <Card border="danger" style={{ width: '18rem' }}>
-                        <Card.Img variant="top" src="holder.js/100px160" />
-                        <Card.Body>
-                        <Card.Title>Card title</Card.Title>
-                        <Card.Text>
-                            This card has supporting text below as a natural lead-in to additional
-                            content.{' '}
-                        </Card.Text>
-                        </Card.Body>
-                        <Card.Footer>
-                        <Button variant = "danger">View</Button>
-                        </Card.Footer>
-                    </Card>
-                    <Card border="danger" style={{ width: '18rem' }}>
-                        <Card.Img variant="top" src="holder.js/100px160" />
-                        <Card.Body>
-                        <Card.Title>Card title</Card.Title>
-                        <Card.Text>
-                            This is a wider card with supporting text below as a natural lead-in to
-                            additional content. This card has even longer content than the first to
-                            show that equal height action.
-                        </Card.Text>
-                        </Card.Body>
-                        <Card.Footer>
-                        <Button variant = "danger">View</Button>
-                        </Card.Footer>
-                    </Card>
-                    </CardDeck>
-                </div>
-            </div>
+                    {/* <CardDeck> */}
+                        {cardInfo.map(renderCard)}
+                    {/* </CardDeck> */}
         </div>
     );
 }

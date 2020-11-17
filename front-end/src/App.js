@@ -25,7 +25,7 @@ const LoginContainer = () => (
 
 // -== SideBar Component present for all other pages
 const DefaultContainer = () => (
-  <div>
+  <div className="pages">
     <Sidebar />
         <Route path="/recipes" exact>
           <RecipesPage />
