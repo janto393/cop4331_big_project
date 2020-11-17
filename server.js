@@ -558,7 +558,7 @@ function fromImperialToMetric(incoming)
 	}
 
 	return returnPackage;
-};
+}
 
 // Matches unit from metric to imperial
 function fromMetricToImperial(incoming)
@@ -618,7 +618,7 @@ function fromMetricToImperial(incoming)
 	}
 
 	return returnPackage;
-};
+}
 
 // Processes string of ingredient names
 async function processIngredients(incoming)
