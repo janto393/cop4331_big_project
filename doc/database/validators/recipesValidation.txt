@@ -2,15 +2,20 @@
   $jsonSchema: {
     bsonType: 'object',
     required: [
+      'picture',
       'publicRecipe',
       'title',
-      'author'
+      'author',
+      'instructions',
+      'categories',
+      'ingredients'
     ],
     properties: {
-      publicRecipe: {
-        bsonType: 'bool'
+      picture: {
+        bsonType: 'string',
+        description: 'Stored by front-end in the server filesystem. This string represents the URI to the image.'
       },
-      isMetric: {
+      publicRecipe: {
         bsonType: 'bool'
       },
       title: {
@@ -37,28 +42,31 @@
       ingredients: {
         bsonType: 'array',
         description: 'Each element acts as foreign key linking ingredient object to recipe. Stored as mutable tuple with ingredient ID, and amount/unit in both metric and imperial',
-        items: [
-          {
-            bsonType: 'objectId',
-            description: 'Ingredient name (foreign key)'
-          },
-          {
-            bsonType: 'double',
-            description: 'Amount (in metric)'
-          },
-          {
-            bsonType: 'objectId',
-            description: 'units type (in metric)'
-          },
-          {
-            bsonType: 'double',
-            description: 'Amount (in imperial)'
-          },
-          {
-            bsonType: 'objectId',
-            description: 'units type (in imperial)'
-          }
-        ]
+        items: {
+          bsonType: 'array',
+          items: [
+            {
+              bsonType: 'objectId',
+              description: 'Ingredient name (foreign key)'
+            },
+            {
+              bsonType: 'double',
+              description: 'Amount (in metric)'
+            },
+            {
+              bsonType: 'objectId',
+              description: 'units type (in metric)'
+            },
+            {
+              bsonType: 'double',
+              description: 'Amount (in imperial)'
+            },
+            {
+              bsonType: 'objectId',
+              description: 'units type (in imperial)'
+            }
+          ]
+        }
       }
     }
   }
