@@ -165,6 +165,10 @@ app.post('/deleteRecipe', async (request, response, next) =>
 		{
 			returnPackage.success = true;
 		}
+		else
+		{
+			returnPackage.error = 'Recipe was not deleted or didn\'t exist to begin with'
+		}
   }
   catch (e)
   {
