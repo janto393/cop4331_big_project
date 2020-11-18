@@ -37,163 +37,6 @@ app.use((req, res, next) =>
   next();
 });
 
-// Add Ingredient Endpoint
-app.post('/addIngredient', async (request, response, next) =>
-{
-	/*
-		Incoming:
-		{
-			name : string
-		}
-		Outgoing:
-		{
-			ingredientID : objectID,
-			success : bool,
-			error : ''
-		}
-	*/
-
-	var returnPackage = {
-												ingredientID : null,
-												success : false,
-												error : ''
-											};
-
-	// ensure we are not inserting a duplicate
-	try
-	{
-		const db = await client.db(process.env.APP_DATABASE);
-
-		const criteria = {
-											 name : request.body.name.toLowerCase()
-										 };
-
-		var result = await db.collection(process.env.COLLECTION_INGREDIENTS).findOne(criteria);
-
-		// exit if ingredient is ready added
-		if (result)
-		{
-			returnPackage.ingredientID = result._id;
-			returnPackage.success = true;
-			response.status(200).json(returnPackage);
-			return;
-		}
-	}
-	catch (e)
-	{
-		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
-		return;
-	}
-
-	// insert the ingredient to the database
-	try
-	{
-		const db = await client.db(process.env.APP_DATABASE);
-		
-		const criteria = {
-											 name : request.body.name.toLowerCase()
-										 };
-
-		db.collection(process.env.COLLECTION_INGREDIENTS).insertOne(criteria);
-
-		// need to search it in the database to get the id of the ingredient
-		var result = await db.collection(process.env.COLLECTION_INGREDIENTS).findOne(criteria);
-
-		returnPackage.ingredientID = result._id;
-		returnPackage.success = true;
-	}
-	catch (e)
-	{
-		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
-		return;
-	}
-
-	response.status(200).json(returnPackage);
-});
-
-
-// Converts units between mesurement systems
-app.post('/convertUnit', async (request, response, next) => {
-	/*
-		Incoming:
-		{
-			isMetric : boolean,
-			unit : string,
-			value : integer
-		}
-
-		Outgoing:
-		{
-			success : bool,
-			value : integer,
-			unit : string,
-			unitID : string,
-			error : string
-		}
-	*/
-
-	var returnPackage = {
-												value : 0,
-												unit : '',
-												unitID : '',
-												error : ''
-											};
-
-	var params = {
-									unit : request.body.unit
-								};
-
-	var answer;
-	var collection;
-
-	// match the unit to the other system's units
-	if (request.body.isMetric)
-	{
-		answer = fromMetricToImperial(params);
-		collection = process.env.COLLECTION_IMPERIAL_UNITS;
-	}
-	else
-	{
-		answer = fromImperialToMetric(params);
-		collection = process.env.COLLECTION_METRIC_UNITS;
-	}
-
-	// Exit if bad unit was given
-	if (answer.error != '')
-	{
-		returnPackage.error = 'Bad unit given.';
-		response.status(400).json(returnPackage);
-		return;
-	}
-
-	returnPackage.unit = answer.unit;
-	returnPackage.value = unitConversion(request.body.value).from(request.body.unit).to(answer.unit);
-
-	// Find the unit in the database to return the _id field
-	try
-	{
-		const db = await client.db(process.env.APP_DATABASE);
-
-		const criteria = {
-											 unit : answer.unit
-										 };
-
-		var result = await db.collection(collection).findOne(criteria);
-
-		returnPackage.unitID = result._id;
-	}
-	catch (e)
-	{
-		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
-		return;
-	}
-
-	response.status(200).json(returnPackage);
-});
-
 
 // Create new recipe endpoint. 
 app.post('/createRecipe', async (request, response, next) =>
@@ -260,8 +103,6 @@ app.post('/createRecipe', async (request, response, next) =>
 										categories : processedCategories.databaseCategories,
 										ingredients : processedIngredients.databaseIngredients
 									};
-
-	console.log(newRecipe);
 
 	// Insert the new recipe into the database
 	try
@@ -697,10 +538,8 @@ async function processIngredients(incoming)
 
 	// Offset values for input array of ingredients
 	const IN_INGREDIENT_NAME_INDEX = 0;
-	const IN_AMOUNT_METRIC_INDEX = 1;
-	const IN_UNIT_METRIC_INDEX = 2;
-	const IN_AMOUNT_IMPERIAL_INDEX = 3;
-	const IN_UNIT_IMPERIAL_INDEX = 4;
+	const IN_AMOUNT_INDEX = 1;
+	const IN_UNIT_INDEX = 2;
 
 	// Offset values for database ingredients array
 	const DB_ID_INDEX = 0;
@@ -787,7 +626,7 @@ async function processIngredients(incoming)
 
 			if (isMetric)
 			{
-				metricUnit = incoming.ingredients[i][IN_UNIT_METRIC_INDEX];
+				metricUnit = incoming.ingredients[i][IN_UNIT_INDEX];
 
 				// match the unit to imperial
 				imperialUnit = fromMetricToImperial({unit : metricUnit}).unit;
@@ -800,12 +639,12 @@ async function processIngredients(incoming)
 				}
 
 				// calculate the ammounts for each ingredient
-				amountMetric = incoming.ingredients[i][IN_AMOUNT_METRIC_INDEX];
+				amountMetric = incoming.ingredients[i][IN_AMOUNT_INDEX];
 				amountImperial = unitConversion(amountMetric).from(metricUnit).to(imperialUnit);
 			}
 			else
 			{
-				imperialUnit = incoming.ingredients[i][IN_UNIT_IMPERIAL_INDEX];
+				imperialUnit = incoming.ingredients[i][IN_UNIT_INDEX];
 
 				// match the unit to metric
 				metricUnit = fromImperialToMetric({unit : imperialUnit}).unit;
@@ -818,7 +657,7 @@ async function processIngredients(incoming)
 				}
 
 				// calculate the amounts for each ingredient
-				amountImperial = incoming.ingredients[i][IN_AMOUNT_IMPERIAL_INDEX];
+				amountImperial = incoming.ingredients[i][IN_AMOUNT_INDEX];
 				amountMetric = unitConversion(amountImperial).from(imperialUnit).to(metricUnit);
 			}
 
