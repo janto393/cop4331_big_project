@@ -128,6 +128,59 @@ app.post('/createRecipe', async (request, response, next) =>
   response.status(200).json(returnPackage);
 });
 
+
+// delete recipe endpoint
+app.post('/deleteRecipe', async (request, response, next) =>
+{
+	/*
+		Incoming:
+		{
+			recipeID : string
+		}
+
+		outgoing:
+		{
+			success : bool,
+			error : string
+		}
+	*/
+
+  var recipeToDelete = {
+					_id : ObjectID(request.body.recipeID)
+	};
+
+  var returnPackage = {
+						success : false,
+						error : ''
+					  };
+					  
+  // Delete recipe record. 
+  try
+  {
+		const db = await client.db(process.env.APP_DATABASE);
+		
+		var result = await db.collection(process.env.COLLECTION_RECIPES).deleteOne(recipeToDelete);
+
+		if (result.deletedCount == 1)
+		{
+			returnPackage.success = true;
+		}
+		else
+		{
+			returnPackage.error = 'Recipe was not deleted or didn\'t exist to begin with'
+		}
+  }
+  catch (e)
+  {
+    returnPackage.error = e.toString();
+    response.status(500).json(returnPackage);
+    return;
+	}
+
+  response.status(200).json(returnPackage);
+});
+
+
 // Fetches all units depending on system selected
 app.post('/fetchUnits', async (request, response, next) => {
 	/*
