@@ -369,6 +369,7 @@ app.post('/modifyRecipe', async (request, response, next) =>
 		Incoming (NULL indicates no change in field):
 		{
 			recipeID : string,
+			isMetric : bool,
 			publicRecipe : bool || NULL,
 			title : string || NULL,
 			instructions : [] || NULL,
@@ -387,7 +388,7 @@ app.post('/modifyRecipe', async (request, response, next) =>
 	// Empty package on initialization, fields will be populated as changes to recipe are parsed
 	var updatePackage = {$set : {}};
 
-	const criteria = {_id : ObjectID(recipeID)};
+	const criteria = {_id : ObjectID(request.body.recipeID)};
 
 	var returnPackage = {
 												success : false,
@@ -397,33 +398,60 @@ app.post('/modifyRecipe', async (request, response, next) =>
 
 	
 	// Check if publicRecipe changed
-	if (request.body.publicRecipe != null)
+	if ((request.body.publicRecipe != null) && (typeof request.body.publicRecipe == 'boolean'))
 	{
 		updatePackage.$set.publicRecipe = request.body.publicRecipe;
 	}
 
 	// Check if title changed
-	if (request.body.title != null)
+	if ((request.body.title != null) && (typeof request.body.title == 'string'))
 	{
-		updatePackage.$set.title = request.body.title.toLower();
+		updatePackage.$set.title = request.body.title.toLowerCase();
 	}
 
 	// Check if instructions changed
-	if (request.body.title != null)
+	if ((request.body.instructions != null) && (typeof request.body.instructions == 'object'))
 	{
-		updatePackage.$set.title = request.body.instructions;
+		updatePackage.$set.instructions = request.body.instructions;
 	}
 
 	// Check if categories changed
-	if (request.body.categories != null)
+	if ((request.body.categories != null) && (typeof request.body.categories == 'object'))
 	{
-		updatePackage.$set.body.categories = request.body.categories;
+		try
+		{
+			let categoriesPayload = {
+				categories : request.body.categories
+			}
+
+			updatePackage.$set.categories = (await processCategories(categoriesPayload)).databaseCategories;
+		}
+		catch (e)
+		{
+			returnPackage.error = e.toString();
+			response.status(400).json(returnPackage);
+			return;
+		}
 	}
 
 	// Check if ingredients changed
-	if (request.body.ingredients != null)
+	if ((request.body.ingredients != null) && (typeof request.body.ingredients == 'object'))
 	{
-		updatePackage.$set.body.ingredients = request.body.ingredients;
+		try
+		{
+			let ingredientsPayload = {
+				isMetric : request.body.isMetric,
+				ingredients : request.body.ingredients
+			}
+
+			updatePackage.$set.ingredients = (await processIngredients(ingredientsPayload)).databaseIngredients;
+		}
+		catch (e)
+		{
+			returnPackage.error = e.toString();
+			response.status(400).json(returnPackage);
+			return;
+		}
 	}
 
 	// Update recipe if needed
@@ -432,8 +460,8 @@ app.post('/modifyRecipe', async (request, response, next) =>
 		// update recipe in the database
 		try
 		{
-			const db = client.db(process.env.APP_DATABASE);
-			db.collection(process.env.COLLECTION_RECIPES).updateOne(criteria, updatePackage);
+			const db = await client.db(process.env.APP_DATABASE);
+			await db.collection(process.env.COLLECTION_RECIPES).updateOne(criteria, updatePackage);
 		}
 		catch (e)
 		{
@@ -443,6 +471,7 @@ app.post('/modifyRecipe', async (request, response, next) =>
 		}
 	}
 
+	returnPackage.success = true;
 	response.status(200).json(returnPackage);
 });
 
@@ -687,9 +716,6 @@ async function processIngredients(incoming)
 			error : string
 		}
 	*/
-
-	var databaseIngredients = [];
-	var frontendIngredients = [];
 
 	// Offset values for input array of ingredients
 	const IN_INGREDIENT_NAME_INDEX = 0;
