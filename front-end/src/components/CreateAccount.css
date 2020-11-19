@@ -1,0 +1,18 @@
+.registerDiv
+{
+	justify-content: center;
+	display: block;
+	margin: auto;
+}
+
+.register-form
+{
+	display: block;
+	margin: auto;
+}
+
+.form-input
+{
+	padding: 2%;
+	font-size: 12pt;
+}

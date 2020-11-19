@@ -39,7 +39,7 @@ app.use((req, res, next) =>
 
 
 // Create new recipe endpoint. 
-app.post('/createRecipe', async (request, response, next) =>
+app.post('/api/createRecipe', async (request, response, next) =>
 {	
 	/*
 		Incoming:
@@ -130,7 +130,7 @@ app.post('/createRecipe', async (request, response, next) =>
 
 
 // delete recipe endpoint
-app.post('/deleteRecipe', async (request, response, next) =>
+app.post('/api/deleteRecipe', async (request, response, next) =>
 {
 	/*
 		Incoming:
@@ -182,7 +182,7 @@ app.post('/deleteRecipe', async (request, response, next) =>
 
 
 // edit favorite recipes Endpoint
-app.post('/editFavoriteRecipes', async (request, response, next) =>
+app.post('/api/editFavoriteRecipes', async (request, response, next) =>
 {
 	/*
 		Incoming:
@@ -252,7 +252,7 @@ app.post('/editFavoriteRecipes', async (request, response, next) =>
 
 
 // Fetches all units depending on system selected
-app.post('/fetchUnits', async (request, response, next) => {
+app.post('/api/fetchUnits', async (request, response, next) => {
 	/*
 		Incoming:
 		{
@@ -313,7 +313,7 @@ app.post('/fetchUnits', async (request, response, next) => {
 
 
 // Fetches recipes according to title
-app.post('/fetchRecipes', async (request, response, next) => {
+app.post('/api/fetchRecipes', async (request, response, next) => {
 	/*
 		Incoming:
 		{
@@ -408,7 +408,7 @@ app.post('/fetchRecipes', async (request, response, next) => {
 
 
 // Find Ingredient Endpoint
-app.post('/findIngredient', async (request, response, next) => {
+app.post('/api/findIngredient', async (request, response, next) => {
 	/*
 		Incoming:
 		{
@@ -458,7 +458,7 @@ app.post('/findIngredient', async (request, response, next) => {
 
 
 // Modify Recipe Endpoint
-app.post('/modifyRecipe', async (request, response, next) =>
+app.post('/api/modifyRecipe', async (request, response, next) =>
 {
 	/*
 		Incoming (NULL indicates no change in field):
@@ -572,7 +572,7 @@ app.post('/modifyRecipe', async (request, response, next) =>
 
 
 // Register Endpoint
-app.post('/registerUser', async (request, response, next) =>
+app.post('/api/registerUser', async (request, response, next) =>
 {
   // incoming: userId, color
   // outgoing: userID, username, email, firstName, lastName, profilePicture

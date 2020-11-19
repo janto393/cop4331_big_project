@@ -1,4 +1,22 @@
-.App {
+body
+{
+	/* background-image: url("img/background.jpg"); */
+}
+
+.page-container
+{
+	display: block;
+	margin: auto;
+	width: 50%;
+}
+
+.dialog-container-div
+{
+	display: block;
+	margin: auto;
+}
+
+/* .App {
   text-align: center;
 }
 
@@ -35,4 +53,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */

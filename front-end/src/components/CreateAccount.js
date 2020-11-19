@@ -71,9 +71,13 @@ function Register()
 
 				<form className="register-form" onSubmit={ doCreation }>
 						<input className="form-input" type="text" id="username" placeholder="Username"   ref={(c) => username = c} />
+						<br />
 						<input className="form-input" type="text" id="email" placeholder="Email"  ref={(c) => email = c}/>
+						<br />
 						<input className="form-input" type="password" id="password" placeholder="Password"   ref={(c) => password = c} />
+						<br />
 						<input className="form-input" type="password" id="password" placeholder="Confirm Password"   ref={(c) => confirmPassword = c} />
+						<br />
 						<div className="registerButton">
 								<input className="buttons" type="submit" id="loginButton" class="buttons" value="Create Account" onClick={doCreation} />       
 						</div>
