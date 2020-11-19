@@ -360,12 +360,12 @@ app.post('/fetchRecipes', async (request, response, next) => {
 	{
 		// package the category given into format for the helper function
 		const rawCategories = {
-			categires : [request.body.category]
+			categories : [request.body.category]
 		}
 
 		try
 		{
-			var processedCategories = await processCategories(rawCategories);
+			var processedCategories = (await processCategories(rawCategories)).databaseCategories;
 
 			// Only take the first element since we are only searching by one category at a time
 			if (processedCategories.length > 0)
@@ -391,8 +391,6 @@ app.post('/fetchRecipes', async (request, response, next) => {
 	try
 	{
 		const db = await client.db(process.env.APP_DATABASE);
-
-		console.log(criteria);
 
 		var result = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).skip(skipOffset).limit(pageCapacity).toArray();
 
