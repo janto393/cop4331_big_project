@@ -317,7 +317,10 @@ app.post('/fetchRecipes', async (request, response, next) => {
 	/*
 		Incoming:
 		{
-			title : string,
+			title : string || NULL,
+			category : string || NULL,
+			fetchUserRecipes : bool,
+			userID : string,
 			currentPage : integer,
 			pageCapacity : integer
 		}
@@ -333,6 +336,7 @@ app.post('/fetchRecipes', async (request, response, next) => {
 
 	// Determines how many results have already been displayed and skips them
 	const skipOffset = (request.body.currentPage - 1) * request.body.pageCapacity;
+	const pageCapacity = request.body.pageCapacity;
 
 	var returnPackage = {
 												recipes : [],
@@ -341,16 +345,56 @@ app.post('/fetchRecipes', async (request, response, next) => {
 												error : ''
 											};
 
+	// Empty package on initialization, will be populated as we preocess input
+	var criteria = {}
+
+	// process title
+	if ((request.body.title != null) && (typeof request.body.title == 'string'))
+	{
+		// format the title into a regex equivalent of SQL's "like"
+		criteria.title =  {$regex : ('^' + request.body.title.toLowerCase())};
+	}
+
+	// process category
+	if ((request.body.category != null) && (typeof request.body.category == 'string'))
+	{
+		// package the category given into format for the helper function
+		const rawCategories = {
+			categires : [request.body.category]
+		}
+
+		try
+		{
+			var processedCategories = await processCategories(rawCategories);
+
+			// Only take the first element since we are only searching by one category at a time
+			if (processedCategories.length > 0)
+			{
+				criteria.category = ObjectID(processedCategries[0]);
+			}
+		}
+		catch (e)
+		{
+			returnPackage.error = e.toString();
+			response.status(400).json(returnPackage);
+			return;
+		}
+	}
+
+	// process if we are fetching user recipes only
+	if (request.body.fetchUserRecipes)
+	{
+		criteria.author = ObjectID(request.body.userID);
+	}
+
 	// Query database based on title
 	try
 	{
 		const db = await client.db(process.env.APP_DATABASE);
 
-		var criteria = {
-										 title : request.body.title.toLowerCase()
-									 };
+		console.log(criteria);
 
-		var result = db.collection(process.env.COLLECTION_RECIPES).find(criteria).skip(skipOffset).limit(request.body.pageCapacity).toArray();
+		var result = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).skip(skipOffset).limit(pageCapacity).toArray();
 
 		returnPackage.recipes = result;
 	}
