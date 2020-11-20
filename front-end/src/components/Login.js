@@ -55,15 +55,15 @@ function Login()
 				var userInfo = {
 					userID : responseJson._id,
 					email : responseJson.email,
-					firstname : responseJson.firstName,
-					lastname : responseJson.lastName,
-					// usesMetric : responseJson.usesMetric,
+					firstname : responseJson.firstname,
+					lastname : responseJson.lastname,
+					usesMetric : responseJson.usesMetric,
 					favoriteRecipes : responseJson.favoriteRecipes
 				};
 
 				localStorage.setItem('user_data', JSON.stringify(userInfo));
 				setMessage('');
-				// window.location.href = '/recipes';
+				window.location.href = '/recipes';
 			}
 		}
 		catch (e)
