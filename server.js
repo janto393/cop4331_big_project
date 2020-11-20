@@ -38,7 +38,7 @@ app.use((req, res, next) =>
 }); 
 
 // Login endpoint. 
-app.post('/login', async (request, response, next) => 
+app.post('/api/login', async (request, response, next) => 
 {
   // incoming: username, password
   // outgoing: userID, username, email, firstName, lastName, profilePicture

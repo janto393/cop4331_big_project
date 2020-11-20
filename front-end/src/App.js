@@ -1,9 +1,6 @@
 // React imports
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-
-// Page imports
-import LoginPage from './pages/LoginPage';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
 // CSS imports
 // import logo from './logo.svg';
@@ -16,25 +13,24 @@ import MyRecipesPage from './pages/MyRecipesPage';
 import IngListPage from './pages/IngListPage';
 import CreateRecipePage from './pages/CreateRecipePage';
 import SettingsPage from './pages/SettingsPage';
+import CreateAccount from './components/CreateAccount';
 
 // -== SideBar Component for each page
 import Sidebar from './components/SidebarFiles/Sidebar';
 import LoginPage from './pages/LoginPage';
 
+
 // -== SideBar Component not present for login
 const LoginContainer = () => (
   <div>
       <Route path="/" exact>
-						<div className="dialog-container-div">
-							<div className="login-dialog">
-								<div className="logo"></div>
-								<div className="login-page-div">
-									<LoginPage state={state} />
-									<p className="register-click" onClick={handleClick}>{message}</p>
-								</div>
-							</div>
-						</div>
-					</Route>
+        <LoginPage />
+      </Route>
+      <Route path="/register" exact>
+        <CreateAccount />
+      </Route>
+      <Redirect to="/" />
+
   </div>
 )
 
@@ -63,22 +59,6 @@ const DefaultContainer = () => (
 
 function App()
 {
-	// boolean hook to determine whether the Login or the CreateAccount component will be rendered
-	const [state, setState] = useState(true);
-	
-	// string hook that will hold the register/create account link in the loginpage
-	const [message, setMessage] = useState('Create an Account');
-
-	// loginState handlers
-	const handleClick = () => {
-		setState(!state);
-		formMessage();
-	}
-
-	const formMessage = (e) => {
-		(state === true) ? setMessage('Return to Login') : setMessage('Create an Account');
-	}
-
   return (
     <Router >
 			<div className="page-container">

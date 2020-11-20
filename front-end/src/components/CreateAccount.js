@@ -5,7 +5,7 @@ import React, { useState } from 'react';
 import './CreateAccount.css'
 
 // Misc. imports
-const passwordHash = require('password-hash');
+// const passwordHash = require('password-hash');
 
 // environment variables
 const PORT = (process.env.PORT || 5000);
@@ -63,8 +63,19 @@ function Register()
 			}
 			else
 			{
+				var userInfo = {
+					userID : responseJson._id,
+					email : responseJson.email,
+					firstname : responseJson.firstname,
+					lastname : responseJson.lastname,
+					// usesMetric : responseJson.usesMetric,
+					favoriteRecipes : responseJson.favoriteRecipes
+				};
+
+				localStorage.setItem('user_data', JSON.stringify(userInfo));
+
 				setMessage('Registration Complete');
-				window.location.href = '/';
+				window.location.href = '/recipes';
 			}
 		}
 		catch (e)
@@ -82,7 +93,7 @@ function Register()
 	return (
 		<div id="registerDiv">
 			<h1 className="dialog-header">Create Account</h1>
-			<form className="register-form" onSubmit={ doCreation }>
+			<form className="register-form">
 				<input className="form-input" type="text" id="username" placeholder="Username"   ref={(c) => username = c} />
 				<br />
 				<input className="form-input" type="text" id="firstname" placeholder="Firstname"  ref={(c) => firstname = c}/>
