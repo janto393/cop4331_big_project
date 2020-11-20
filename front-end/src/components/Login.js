@@ -58,7 +58,7 @@ function Login()
 					email : responseJson.email,
 					firstname : responseJson.firstname,
 					lastname : responseJson.lastname,
-					// usesMetric : responseJson.usesMetric,
+					usesMetric : responseJson.usesMetric,
 					favoriteRecipes : responseJson.favoriteRecipes
 				}
 
