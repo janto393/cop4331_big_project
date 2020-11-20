@@ -85,7 +85,7 @@ app.post('/login', async (request, response, next) =>
  console.log(result);
  if( result )
 	{
-    returnPackage.userID = result.userID;
+    returnPackage.userID = result._id;
     returnPackage.username = result.username;
 		returnPackage.email = result.email;
 		returnPackage.firstName = result.firstName;
@@ -381,7 +381,7 @@ app.post('/registerUser', async (request, response, next) =>
   // Assigns return package values. 
   if (result)
   {
-    returnPackage.userID = result.userID;
+    returnPackage.userID = result._id;
     returnPackage.username = result.username;
     returnPackage.email = result.email;
     returnPackage.firstName = result.firstName;

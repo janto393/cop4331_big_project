@@ -45,8 +45,9 @@ function Login()
             }
             else
             {
-                var user = {firstName:res.firstName,lastName:res.lastName,id:res.userID}
+                var user = {firstName:res.firstName,lastName:res.lastName,userId:res.userID}
                 localStorage.setItem('user_data', JSON.stringify(user));
+                console.log(user);
 
                 setMessage('');
                 window.location.href = '/recipes';
@@ -72,7 +73,7 @@ function Login()
                 Sign In
                 </Button>
             <Grid>
-                <Link href="#">
+                <Link to="/">
                   {"Don't have an account? Sign Up"}
                 </Link>
             </Grid>
