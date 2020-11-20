@@ -2,6 +2,7 @@
 const bodyParser = require('body-parser');
 const unitConversion = require('convert-units');
 const cors = require('cors');
+const { response, request } = require('express');
 require('dotenv').config();
 const express = require('express');
 const { ObjectId } = require('mongodb');
@@ -23,14 +24,14 @@ const client = new MongoClient(url, { useUnifiedTopology: true });
 client.connect();
 
 // Access Control Logic
-app.use((req, res, next) => 
+app.use((request, response, next) => 
 {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader(
     'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    'Origin, X-requestuested-With, Content-Type, Accept, Authorization'
   );
-  res.setHeader(
+  response.setHeader(
     'Access-Control-Allow-Methods',
     'GET, POST, PATCH, DELETE, OPTIONS'
   );
@@ -453,6 +454,85 @@ app.post('/api/findIngredient', async (request, response, next) => {
 		return;
 	}
 
+	response.status(200).json(returnPackage);
+});
+
+
+// login endpoint
+app.post('/api/login', async (request, response, next) => 
+{
+	/*
+		Incoming:
+		{
+			username : string,
+			password : string
+		}
+
+		Outgoing:
+		{
+			success : bool,
+			userID : string,
+			username : string,
+			email : string,
+			firstname : string,
+			lastname : string,
+			usesMetric : bool,
+			favoriteRecipes : array,
+			error : string
+		}
+	*/
+
+	const INVALID_CREDENTIALS = 'Invalid Username/Password';
+
+	var returnPackage = {
+		success : false,
+		userID : '',
+		username : '',
+		email : '',
+		firstname : '',
+		lastname : '',
+		usesMetric : false,
+		favoriteRecipes : [],
+		error : ''
+	}
+
+	// try to locate user in the database
+	try
+	{
+		const db = await client.db(process.env.APP_DATABASE);
+
+		const criteria = {
+			username : request.body.username.toLowerCase(),
+			password : request.body.password
+		}
+
+		var result = await db.collection(process.env.COLLECTION_USERS).findOne(criteria);
+
+		// check if user does not exist or password doesn't match
+		if ((!result) || (result.password !== request.body.password))
+		{
+			returnPackage.error = INVALID_CREDENTIALS;
+			response.status(400).json(returnPackage);
+			return;
+		}
+
+		// parse the user information into the return package
+		returnPackage.userID = result._id;
+		returnPackage.username = result.username;
+		returnPackage.email = result.email;
+		returnPackage.firstname = result.fistname;
+		returnPackage.lastname = result.lastname;
+		returnPackage.usesMetric = result.usesMetric;
+		returnPackage.favoriteRecipes = result.favoriteRecipes;
+	}
+	catch (e)
+	{
+		returnPackage.error = e.toString;
+		response.status(500).json(returnPackage);
+		return;
+	}
+
+	returnPackage.success = true;
 	response.status(200).json(returnPackage);
 });
 
@@ -1056,4 +1136,4 @@ async function processCategories(incoming)
 }
 
 
-app.listen(process.env.PORT || 5000); // start Node + Express server on port 5000
+app.listen(process.env.PORT || 5000); // start Node + Expresponses server on port 5000
