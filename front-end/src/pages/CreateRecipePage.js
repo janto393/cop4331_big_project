@@ -8,9 +8,6 @@ const CreateRecipePage = () =>{
 
     const [message,setMessage] = useState('');
 
-    const [imperial,setImperial] = useState(true);
-    const isImperial = () => setImperial(!imperial);
-
     const [publicize,setPublicize] = useState(true);
     const isPublicized = () => setPublicize(!publicize);
 
@@ -25,7 +22,7 @@ const CreateRecipePage = () =>{
 
     var newRecipe = {
       title : "", 
-      isMetric : false,
+      // isMetric : false,
       publicRecipe : false,
       author : userId,
       categories : [],
@@ -53,19 +50,19 @@ const CreateRecipePage = () =>{
         {
           newRecipe.title = newRecipe.title.value;
           newRecipe.categories = categoryList;
-          newRecipe.isMetric = imperial;
+          // newRecipe.isMetric = imperial;
           newRecipe.publicRecipe = publicize;
           newRecipe.ingredients = ingredientList;
           newRecipe.instructions = instructionList;
-          console.log(typeof newRecipe.ingredients[0].quantity);
+
           console.log(newRecipe);
 
             const response = await fetch( buildPath('/createRecipe'),
             {method:'POST',body:JSON.stringify(newRecipe),headers:{'Content-Type': 'application/json'}});
             
             var txt = await response.text();
-            var res = JSON.parse(txt);
-            console.log(await response.json());
+            var res = JSON.parse(await txt);
+            console.log(response);
 
             if( res.error.length > 0 )
             {
@@ -249,9 +246,6 @@ const CreateRecipePage = () =>{
               <Form.Label column = "lg" lg={2}>
               Ingredients
               </Form.Label>
-              <Col lg={2}>
-              <Form.Check label="Imperial Units" type="switch" size="lg" onClick={isImperial}/>
-              </Col>
               </Form.Group>
 
               <Col lg={{span:10}}>

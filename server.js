@@ -100,7 +100,7 @@ app.post('/login', async (request, response, next) =>
 
 
 // Create new recipe endpoint. 
-app.post('/createRecipe', async (request, response, next) =>
+app.post('/api/createRecipe', async (request, response, next) =>
 {	
 	/*
 		Incoming:
@@ -191,7 +191,7 @@ app.post('/createRecipe', async (request, response, next) =>
 
 
 // delete recipe endpoint
-app.post('/deleteRecipe', async (request, response, next) =>
+app.post('/api/deleteRecipe', async (request, response, next) =>
 {
 	/*
 		Incoming:
@@ -243,7 +243,7 @@ app.post('/deleteRecipe', async (request, response, next) =>
 
 
 // edit favorite recipes Endpoint
-app.post('/editFavoriteRecipes', async (request, response, next) =>
+app.post('/api/editFavoriteRecipes', async (request, response, next) =>
 {
 	/*
 		Incoming:
@@ -313,7 +313,7 @@ app.post('/editFavoriteRecipes', async (request, response, next) =>
 
 
 // Fetches all units depending on system selected
-app.post('/fetchUnits', async (request, response, next) => {
+app.post('/api/fetchUnits', async (request, response, next) => {
 	/*
 		Incoming:
 		{
@@ -374,7 +374,7 @@ app.post('/fetchUnits', async (request, response, next) => {
 
 
 // Fetches recipes according to title
-app.post('/fetchRecipes', async (request, response, next) => {
+app.post('/api/fetchRecipes', async (request, response, next) => {
 	/*
 		Incoming:
 		{
@@ -469,7 +469,7 @@ app.post('/fetchRecipes', async (request, response, next) => {
 
 
 // Find Ingredient Endpoint
-app.post('/findIngredient', async (request, response, next) => {
+app.post('/api/findIngredient', async (request, response, next) => {
 	/*
 		Incoming:
 		{
@@ -519,7 +519,7 @@ app.post('/findIngredient', async (request, response, next) => {
 
 
 // Modify Recipe Endpoint
-app.post('/modifyRecipe', async (request, response, next) =>
+app.post('/api/modifyRecipe', async (request, response, next) =>
 {
 	/*
 		Incoming (NULL indicates no change in field):
@@ -633,59 +633,69 @@ app.post('/modifyRecipe', async (request, response, next) =>
 
 
 // Register Endpoint
-app.post('/registerUser', async (request, response, next) =>
+app.post('/api/registerUser', async (request, response, next) =>
 {
-  // incoming: userId, color
-  // outgoing: userID, username, email, firstName, lastName, profilePicture
-  // isVerified, favoriteRecipes, error
-	
-	const { username,
-					password,
-					email,
-					firstName,
-					lastName,
-					profilePicture
-				} = request.body;
+	/*
+		Incoming:
+		{
+			username : string,
+			password : string,
+			email : string,
+			firstname : string,
+			lastname : string,
+			usesMetric : bool,
+		}
 
-  const INVALID_USER = -1;
-  var result = null;
+		Outgoing:
+		{
+			success : bool,
+			userID : string,
+			username : string,
+			email : string,
+			firstname : string,
+			lastname : string,
+			usesMetric : bool,
+			error : string
+		}
+	*/
 
   var returnPackage = {
-                        userID : INVALID_USER,
-                        username : '',
-                        email : '',
-                        firstName : '',
-                        lastName : '',
-                        profilePicture : profilePicture,
-                        isVerified : false,
-                        favoriteRecipes : [],
-                        error : ''
-                      };
+		success : false,
+		userID : '',
+		username : '',
+		email : '',
+		firstname : '',
+		lastname : '',
+		usesMetric : false,
+		isVerified : false,
+		error : ''
+	}
 
   const newUser = {
-                    username : username, 
-                    password : password, 
-                    email : email,
-                    firstName : firstName,
-                    lastName : lastName,
-                    profilePicture : profilePicture,
-                    isVerified : false,
-                    favoriteRecipes : []
-                  };
+		username : request.body.username.toLowerCase(),
+		password : request.body.password,
+		email : request.body.email,
+		firstName : request.body.firstname,
+		lastName : request.body.lastname,
+		usesMetric : request.body.usesMetric,
+		isVerified : false,
+		favoriteRecipes : []
+	};
 
   // Check if user name is already taken.
   try 
   {
-		const db = client.db(process.env.APP_DATABASE);
+		const db = await client.db(process.env.APP_DATABASE);
 		
     const criteria = {
-                        username : username
-                      };
+			username : newUser.username
+		};
+
 		const data = await db.collection(process.env.COLLECTION_USERS).findOne(criteria);
 		
     if (data)
     {
-      throw "User name already taken.";
+      throw "User name unavailable";
     }
   }
   catch(e)
@@ -698,33 +708,34 @@ app.post('/registerUser', async (request, response, next) =>
   // Inserts new user record. 
   try
   {
-    const db = client.db(process.env.APP_DATABASE);
+    const db = await client.db(process.env.APP_DATABASE);
     db.collection(process.env.COLLECTION_USERS).insertOne(newUser);
 
 		var result = await db.collection(process.env.COLLECTION_USERS).findOne(newUser);
+
+		if (!result)
+		{
+			throw 'Could not create user account';
+		}
+
+		// assign data to the return package
+		returnPackage.success = true;
+		returnPackage.username = result.username;
+		returnPackage.email = result.email;
+		returnPackage.firstname = result.firstname;
+		returnPackage.lastname = result.lastname;
+		returnPackage.usesMetric = result.usesMetric;
+		returnPackage.isVerified = result.isVerified;
   }
   catch(e)
   {
     returnPackage.error = e.toString();
     response.status(500).json(returnPackage);
     return;
-  }
-
-  // Assigns return package values. 
-  if (result)
-  {
-    returnPackage.userID = result._id;
-    returnPackage.username = result.username;
-    returnPackage.email = result.email;
-    returnPackage.firstName = result.firstName;
-    returnPackage.lastName = result.lastName;
-    returnPackage.profilePicture = result.profilePicture;
-    returnPackage.isVerified = result.isVerified;
-    returnPackage.favoriteRecipes = result.favoriteRecipes;
-  }
+	}
+	
   response.status(200).json(returnPackage);
-}
-);
+});
 
 //////////////////////////////////////////////////////////////////////////////////
 // Begin Internal Helper Functions
