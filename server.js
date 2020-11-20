@@ -38,67 +38,6 @@ app.use((request, response, next) =>
   next();
 }); 
 
-// Login endpoint. 
-app.post('/api/login', async (request, response, next) => 
-{
-  // incoming: username, password
-  // outgoing: userID, username, email, firstName, lastName, profilePicture
-  // isVerified, favoriteRecipes, error
-
-  // JSON Package
-  // {
-  //   "username": "RickL",
-  //   "password": "google123"
-  // }
-
- const { username, password } = request.body;
-
- const INVALID_USER = -1;
- var returnPackage = {
-                      userID : INVALID_USER,
-                      username : '',
-                      email : '',
-                      firstName : '',
-                      lastName : '',
-                      // profilePicture : profilePicture,
-                      isVerified : false,
-                      favoriteRecipes : [],
-                      error : ''
-};
-
- try 
-  {
-		const db = client.db(process.env.APP_DATABASE);
-		
-    const criteria = {
-                      username:username, 
-                      password:password
-                      };
-		var result = await db.collection(process.env.COLLECTION_USERS).findOne(criteria);
-  }
-  catch(e)
-  {
-    returnPackage.error = e.toString();
-    response.status(400).json(returnPackage);
-    return;
-  }
-
- console.log(result);
- if( result )
-	{
-    returnPackage.userID = result._id;
-    returnPackage.username = result.username;
-		returnPackage.email = result.email;
-		returnPackage.firstName = result.firstName;
-		returnPackage.lastName = result.lastName;
-		// returnPackage.profilePicture = result.profilePicture;
-		returnPackage.isVerified = result.isVerified;
-		returnPackage.favoriteRecipes = result.favoriteRecipes;
-	}
-
-  response.status(200).json(returnPackage);
-});
-
 
 // Create new recipe endpoint. 
 app.post('/api/createRecipe', async (request, response, next) =>

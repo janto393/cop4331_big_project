@@ -20,20 +20,6 @@ import Sidebar from './components/SidebarFiles/Sidebar';
 import LoginPage from './pages/LoginPage';
 
 
-// -== SideBar Component not present for login
-const LoginContainer = () => (
-  <div>
-      <Route path="/" exact>
-        <LoginPage />
-      </Route>
-      <Route path="/register" exact>
-        <CreateAccount />
-      </Route>
-      <Redirect to="/" />
-
-  </div>
-)
-
 // -== SideBar Component present for all other pages
 const DefaultContainer = () => (
   <div className="pages">
@@ -60,17 +46,18 @@ const DefaultContainer = () => (
 function App()
 {
   return (
-    <Router >
-			<div className="page-container">
+    <Router>
 				<Switch>
           <Route path="/" exact>
-            <LoginContainer />
+            <LoginPage />
+          </Route>
+          <Route path="/register" exact>
+            <CreateAccount />
           </Route>
           <Route>
             <DefaultContainer />
           </Route>
 				</Switch>
-			</div>
 		</Router>
   );
 }

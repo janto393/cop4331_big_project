@@ -37,16 +37,11 @@ function Login()
 
             var responseJson = JSON.parse(await response.text());
             console.log(responseJson);
-            console.log(responseJson.userID);
 
-
-			// Check if credentials sent were invalid
-			if (responseJson.userID < 0)
-			{
-                console.log(responseJson.userID);
-				setMessage('Username/Password combination invalid');
-			}
-
+            if(!responseJson.success)
+            {
+                setMessage(responseJson.error);
+            }
 			// Check if the user has not been validated yet
 			// else if (!responseJson.isVerified)
 			// {
@@ -68,7 +63,7 @@ function Login()
 
 				localStorage.setItem('user_data', JSON.stringify(userInfo));
 				setMessage('');
-				window.location.href = '/recipes';
+				// window.location.href = '/recipes';
 			}
 		}
 		catch (e)
