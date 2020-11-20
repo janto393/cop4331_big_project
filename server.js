@@ -756,6 +756,70 @@ app.post('/api/registerUser', async (request, response, next) =>
   response.status(200).json(returnPackage);
 });
 
+
+// Reset Password Endpoint
+app.post('/api/resetPassword', async (request, response, next) =>
+{
+	/*
+		Incoming:
+		{
+			username : string,
+			password : string
+		}
+
+		Outgoing:
+		{
+			userID : string,
+			success : bool,
+			error : string
+		}
+	*/
+
+  var returnPackage = {
+		success : false,
+		userID : '',
+		error : ''
+	};
+
+  // Update user record. 
+  try
+  {
+		const db = await client.db(process.env.APP_DATABASE);
+
+		const searchUser = {
+			username : request.body.username.toLowerCase()
+		}
+
+		const updatePackage = {
+			$set : {
+				password : request.body.password
+			}
+		}
+
+		await db.collection(process.env.COLLECTION_USERS).updateOne(searchUser, updatePackage);
+
+		var result = await db.collection(process.env.COLLECTION_USERS).findOne(searchUser);
+
+		if (result)
+		{
+			returnPackage.userID = result._id;
+		}
+		else
+		{
+			returnPackage.error = 'User does not exist, please create account'
+		}
+  }
+  catch(e)
+  {
+    returnPackage.error = e.toString();
+    response.status(500).json(returnPackage);
+    return;
+	}
+
+	returnPackage.success = true;
+  response.status(200).json(returnPackage);
+});
+
 //////////////////////////////////////////////////////////////////////////////////
 // Begin Internal Helper Functions
 //////////////////////////////////////////////////////////////////////////////////
