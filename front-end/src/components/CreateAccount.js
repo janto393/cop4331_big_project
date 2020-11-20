@@ -12,16 +12,21 @@ const PORT = (process.env.PORT || 5000);
 
 function Register()
 {
-	var username, password, firstname, lastname, email, confirmPassword;
-
-	const INVALID_USER = -1;
+	var username = '';
+	var password = '';
+	var firstname = '';
+	var lastname = '';
+	var email = '';
+	var confirmPassword = '';
 
 	const [message, setMessage] = useState('');
+	const [metric, setMetric] = useState(true);
+
 
 	const doCreation = async event =>
 	{
 		// ensure both password entries match
-		if (password != confirmPassword)
+		if (password.value !== confirmPassword.value)
 		{
 			setMessage('Passwords do not match');
 			return;
@@ -30,11 +35,12 @@ function Register()
 		event.preventDefault();
 
 		var apiPayload = {
-			username : username,
-			password : passwordHash.generate(password),
-			email : email,
-			firstname : firstname,
-			lastname : lastname
+			username : username.value,
+			password : password.value,
+			email : email.value,
+			firstname : firstname.value,
+			lastname : lastname.value,
+			usesMetric : metric
 		}
 
 		// Call the register endpont and process data
@@ -46,10 +52,12 @@ function Register()
 					body : JSON.stringify(apiPayload),
 					headers : {'Content-Type': 'application/json'}}); 
 
-			var responseJson = JSON.parse(await response.text());
+			var responseJson = await JSON.parse(await response.text());
+
+			console.log(responseJson);
 
 			// Check if register failed
-			if (responseJson.userID == INVALID_USER)
+			if (responseJson.success === false)
 			{
 				setMessage(responseJson.error);
 			}
@@ -66,22 +74,41 @@ function Register()
 		}
 	}
 
+	const changeMeasurementSystem = () =>
+	{
+		setMetric(!metric);
+	}
+
 	return (
 		<div id="registerDiv">
-
-				<form className="register-form" onSubmit={ doCreation }>
-						<input className="form-input" type="text" id="username" placeholder="Username"   ref={(c) => username = c} />
-						<br />
-						<input className="form-input" type="text" id="email" placeholder="Email"  ref={(c) => email = c}/>
-						<br />
-						<input className="form-input" type="password" id="password" placeholder="Password"   ref={(c) => password = c} />
-						<br />
-						<input className="form-input" type="password" id="password" placeholder="Confirm Password"   ref={(c) => confirmPassword = c} />
-						<br />
-						<div className="registerButton">
-								<input className="buttons" type="submit" id="loginButton" class="buttons" value="Create Account" onClick={doCreation} />       
-						</div>
-				</form>
+			<h1 className="dialog-header">Create Account</h1>
+			<form className="register-form" onSubmit={ doCreation }>
+				<input className="form-input" type="text" id="username" placeholder="Username"   ref={(c) => username = c} />
+				<br />
+				<input className="form-input" type="text" id="firstname" placeholder="Firstname"  ref={(c) => firstname = c}/>
+				<br />
+				<input className="form-input" type="text" id="lastname" placeholder="Lastname"  ref={(c) => lastname = c}/>
+				<br />
+				<input className="form-input" type="text" id="email" placeholder="Email"  ref={(c) => email = c}/>
+				<br />
+				<input className="form-input" type="password" id="password" placeholder="Password"   ref={(c) => password = c} />
+				<br />
+				<input className="form-input" type="password" id="password" placeholder="Confirm Password"   ref={(c) => confirmPassword = c} />
+				<br />
+				<div className="measurementSwitch">
+					<label className="form-label">Metric</label>
+					<label className="switch">
+						<input type="checkbox" onClick={ changeMeasurementSystem } />
+						<span className="slider round" />
+					</label>
+					<label className="form-label">Imperial</label>
+				</div>
+				<br />
+				<label className="error-message">{message}</label>
+				<div className="registerButton">
+						<input className="buttons" type="submit" id="loginButton" value="Create Account" onClick={ doCreation } />
+				</div>
+			</form>
 		</div>
 	);
 }

@@ -12,7 +12,7 @@ const LoginPage = ({state}) => {
 
 	return (
 		<div>
-			{state == true ? <Login /> : <CreateAccount />}
+			{state ? <Login /> : <CreateAccount />}
 		</div>
 	);
 };

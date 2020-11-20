@@ -1,12 +1,12 @@
 // React imports
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 // Page imports
 import LoginPage from './pages/LoginPage';
 
 // CSS imports
-import logo from './logo.svg';
+// import logo from './logo.svg';
 import './App.css';
 
 function App()
@@ -18,32 +18,32 @@ function App()
 	const [message, setMessage] = useState('Create an Account');
 
 	// loginState handlers
-	const handleClick = (currentState) => {
-		setState(!currentState);
+	const handleClick = () => {
+		setState(!state);
 		formMessage();
 	}
 
 	const formMessage = (e) => {
-		(state == true) ? setMessage('Return to Login') : setMessage('Creaet an Account');
+		(state === true) ? setMessage('Return to Login') : setMessage('Create an Account');
 	}
 
   return (
     <Router >
-			<Switch>
-				<div className="page-container">
+			<div className="page-container">
+				<Switch>
 					<Route path="/" exact>
 						<div className="dialog-container-div">
 							<div className="login-dialog">
 								<div className="logo"></div>
 								<div className="login-page-div">
-									<LoginPage />
+									<LoginPage state={state} />
 									<p className="register-click" onClick={handleClick}>{message}</p>
 								</div>
 							</div>
 						</div>
 					</Route>
-				</div>
-			</Switch>
+				</Switch>
+			</div>
 		</Router>
   );
 }
