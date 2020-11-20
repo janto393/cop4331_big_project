@@ -1,0 +1,18 @@
+body
+{
+	/* background-image: url("img/background.jpg"); */
+}
+
+.page-container
+{
+	display: block;
+	margin: auto;
+	width: 50%;
+}
+
+.dialog-container-div
+{
+	border: 2px solid black;
+	text-align: center;
+	padding: 5%;
+}

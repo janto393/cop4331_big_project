@@ -6,15 +6,15 @@
       'password',
       'firstName',
       'lastName',
-      'profilePicture',
       'email',
+      'usesMetric',
       'isVerified',
       'favoriteRecipes'
     ],
     properties: {
       username: {
         bsonType: 'string',
-        description: 'Must be unique (case insensitive.'
+        description: 'Must be unique (case insensitive).'
       },
       password: {
         bsonType: 'string',
@@ -26,11 +26,11 @@
       lastName: {
         bsonType: 'string'
       },
-      profilePicture: {
-        bsonType: 'string'
-      },
       email: {
         bsonType: 'string'
+      },
+      usesMetric: {
+        bsonType: 'bool'
       },
       isVerified: {
         bsonType: 'bool'
