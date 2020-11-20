@@ -741,8 +741,8 @@ app.post('/api/registerUser', async (request, response, next) =>
 		returnPackage.success = true;
 		returnPackage.username = result.username;
 		returnPackage.email = result.email;
-		returnPackage.firstname = result.firstname;
-		returnPackage.lastname = result.lastname;
+		returnPackage.firstname = result.firstName;
+		returnPackage.lastname = result.lastName;
 		returnPackage.usesMetric = result.usesMetric;
 		returnPackage.isVerified = result.isVerified;
   }
