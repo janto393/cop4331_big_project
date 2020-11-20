@@ -24,14 +24,14 @@ const client = new MongoClient(url, { useUnifiedTopology: true });
 client.connect();
 
 // Access Control Logic
-app.use((req, res, next) => 
+app.use((request, response, next) => 
 {
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader(
+  response.setHeader('Access-Control-Allow-Origin', '*');
+  response.setHeader(
     'Access-Control-Allow-Headers',
-    'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    'Origin, X-requestuested-With, Content-Type, Accept, Authorization'
   );
-  res.setHeader(
+  response.setHeader(
     'Access-Control-Allow-Methods',
     'GET, POST, PATCH, DELETE, OPTIONS'
   );
@@ -1136,4 +1136,4 @@ async function processCategories(incoming)
 }
 
 
-app.listen(process.env.PORT || 5000); // start Node + Express server on port 5000
+app.listen(process.env.PORT || 5000); // start Node + Expresponses server on port 5000
