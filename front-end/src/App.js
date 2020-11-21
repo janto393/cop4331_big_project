@@ -39,6 +39,9 @@ const DefaultContainer = () => (
         <Route path="/accountSettings" exact>
           <SettingsPage />
         </Route>
+				<Route path="/viewRecipe" exact>
+					<ViewRecipePage />
+				</Route>
         <Redirect to="/recipes" />
   </div>
 )
