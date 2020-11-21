@@ -25,11 +25,54 @@ function Register()
 
 	const doCreation = async event =>
 	{
+		// integrity check username
+		if (username.value === '')
+		{
+			setMessage('Username is required');
+			return;
+		}
+
+		// integrity check password
+		if (password.value === '')
+		{
+			setMessage('Password is required');
+			return;
+		}
+
+		// integrity check confirmPassword
+		if (confirmPassword.value === '')
+		{
+			setMessage('Please confirm your password');
+			return;
+		}
+
 		// ensure both password entries match
 		if (password.value !== confirmPassword.value)
 		{
 			setMessage('Passwords do not match');
 			return;
+		}
+
+		// integrity check firstname
+		if (firstname.value === '')
+		{
+			setMessage('Firstname required');
+		}
+
+		// integrity check email
+		if (email.value === '')
+		{
+			setMessage('Email required');
+			return;
+		}
+		else
+		{
+			// use regex to see if email is valid
+			if (!/^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z]+$/.test(email.value))
+			{
+				setMessage('Email not valid');
+				return;
+			}
 		}
 
 		event.preventDefault();

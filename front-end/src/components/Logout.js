@@ -7,8 +7,8 @@ function Logout()
 	const doLogout = event => 
 	{
 		event.preventDefault();
-		localStorage.removeItem('user_data')
 		window.location.href = '/';
+		localStorage.removeItem('user_data')
 	};
 
   return(
