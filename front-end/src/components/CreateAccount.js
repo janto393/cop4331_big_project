@@ -74,8 +74,7 @@ function Register()
 
 				localStorage.setItem('user_data', JSON.stringify(userInfo));
 
-				setMessage('');
-				window.location.href = '/recipes';
+				setMessage('Registration successful. Please check your email.');
 			}
 		}
 		catch (e)
