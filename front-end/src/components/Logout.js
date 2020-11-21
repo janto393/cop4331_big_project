@@ -7,13 +7,13 @@ function Logout()
 	const doLogout = event => 
 	{
 		event.preventDefault();
-		window.location.href = '/';
 		localStorage.removeItem('user_data')
+		window.location.href = '/';
 	};
 
   return(
     <div>
-			<Button variant = "light" id="logoutButton" className="side-menu-items" onClick={ doLogout }> Log Out </Button>
+			<Button variant="light" id="logoutButton" className="side-menu-items" onClick={ doLogout }> Log Out </Button>
    </div>
   );
 
