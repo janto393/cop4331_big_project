@@ -1,5 +1,6 @@
 // React imports
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // CSS imports
 import './CreateAccount.css'
@@ -160,6 +161,8 @@ function Register()
 			<div className="registerButton">
 					<input className="buttons" type="submit" id="loginButton" value="Create Account" onClick={ doCreation } />
 			</div>
+			<br />
+			<Link to="/">{ "Return to Login" }</Link>
 		</div>
 	);
 }
