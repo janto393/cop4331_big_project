@@ -6,11 +6,7 @@ import Button from 'react-bootstrap/Button';
 
 function CardUI()
 {
-    var _ud = localStorage.getItem('user_data');
-    var ud = JSON.parse(_ud);
-    var id = ud.userID;
-    var firstName = ud.firstName;
-    var lastName = ud.lastName;  
+    var userData = JSON.parse(localStorage.getItem('user_data'));
     // var card = '';
     // var search = '';
 

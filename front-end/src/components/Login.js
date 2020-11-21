@@ -60,8 +60,8 @@ function Login()
 					userID : responseJson._id,
 					username : responseJson.username,
 					email : responseJson.email,
-					firstname : responseJson.username,
-					lastname : responseJson.lastName,
+					firstname : responseJson.firstname,
+					lastname : responseJson.lastname,
 					usesMetric : responseJson.usesMetric,
 					favoriteRecipes : responseJson.favoriteRecipes
 				}
