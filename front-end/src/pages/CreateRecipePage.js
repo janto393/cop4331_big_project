@@ -46,38 +46,38 @@ const CreateRecipePage = () =>{
     {
       event.preventDefault();
 
-        try
-        {
-          newRecipe.title = newRecipe.title.value;
-          newRecipe.categories = categoryList;
-          // newRecipe.isMetric = imperial;
-          newRecipe.publicRecipe = publicize;
-          newRecipe.ingredients = ingredientList;
-          newRecipe.instructions = instructionList;
+			try
+			{
+				newRecipe.title = newRecipe.title.value;
+				newRecipe.categories = categoryList;
+				// newRecipe.isMetric = imperial;
+				newRecipe.publicRecipe = publicize;
+				newRecipe.ingredients = ingredientList;
+				newRecipe.instructions = instructionList;
 
-          console.log(newRecipe);
+				console.log(newRecipe);
 
-            const response = await fetch( buildPath('/api/createRecipe'),
-            {method:'POST',body:JSON.stringify(newRecipe),headers:{'Content-Type': 'application/json'}});
-            
-            var txt = await response.text();
-            var res = JSON.parse(txt);
-            console.log(response);
+				const response = await fetch( buildPath('/api/createRecipe'),
+				{method:'POST',body:JSON.stringify(newRecipe),headers:{'Content-Type': 'application/json'}});
+				
+				var txt = await response.text();
+				var res = JSON.parse(txt);
+				console.log(response);
 
-            if( res.error.length > 0 )
-            {
-                setMessage( "API Error:" + res.error );
-            }
-            else
-            {
-                window.location.href = '/createrecipe';
-                setMessage('Card has been added');
-            }
-        }
-        catch(e)
-        {
-            setMessage(e.toString());
-        }
+				if( res.error.length > 0 )
+				{
+					setMessage( "API Error:" + res.error );
+				}
+				else
+				{
+					window.location.href = '/createrecipe';
+					setMessage('Card has been added');
+				}
+			}
+			catch(e)
+			{
+				setMessage(e.toString());
+			}
   };
   
   // handle checkboxes
