@@ -46,7 +46,6 @@ function Login()
 					headers : {'Content-Type': 'application/json'}}); 
 
 			var responseJson = JSON.parse(await response.text());
-			// console.log(responseJson);
 
 			if(!responseJson.success)
 			{
@@ -68,7 +67,7 @@ function Login()
 
 				localStorage.setItem('user_data', JSON.stringify(userInfo));
 				setMessage('Login Successful');
-				// window.location.href = '/recipes';
+				window.location.href = '/recipes';
 			}
 		}
 		catch (e)
@@ -78,24 +77,28 @@ function Login()
 		}
 	}
 
-	return (    
-		<div>
-			<form className="login-form">
-				<h1 className="dialog-header">Login</h1>
-				<input className="form-input" type="text" id="loginName" placeholder="Username"   ref={(c) => username = c} />
+	return (  
+		<div className="page">
+			<div className="login-dialog">
+				<form className="login-form">
+					<h1 className="dialog-header">Login</h1>
+					<input className="login-text-input" type="text" id="loginName" placeholder="Username"   ref={(c) => username = c} />
+					<input className="login-text-input" type="password" id="loginPassword" placeholder="Password"   ref={(c) => password = c} />
+					<div>
+						<span className="fpwrd-text" >Forgot Password?</span>
+					</div>
+					<div>
+						<input className="login-button" type="submit" value="Login" onClick={doLogin} />       
+					</div>
+				</form>
+				<div>
+				<Link to="/register">
+					{"Don't have an account? Sign Up"}
+				</Link>
 				<br />
-				<input className="form-input" type="password" id="loginPassword" placeholder="Password"   ref={(c) => password = c} />
-				<br />
-				<span className="fpwrd-text" >Forgot Password?</span>
-				<br />
-				<div className="loginButton">
-						<input type="submit" className="buttons" value="Login" onClick={doLogin} />       
+				<span id="loginResult" className="error-message">{message}</span>
 				</div>
-			</form>
-            <Link to="/register">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-            <span id="loginResult">{message}</span>
+			</div>
 		</div>
 	);
 }

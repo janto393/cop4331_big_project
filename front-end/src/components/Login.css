@@ -1,0 +1,38 @@
+.error-message
+{
+	font-size: 14pt;
+	color: red;
+}
+
+.login-dialog
+{
+	display: block;
+	width: 60%;
+	margin: auto;
+	text-align: center;
+	padding: 5%;
+	border: 3px solid black;
+	border-radius: 10%;
+}
+
+.login-text-input
+{
+	font-size: 16pt;
+	width: 60%;
+	padding: 12px 20px;
+	border-radius: 5%;
+	border: 3px solid lightgray;
+}
+
+.login-text-input:focus
+{
+	border: 3px solid skyblue;
+	size: 10% 2%;
+}
+
+.login-button
+{
+	border-radius: 40px;
+	font-size: 16pt;
+	padding: 2% 5%;
+}
