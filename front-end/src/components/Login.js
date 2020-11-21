@@ -78,26 +78,24 @@ function Login()
 	}
 
 	return (  
-		<div className="page">
-			<div className="login-dialog">
-				<form className="login-form">
-					<h1 className="dialog-header">Login</h1>
-					<input className="login-text-input" type="text" id="loginName" placeholder="Username"   ref={(c) => username = c} />
-					<input className="login-text-input" type="password" id="loginPassword" placeholder="Password"   ref={(c) => password = c} />
-					<div>
-						<span className="fpwrd-text" >Forgot Password?</span>
-					</div>
-					<div>
-						<input className="login-button" type="submit" value="Login" onClick={doLogin} />       
-					</div>
-				</form>
+		<div className="login-dialog">
+			<form className="login-form">
+				<h1 className="dialog-header">Login</h1>
+				<input className="login-text-input" type="text" id="loginName" placeholder="Username"   ref={(c) => username = c} />
+				<input className="login-text-input" type="password" id="loginPassword" placeholder="Password"   ref={(c) => password = c} />
 				<div>
-				<Link to="/register">
-					{"Don't have an account? Sign Up"}
-				</Link>
-				<br />
-				<span id="loginResult" className="error-message">{message}</span>
+					<span className="fpwrd-text" >Forgot Password?</span>
 				</div>
+				<div>
+					<input className="login-button" type="submit" value="Login" onClick={doLogin} />       
+				</div>
+			</form>
+			<div>
+			<Link to="/register">
+				{"Don't have an account? Sign Up"}
+			</Link>
+			<br />
+			<span id="loginResult" className="error-message">{message}</span>
 			</div>
 		</div>
 	);
