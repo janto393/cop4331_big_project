@@ -36,7 +36,7 @@ app.use((request, response, next) =>
     'GET, POST, PATCH, DELETE, OPTIONS'
   );
   next();
-});
+}); 
 
 
 // Create new recipe endpoint. 
@@ -482,7 +482,8 @@ app.post('/api/login', async (request, response, next) =>
 		}
 	*/
 
-	const INVALID_CREDENTIALS = 'Invalid Username/Password';
+	const INVALID_CREDENTIALS_MSG = 'Invalid Username/Password';
+	const NOT_VERIFIED_MSG = 'Please verify your email before logging in';
 
 	var returnPackage = {
 		success : false,
@@ -511,7 +512,15 @@ app.post('/api/login', async (request, response, next) =>
 		// check if user does not exist or password doesn't match
 		if ((!result) || (result.password !== request.body.password))
 		{
-			returnPackage.error = INVALID_CREDENTIALS;
+			returnPackage.error = INVALID_CREDENTIALS_MSG;
+			response.status(400).json(returnPackage);
+			return;
+		}
+
+		// check if user is not verified
+		if (!result.isVerified)
+		{
+			returnPackage.error = NOT_VERIFIED_MSG;
 			response.status(400).json(returnPackage);
 			return;
 		}
@@ -527,7 +536,7 @@ app.post('/api/login', async (request, response, next) =>
 	}
 	catch (e)
 	{
-		returnPackage.error = e.toString;
+		returnPackage.error = e.toString();
 		response.status(500).json(returnPackage);
 		return;
 	}

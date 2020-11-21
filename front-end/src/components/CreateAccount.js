@@ -1,11 +1,12 @@
 // React imports
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // CSS imports
 import './CreateAccount.css'
 
 // Misc. imports
-const passwordHash = require('password-hash');
+// const passwordHash = require('password-hash');
 
 // environment variables
 const PORT = (process.env.PORT || 5000);
@@ -25,11 +26,54 @@ function Register()
 
 	const doCreation = async event =>
 	{
+		// integrity check username
+		if (username.value === '')
+		{
+			setMessage('Username is required');
+			return;
+		}
+
+		// integrity check password
+		if (password.value === '')
+		{
+			setMessage('Password is required');
+			return;
+		}
+
+		// integrity check confirmPassword
+		if (confirmPassword.value === '')
+		{
+			setMessage('Please confirm your password');
+			return;
+		}
+
 		// ensure both password entries match
 		if (password.value !== confirmPassword.value)
 		{
 			setMessage('Passwords do not match');
 			return;
+		}
+
+		// integrity check firstname
+		if (firstname.value === '')
+		{
+			setMessage('Firstname required');
+		}
+
+		// integrity check email
+		if (email.value === '')
+		{
+			setMessage('Email required');
+			return;
+		}
+		else
+		{
+			// use regex to see if email is valid
+			if (!/^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z]+$/.test(email.value))
+			{
+				setMessage('Email not valid');
+				return;
+			}
 		}
 
 		event.preventDefault();
@@ -63,8 +107,18 @@ function Register()
 			}
 			else
 			{
-				setMessage('Registration Complete');
-				window.location.href = '/';
+				var userInfo = {
+					userID : responseJson._id,
+					email : responseJson.email,
+					firstname : responseJson.firstname,
+					lastname : responseJson.lastname,
+					usesMetric : responseJson.usesMetric,
+					favoriteRecipes : responseJson.favoriteRecipes
+				};
+
+				localStorage.setItem('user_data', JSON.stringify(userInfo));
+
+				setMessage('Registration successful. Please check your email.');
 			}
 		}
 		catch (e)
@@ -80,22 +134,20 @@ function Register()
 	}
 
 	return (
-		<div id="registerDiv">
+		<div className="register-dialog">
 			<h1 className="dialog-header">Create Account</h1>
-			<form className="register-form" onSubmit={ doCreation }>
-				<input className="form-input" type="text" id="username" placeholder="Username"   ref={(c) => username = c} />
-				<br />
-				<input className="form-input" type="text" id="firstname" placeholder="Firstname"  ref={(c) => firstname = c}/>
-				<br />
-				<input className="form-input" type="text" id="lastname" placeholder="Lastname"  ref={(c) => lastname = c}/>
-				<br />
-				<input className="form-input" type="text" id="email" placeholder="Email"  ref={(c) => email = c}/>
-				<br />
-				<input className="form-input" type="password" id="password" placeholder="Password"   ref={(c) => password = c} />
-				<br />
-				<input className="form-input" type="password" id="password" placeholder="Confirm Password"   ref={(c) => confirmPassword = c} />
-				<br />
-				<div className="measurementSwitch">
+			<div>
+				<form className="register-form">
+					<input className="register-text-input" type="text" id="username" placeholder="Username"   ref={(c) => username = c} />
+					<input className="register-text-input" type="text" id="firstname" placeholder="Firstname"  ref={(c) => firstname = c}/>
+					<input className="register-text-input" type="text" id="lastname" placeholder="Lastname"  ref={(c) => lastname = c}/>
+					<input className="register-text-input" type="text" id="email" placeholder="Email"  ref={(c) => email = c}/>
+					<input className="register-text-input" type="password" id="password" placeholder="Password"   ref={(c) => password = c} />
+					<input className="register-text-input" type="password" id="password" placeholder="Confirm Password"   ref={(c) => confirmPassword = c} />
+				</form>
+			</div>
+			<div className="measurement-switch-div">
+				<div>
 					<label className="form-label">Metric</label>
 					<label className="switch">
 						<input type="checkbox" onClick={ changeMeasurementSystem } />
@@ -103,12 +155,14 @@ function Register()
 					</label>
 					<label className="form-label">Imperial</label>
 				</div>
-				<br />
-				<label className="error-message">{message}</label>
-				<div className="registerButton">
-						<input className="buttons" type="submit" id="loginButton" value="Create Account" onClick={ doCreation } />
-				</div>
-			</form>
+			</div>
+			<br />
+			<label className="error-message">{message}</label>
+			<div className="registerButton">
+					<input className="buttons" type="submit" id="loginButton" value="Create Account" onClick={ doCreation } />
+			</div>
+			<br />
+			<Link to="/">{ "Return to Login" }</Link>
 		</div>
 	);
 }

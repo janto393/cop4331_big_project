@@ -6,13 +6,12 @@ import './LoginPage.css';
 
 // Component imports
 import Login from '../components/Login';
-import CreateAccount from '../components/CreateAccount';
 
-const LoginPage = ({state}) => {
+const LoginPage = () => {
 
 	return (
 		<div>
-			{state ? <Login /> : <CreateAccount />}
+			<Login />
 		</div>
 	);
 };

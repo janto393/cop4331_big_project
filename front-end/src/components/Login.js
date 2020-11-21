@@ -1,5 +1,6 @@
 // React imports
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 // CSS imports
 import './Login.css';
@@ -13,16 +14,26 @@ function Login()
 
 	const [message, setMessage] = useState('');
 
-	const INVALID_USER = -1;
-
 	const doLogin = async event =>
 	{
 		// cancels the event if it is cancelable
 		event.preventDefault();
 
 		var apiPayload = {
-			username : username,
-			password : password
+			username : username.value,
+			password : password.value
+		}
+
+		// integrity check input data
+		if (apiPayload.username === '')
+		{
+			setMessage('Username is required');
+			return;
+		}
+		else if (apiPayload.password === '')
+		{
+			setMessage('Password is required');
+			return;
 		}
 
 		// try to do the login
@@ -34,27 +45,20 @@ function Login()
 					body : JSON.stringify(apiPayload),
 					headers : {'Content-Type': 'application/json'}}); 
 
-			alert('login success');
-
 			var responseJson = JSON.parse(await response.text());
 
-			// Check if credentials sent were invalid
-			if (responseJson.userID == INVALID_USER)
+			if(!responseJson.success)
 			{
-				setMessage('Username/Password combination invalid');
-			}
-
-			// Check if the user has not been validated yet
-			else if (!responseJson.isVerified)
-			{
-				setMessage('Please verify email before logging in');
+				setMessage(responseJson.error);
+				return;
 			}
 
 			// Store the user information in local storage
 			else
 			{
 				var userInfo = {
-					userID : responseJson.userID,
+					userID : responseJson._id,
+					username : responseJson.username,
 					email : responseJson.email,
 					firstname : responseJson.firstname,
 					lastname : responseJson.lastname,
@@ -62,9 +66,10 @@ function Login()
 					favoriteRecipes : responseJson.favoriteRecipes
 				}
 
-				localStorage.setItem('user_data', userInfo);
+				localStorage.setItem('user_data', JSON.stringify(userInfo));
+
 				setMessage('');
-				window.location.href = '/myRecipes';
+				window.location.href = '/recipes';
 			}
 		}
 		catch (e)
@@ -74,20 +79,26 @@ function Login()
 		}
 	}
 
-	return (    
-		<div>
-			<form className="login-form" onSubmit={doLogin}>
+	return (  
+		<div className="login-dialog">
+			<form className="login-form">
 				<h1 className="dialog-header">Login</h1>
-				<input className="form-input" type="text" id="loginName" placeholder="Username"   ref={(c) => username = c} />
-				<br />
-				<input className="form-input" type="password" id="loginPassword" placeholder="Password"   ref={(c) => password = c} />
-				<br />
-				<span className="fpwrd-text" >Forgot Password?</span>
-				<br />
-				<div className="loginButton">
-						<input type="submit" className="buttons" value="Login" onClick={doLogin} />       
+				<input className="login-text-input" type="text" id="loginName" placeholder="Username"   ref={(c) => username = c} />
+				<input className="login-text-input" type="password" id="loginPassword" placeholder="Password"   ref={(c) => password = c} />
+				<div>
+					<span className="fpwrd-text" >Forgot Password?</span>
+				</div>
+				<div>
+					<input className="login-button" type="submit" value="Login" onClick={doLogin} />       
 				</div>
 			</form>
+			<div>
+			<Link to="/register">
+				{"Don't have an account? Sign Up"}
+			</Link>
+			<br />
+			<span id="loginResult" className="error-message">{message}</span>
+			</div>
 		</div>
 	);
 }
