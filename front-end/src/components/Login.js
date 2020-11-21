@@ -14,8 +14,6 @@ function Login()
 
 	const [message, setMessage] = useState('');
 
-	const INVALID_USER = -1;
-
 	const doLogin = async event =>
 	{
 		// cancels the event if it is cancelable
@@ -24,6 +22,18 @@ function Login()
 		var apiPayload = {
 			username : username.value,
 			password : password.value
+		}
+
+		// integrity check input data
+		if (apiPayload.username === '')
+		{
+			setMessage('Username is required');
+			return;
+		}
+		else if (apiPayload.password === '')
+		{
+			setMessage('Password is required');
+			return;
 		}
 
 		// try to do the login
@@ -35,34 +45,29 @@ function Login()
 					body : JSON.stringify(apiPayload),
 					headers : {'Content-Type': 'application/json'}}); 
 
-            var responseJson = JSON.parse(await response.text());
-            console.log(responseJson);
+			var responseJson = JSON.parse(await response.text());
+			// console.log(responseJson);
 
-            if(!responseJson.success)
-            {
-                setMessage(responseJson.error);
-            }
-			// Check if the user has not been validated yet
-			// else if (!responseJson.isVerified)
-			// {
-			// 	setMessage('Please verify email before logging in');
-			// }
+			if(!responseJson.success)
+			{
+				setMessage(responseJson.error);
+				return;
+			}
 
 			// Store the user information in local storage
 			else
 			{
-
 				var userInfo = {
 					userID : responseJson._id,
 					email : responseJson.email,
 					firstname : responseJson.firstName,
 					lastname : responseJson.lastName,
-					// usesMetric : responseJson.usesMetric,
+					usesMetric : responseJson.usesMetric,
 					favoriteRecipes : responseJson.favoriteRecipes
 				};
 
 				localStorage.setItem('user_data', JSON.stringify(userInfo));
-				setMessage('');
+				setMessage('Login Successful');
 				// window.location.href = '/recipes';
 			}
 		}
