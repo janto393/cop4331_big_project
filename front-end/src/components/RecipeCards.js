@@ -11,8 +11,8 @@ const RecipeCards = (json) =>
 	const createCard = (recipe, key) => {
 		return (
 			<Card key={key} className="recipe-card">
-				<Card.Img src={recipe.picture} alt="RecipePicture" />
-				<Card.Body>
+				<Card.Img className="card-img-top" src={recipe.picture} alt={recipe.picture.toString()} />
+				<Card.Body className="card-body">
 					<Card.Title>{recipe.title}</Card.Title>
 					<Button variant="primary" className="view-button">View</Button>
 				</Card.Body>

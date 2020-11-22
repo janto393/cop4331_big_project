@@ -1,4 +1,6 @@
 .recipe-card
 {
-	width: 20%;
+	min-width: 20%;
+	max-width: 30%;
+	border: 3px solid black;
 }
