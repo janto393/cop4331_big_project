@@ -43,9 +43,9 @@ function Login()
 				{
 					method:'POST',
 					body : JSON.stringify(apiPayload),
-					headers : {'Content-Type': 'application/json'}}); 
+					headers : {'Content-Type': 'application/json'}});
 
-			var responseJson = JSON.parse(await response.text());
+			var responseJson = await JSON.parse(await response.text());
 
 			if(!responseJson.success)
 			{

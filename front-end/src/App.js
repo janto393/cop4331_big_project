@@ -13,6 +13,9 @@ import MyRecipesPage from './pages/MyRecipesPage';
 import IngListPage from './pages/IngListPage';
 import CreateRecipePage from './pages/CreateRecipePage';
 import SettingsPage from './pages/SettingsPage';
+import ViewRecipePage from './pages/ViewRecipePage';
+
+// Component includes
 import CreateAccount from './components/CreateAccount';
 
 // -== SideBar Component for each page
