@@ -24,7 +24,7 @@ const CreateRecipePage = () =>{
       title : "", 
       // isMetric : false,
       publicRecipe : false,
-      author : userId,
+      author : userId, // FIX AUTHOR <====================================
       categories : [],
       ingredients : [{ingredient:"", quantity: 0}],
       instructions : [],
