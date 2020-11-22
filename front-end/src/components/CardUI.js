@@ -14,17 +14,17 @@ function CardUI()
 	// const [searchResults,setResults] = useState('');
 	// const [cardList,setCardList] = useState('');
 
-	const addCard = async event => 
-	{
-		event.preventDefault();
-		alert('addCard() ' + card.value);
-	};
+	// const addCard = async event => 
+	// {
+	// 	event.preventDefault();
+	// 	alert('addCard() ' + card.value);
+	// };
 
-	const searchCard = async event => 
-	{
-		event.preventDefault();
-		alert('searchCard() ' + search.value);
-	};
+	// const searchCard = async event => 
+	// {
+	// 	event.preventDefault();
+	// 	alert('searchCard() ' + search.value);
+	// };
 
 	const cardInfo = [
 		{

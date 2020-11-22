@@ -3,15 +3,15 @@ import React from 'react';
 import Card from 'react-bootstrap/esm/Card';
 import Button from 'react-bootstrap/esm/Button';
 
-const RecipeCards = async (recipes) =>
-{
-	console.log('in the function');
-	console.log(recipes);
+// CSS imports
+import './RecipeCards.css';
 
-	const createCard = (recipe) => {
+const RecipeCards = (json) =>
+{
+	const createCard = (recipe, key) => {
 		return (
-			<Card className="recipe-card">
-				<Card.Img src={recipe.picture} />
+			<Card key={key} className="recipe-card">
+				<Card.Img src={recipe.picture} alt="RecipePicture" />
 				<Card.Body>
 					<Card.Title>{recipe.title}</Card.Title>
 					<Button variant="primary" className="view-button">View</Button>
@@ -22,7 +22,7 @@ const RecipeCards = async (recipes) =>
 
 	return (
 		<div>
-			{recipes.map(createCard)}
+			{json.recipes.map(createCard)}
 		</div>
 	);
 }
