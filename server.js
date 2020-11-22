@@ -10,6 +10,11 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectId;
 const path = require('path');
 
+// GridFS dependencies
+const methodOverrid = require('method-override');
+const multer = require('multer');
+const GridFsStorage = require('multer-gridfs-storage');
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -38,6 +43,30 @@ app.use((request, response, next) =>
   next();
 }); 
 
+
+// Create a new storage engine for gridFS
+const storage = new GridFsStorage({
+	url : process.env.APP_DATABASE,
+	file : (req, file) => {
+			return new Promise((resolve, reject) => {
+				// encrypt filename before storing it
+				crypto.randomBytes(16, (err, buf) => {
+					if (err)
+					{
+						return reject(err);
+					}
+					const filename = buf.toString('hex') + path.extname(file.originalname);
+					const fileInfo = {
+						filename : filename,
+						bucketName : 'uploads'
+					};
+					resolve(fileInfo);
+				})
+			})
+		}
+});
+
+const upload = multer({ storage });
 
 // Create new recipe endpoint. 
 app.post('/api/createRecipe', async (request, response, next) =>
