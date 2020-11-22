@@ -422,7 +422,7 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	{
 		const db = await client.db(process.env.APP_DATABASE);
 
-		var result = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).skip(skipOffset).limit(pageCapacity).toArray();
+		var result = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).skip(Math.floor(skipOffset)).limit(Math.floor(pageCapacity)).toArray();
 
 		returnPackage.recipes = result;
 	}
