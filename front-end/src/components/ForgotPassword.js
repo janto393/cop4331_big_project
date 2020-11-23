@@ -22,7 +22,10 @@ async function resetPassword(request)
 	}
 	catch (e)
 	{
-		return '';
+		return {
+			success : false,
+			error : 'could not call API'
+		};
 	}
 }
 
@@ -45,9 +48,7 @@ class ForgotPassword extends React.Component
 			password : this.password
 		}
 
-		resetPassword(data)
-			.then(response => response.json())
-			.then(json => this.setState(json.error));
+		resetPassword(data).then(response => response.json());
 	}
 
 	render()

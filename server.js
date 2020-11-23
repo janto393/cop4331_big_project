@@ -828,6 +828,8 @@ app.post('/api/resetPassword', async (request, response, next) =>
 		else
 		{
 			returnPackage.error = 'Credentials invalid'
+			response.status(404).json(returnPackage);
+			return;
 		}
   }
   catch(e)
