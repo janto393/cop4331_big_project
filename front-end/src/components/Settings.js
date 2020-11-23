@@ -7,12 +7,49 @@ import BootstrapSwitchButton from 'bootstrap-switch-button-react';
 // CSS imports
 import './Settings.css';
 
+const PORT = (process.env.PORT || 5000)
+
+function updateUserRecord(userData)
+{
+	const criteria = {
+		_id : userData.userID
+	}
+
+	var updatePackage = {
+		$set : {
+			firstName : userData.firstname,
+			lastName : userData.lastname,
+			usesMetric : userData.usesMetric
+		}
+	}
+
+	try
+	{
+		const response = fetch('http://localhost:' + PORT + '/api/fetchRecipes',
+			{
+				method:'POST',
+				body : JSON.stringify(criteria),
+				headers : {'Content-Type': 'application/json'}});
+
+		return response;
+	}
+	catch (e)
+	{
+		return;
+	}
+}
+
 class Settings extends React.Component
 {
 	constructor()
 	{
 		super();
 		this.userData = JSON.parse(localStorage.getItem('user_data'));
+	}
+
+	componetWillUnmount()
+	{
+		updateUserRecord(this.userData);
 	}
 
 	render()
@@ -62,7 +99,7 @@ class Settings extends React.Component
 				</Form.Group>
 
 				<Form.Group controlId="unitSystem">
-					<div>
+					<div >
 						<Form.Label>Measurement System</Form.Label>
 						<br />
 						<BootstrapSwitchButton onstyle="primary" offstyle="primary" width={100} checked={this.userData.usesMetric} onlabel='Metric' offlabel='Imperial' onChange={(checked) => {this.userData.usesMetric = checked}} />
