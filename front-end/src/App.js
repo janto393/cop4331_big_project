@@ -14,6 +14,7 @@ import IngListPage from './pages/IngListPage';
 import CreateRecipePage from './pages/CreateRecipePage';
 import SettingsPage from './pages/SettingsPage';
 import ViewRecipePage from './pages/ViewRecipePage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 
 // Component includes
 import CreateAccount from './components/CreateAccount';
@@ -60,6 +61,9 @@ function App()
           <Route path="/register" exact>
             <CreateAccount />
           </Route>
+					<Route path="/resetPassword" exact>
+						<ForgotPasswordPage />
+					</Route>
           <Route>
             <DefaultContainer />
           </Route>
