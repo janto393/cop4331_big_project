@@ -8,8 +8,7 @@
       'lastName',
       'email',
       'usesMetric',
-      'isVerified',
-      'favoriteRecipes'
+      'isVerified'
     ],
     properties: {
       username: {
@@ -34,13 +33,6 @@
       },
       isVerified: {
         bsonType: 'bool'
-      },
-      favoriteRecipes: {
-        bsonType: 'array',
-        description: 'Array of recipe objects',
-        items: {
-          bsonType: 'objectId'
-        }
       }
     }
   }

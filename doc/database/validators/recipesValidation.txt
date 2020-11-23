@@ -13,14 +13,11 @@
     properties: {
       picture: {
         bsonType: 'string',
-        description: 'Stored by front-end in the server filesystem. This string represents the URI to the image.'
+        description: 'Stored in an AWS S3 bucket. String is the url to the object in the bucket'
       },
-<<<<<<< HEAD
-=======
       publicRecipe: {
         bsonType: 'bool'
       },
->>>>>>> 85e4da016bc7e5277aaf958f80c06056a5bd54cb
       title: {
         bsonType: 'string'
       },
@@ -49,8 +46,8 @@
           bsonType: 'array',
           items: [
             {
-              bsonType: 'objectId',
-              description: 'Ingredient name (foreign key)'
+              bsonType: 'string',
+              description: 'Ingredient name'
             },
             {
               bsonType: 'double',
