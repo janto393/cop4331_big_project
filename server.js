@@ -702,7 +702,7 @@ app.post('/api/registerUser', async (request, response, next) =>
   const newUser = {
 		username : request.body.username.toLowerCase(),
 		password : request.body.password,
-		email : request.body.email,
+		email : request.body.email.toLowerCase(),
 		firstName : request.body.firstname,
 		lastName : request.body.lastname,
 		usesMetric : request.body.usesMetric,
@@ -798,7 +798,7 @@ app.post('/api/resetPassword', async (request, response, next) =>
 
 		const searchUser = {
 			username : request.body.username.toLowerCase(),
-			email : request.body.username
+			email : request.body.email.toLowerCase()
 		}
 
 		const updatePackage = {
