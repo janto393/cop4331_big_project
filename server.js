@@ -839,6 +839,7 @@ app.post('/api/resetPassword', async (request, response, next) =>
     return;
 	}
 
+	returnPackage.error = 'Password Reset';
 	returnPackage.success = true;
   response.status(200).json(returnPackage);
 });

@@ -1,5 +1,6 @@
 // React imports
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 
@@ -8,95 +9,131 @@ import './ForgotPassword.css';
 
 const PORT = (process.env.PORT || 5000);
 
-async function resetPassword(request)
+function resetPassword(request)
 {
 	try
 	{
-		const response = fetch('http://localhost:' + PORT + '/api/resetPassword',
+		return fetch('http://localhost:' + PORT + '/api/resetPassword',
 			{
 				method:'POST',
 				body : JSON.stringify(request),
-				headers : {'Content-Type': 'application/json'}});
-
-		return response;
+				headers : {'Content-Type': 'application/json'}
+			});
 	}
 	catch (e)
 	{
-		return {
-			success : false,
-			error : 'could not call API'
-		};
+		return 'Could not call API';
 	}
 }
 
-class ForgotPassword extends React.Component
+function ForgotPassword()
 {
-	constructor()
+	const [message, setMessage] = useState('');
+
+	const changeMessage = (newMessage) =>
 	{
-		super();
-		this.email = '';
-		this.username = '';
-		this.password = '';
-		this.message = '';
+		setMessage(newMessage);
 	}
 
-	componentDidUpdate()
-	{
-		var data = {
-			username : this.username.value,
-			email : this.email.value,
-			password : this.password
-		}
-
-		resetPassword(data).then(response => response.json());
+	var data = {
+		email : '',
+		username : '',
+		password : ''
 	}
 
-	render()
+	const doReset = (event) =>
 	{
-		const submitPasswordReset = () => 
+		event.preventDefault();
+
+		if (data.username.value === '')
 		{
-			var request = {
-				username : this.username.value,
-				password : this.password.value,
-				email : this.email.value
-			}
-
-			console.log(request);
-
-			this.forceUpdate();
+			changeMessage('Username is required');
+			return;
 		}
 
-		return (
-			<div className="forgot-password-dialog">
-				<Form>
-					<div className="dialog-header-div">
-						<h1 className="dialog-header">Forgot Password</h1>
-					</div>
+		if (data.email.value === '')
+		{
+			changeMessage('Email is required');
+			return;
+		}
+		else
+		{
+			// use regex to see if email is valid
+			if (!/^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z]+$/.test(data.email.value))
+			{
+				setMessage('Email not valid');
+				return;
+			}
+		}
 
-					<Form.Group controlId="username">
-						<Form.Label>Username:</Form.Label>
-						<Form.Control required type="text" placeholder={'Username'} ref={(c) => {this.username = c}} />
-					</Form.Group>
+		if (data.password.value === '')
+		{
+			changeMessage('Password is required');
+			return;
+		}
 
-					<Form.Group controlId="email">
-						<Form.Label>Email:</Form.Label>
-						<Form.Control required type="email" placeholder={'Email'} ref={(c) => {this.email = c}} />
-					</Form.Group>
+		var extractedData = {
+			username : data.username.value,
+			email : data.email.value,
+			password : data.password.value
+		}
 
-					<Form.Group controlId="newPassword">
-						<Form.Label>New Password:</Form.Label>
-						<Form.Control required type="password" placeholder={'New Password'} ref={(c) => {this.password = c}} />
-					</Form.Group>
+		// call the api through it's gateway function
+		resetPassword(extractedData)
+			.then(response => response.json())
+			.then(json => setMessage(json.error));
 
-					<div className="submit-div">
-						<Button type="submit" variant="outline-primary" onClick={submitPasswordReset}>Reset Password</Button>
-						<br />
-						<span>{this.message}</span>
-					</div>
-				</Form>
-			</div>
-		);
+		// var result = resetPassword(extractedData);
+
+		// // check if response is a promise
+		// if (typeof result == 'object')
+		// {
+		// 	console.log('promise returned');
+		// 	result
+		// }
+
+		// // response is not a promise, so just print the string returned
+		// else
+		// {
+		// 	setMessage(result);
+		// 	console.log('string returned');
+		// }
 	}
+
+	return (
+		<div className="forgot-password-dialog">
+			<Form>
+				<div className="dialog-header-div">
+					<h1 className="dialog-header">Forgot Password</h1>
+				</div>
+
+				<Form.Group controlId="username">
+					<Form.Label>Username:</Form.Label>
+					<Form.Control required type="text" placeholder={'Username'} ref={(c) => {data.username = c}} />
+				</Form.Group>
+
+				<Form.Group controlId="email">
+					<Form.Label>Email:</Form.Label>
+					<Form.Control required type="text" placeholder={'Email'} ref={(c) => {data.email = c}} />
+				</Form.Group>
+
+				<Form.Group controlId="newPassword">
+					<Form.Label>New Password:</Form.Label>
+					<Form.Control required type="password" placeholder={'New Password'} ref={(c) => {data.password = c}} />
+				</Form.Group>
+
+				<div className="submit-div">
+					<Button variant="outline-primary" onClick={doReset}>Reset Password</Button>
+				</div>
+			</Form>
+			<div className="message-div">
+				<span>{message}</span>
+			</div>
+			<div className="link-div">
+				<Link to="/">Return to Login</Link>
+			</div>
+		</div>
+	);
 }
 
 export default ForgotPassword;
