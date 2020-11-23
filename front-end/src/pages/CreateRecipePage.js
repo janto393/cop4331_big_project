@@ -14,22 +14,25 @@ const CreateRecipePage = () =>{
     const [categoryList, setCategoryList] = useState([]);
 
     const [instructionList, setInstructionList] = useState([{ instruction: "" }]);
-    const [ingredientList, setIngredientList] = useState([{ ingredient: "", quantity: 0 }]);
+    const [ingredientList, setIngredientList] = useState([{ ingredient: "", quantity: 0, unit: "" }]);
 
     var _ud = localStorage.getItem('user_data');
     var ud = JSON.parse(_ud);
-    var userId = ud.userId;
+    var userId = ud.userID;
+    var isMetric = ud.usesMetric;
+    console.log(ud);
+
 
     var newRecipe = {
       title : "", 
-      // isMetric : false,
       publicRecipe : false,
-      author : userId, // FIX AUTHOR <====================================
+      author : userId,
       categories : [],
-      ingredients : [{ingredient:"", quantity: 0}],
+      ingredients : [{ingredient:"", quantity: 0, unit: ""}],
       instructions : [],
     };
 
+    
     function buildPath(route)
     {
     // if (process.env.NODE_ENV === 'production') 
@@ -50,7 +53,6 @@ const CreateRecipePage = () =>{
         {
           newRecipe.title = newRecipe.title.value;
           newRecipe.categories = categoryList;
-          // newRecipe.isMetric = imperial;
           newRecipe.publicRecipe = publicize;
           newRecipe.ingredients = ingredientList;
           newRecipe.instructions = instructionList;
@@ -79,6 +81,8 @@ const CreateRecipePage = () =>{
             setMessage(e.toString());
         }
   };
+
+  
   
   // handle checkboxes
   const [box1,setCheckBox1] = useState(true);
@@ -174,7 +178,7 @@ const CreateRecipePage = () =>{
     setIngredientList(list);
   };
   const handleAddClick = () => {
-    setIngredientList([...ingredientList, { ingredient: "", quantity: 0 }]);
+    setIngredientList([...ingredientList, { ingredient: "", quantity: 0, unit: "" }]);
   };
 
   // handle instructions
@@ -192,6 +196,8 @@ const CreateRecipePage = () =>{
   const handleAddClickIns = () => {
     setInstructionList([...instructionList, { instruction: "" }]);
   };
+
+  
 
     return(
       <div>
@@ -254,14 +260,24 @@ const CreateRecipePage = () =>{
                   <div key={i}>
                     <Form.Control size="lg" type ="text" name="ingredient" placeholder="Enter Ingredient" value={x.ingredient} onChange={e => handleIngredientChange(e, i)} />
                     <Form.Control type ="number" name="quantity" min={0} max={50} step={0.25} precision={2} placeholder="Enter Numeric Quantity" value={x.quantity} onChange={e => handleIngredientChange(e, i)} />
-                    <Form.Control as="select">
-                      <option>Select Unit...</option>
+                    <div>
+                      {isMetric ? <Form.Control name="unit" as="select" value={x.unit} onChange={e => handleIngredientChange(e, i) }>
                       <option>ml</option>
                       <option>l</option>
                       <option>g</option>
                       <option>kg</option>
-                      <option>c</option>
-                    </Form.Control>
+                      <option>c</option></Form.Control> : 
+                      <Form.Control name="unit" as="select" value={x.unit} onChange={e => handleIngredientChange(e, i) }>
+                      <option>lb</option>
+                      <option>oz</option>
+                      <option>fl-oz</option>
+                      <option>cup</option>
+                      <option>qt</option>
+                      <option>gal</option>
+                      <option>tsp</option>
+                      <option>Tbsp</option>
+                      <option>f</option></Form.Control> }
+                    </div>
                     {ingredientList.length - 1 === i && i !== 0 && <Button onClick={() => handleRemoveClick(i)}>Remove</Button>}
                     {ingredientList.length - 1 === i && <Button onClick={handleAddClick}>Add</Button>}
                   </div>
