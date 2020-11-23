@@ -773,6 +773,7 @@ app.post('/api/resetPassword', async (request, response, next) =>
 		Incoming:
 		{
 			username : string,
+			email : string,
 			password : string
 		}
 
@@ -796,7 +797,8 @@ app.post('/api/resetPassword', async (request, response, next) =>
 		const db = await client.db(process.env.APP_DATABASE);
 
 		const searchUser = {
-			username : request.body.username.toLowerCase()
+			username : request.body.username.toLowerCase(),
+			email : request.body.username
 		}
 
 		const updatePackage = {
@@ -805,9 +807,19 @@ app.post('/api/resetPassword', async (request, response, next) =>
 			}
 		}
 
+		// see if the user is even in the database
+		var result = await db.collection(process.env.COLLECTION_USERS).findOne(searchUser);
+
+		if (!result)
+		{
+			returnPackage.error = 'Account does not exist. Please create an account.';
+			response.status(404).json(returnPackage);
+			return;
+		}
+
 		await db.collection(process.env.COLLECTION_USERS).updateOne(searchUser, updatePackage);
 
-		var result = await db.collection(process.env.COLLECTION_USERS).findOne(searchUser);
+		result = await db.collection(process.env.COLLECTION_USERS).findOne(searchUser);
 
 		if (result)
 		{
@@ -815,7 +827,7 @@ app.post('/api/resetPassword', async (request, response, next) =>
 		}
 		else
 		{
-			returnPackage.error = 'User does not exist, please create account'
+			returnPackage.error = 'Credentials invalid'
 		}
   }
   catch(e)
