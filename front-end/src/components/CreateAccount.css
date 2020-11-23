@@ -1,28 +1,38 @@
-.registerDiv
+.register-dialog
 {
-	justify-content: center;
-	display: block;
+	border: 3px solid black;
 	margin: auto;
-}
-
-.register-form
-{
+	text-align: center;
+	width: 60%;
 	display: block;
-	margin: auto;
 }
 
-.form-input
+.register-text-input
 {
-	padding: 2%;
-	font-size: 12pt;
+	font-size: 16pt;
+	width: 60%;
+	padding: 12px 20px;
+	border-radius: 5%;
+	border: 3px solid lightgray;
 }
 
- /* The switch - the box around the slider */
- .switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
+.measurement-switch-div
+{
+	padding: 5%;
+}
+
+.form-label
+{
+	font-size: 16pt;
+	padding: 2px 5px;
+}
+
+/* The switch - the box around the slider */
+.switch {
+position: relative;
+display: inline-block;
+width: 60px;
+height: 34px;
 }
 
 /* Hide default HTML checkbox */

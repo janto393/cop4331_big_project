@@ -1,5 +1,5 @@
 // React imports
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 
 // CSS imports
@@ -13,6 +13,9 @@ import MyRecipesPage from './pages/MyRecipesPage';
 import IngListPage from './pages/IngListPage';
 import CreateRecipePage from './pages/CreateRecipePage';
 import SettingsPage from './pages/SettingsPage';
+import ViewRecipePage from './pages/ViewRecipePage';
+
+// Component includes
 import CreateAccount from './components/CreateAccount';
 
 // -== SideBar Component for each page
@@ -39,6 +42,9 @@ const DefaultContainer = () => (
         <Route path="/accountSettings" exact>
           <SettingsPage />
         </Route>
+				<Route path="/viewRecipe" exact>
+					<ViewRecipePage />
+				</Route>
         <Redirect to="/recipes" />
   </div>
 )

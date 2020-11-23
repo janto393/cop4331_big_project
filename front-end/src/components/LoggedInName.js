@@ -2,14 +2,21 @@ import React from 'react';
 
 function LoggedInName()
 {
-    var _ud = localStorage.getItem('user_data');
-    var ud = JSON.parse(_ud);
-    var firstName = ud.firstname;
-    var lastName = ud.lastname;   
+	// try catch so code doen't throw typeError on logout
+	try
+	{
+		var userData = JSON.parse(localStorage.getItem('user_data'));
+		var firstname = userData.firstname;
+		var lastname = userData.lastname;
+	}
+	catch (e)
+	{
+
+	}
 
   return(
    <div>
-   <span id="userName">{firstName} {lastName}</span>
+   	<span id="username">{firstname} {lastname}</span>
    </div>
   );
 

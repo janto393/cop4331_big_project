@@ -1,0 +1,11 @@
+.recipe-card
+{
+	min-width: 20%;
+	max-width: 30%;
+	border: 3px solid black;
+}
+
+.card-title
+{
+	font-size: 16pt;
+}

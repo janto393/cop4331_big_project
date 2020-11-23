@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 // Environment variables
 const PORT = process.env.PORT || 5000;
-app.set('port', (process.env.PORT || 5000));
+app.set('port', PORT);
 const url = process.env.MONGODB_URI;
 
 // Initialize database object and connect
@@ -393,7 +393,7 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	{
 		const db = await client.db(process.env.APP_DATABASE);
 
-		var result = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).skip(skipOffset).limit(pageCapacity).toArray();
+		var result = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).skip(Math.floor(skipOffset)).limit(Math.floor(pageCapacity)).toArray();
 
 		returnPackage.recipes = result;
 	}
@@ -482,7 +482,8 @@ app.post('/api/login', async (request, response, next) =>
 		}
 	*/
 
-	const INVALID_CREDENTIALS = 'Invalid Username/Password';
+	const INVALID_CREDENTIALS_MSG = 'Invalid Username/Password';
+	const NOT_VERIFIED_MSG = 'Please verify your email before logging in';
 
 	var returnPackage = {
 		success : false,
@@ -511,7 +512,15 @@ app.post('/api/login', async (request, response, next) =>
 		// check if user does not exist or password doesn't match
 		if ((!result) || (result.password !== request.body.password))
 		{
-			returnPackage.error = INVALID_CREDENTIALS;
+			returnPackage.error = INVALID_CREDENTIALS_MSG;
+			response.status(400).json(returnPackage);
+			return;
+		}
+
+		// check if user is not verified
+		if (!result.isVerified)
+		{
+			returnPackage.error = NOT_VERIFIED_MSG;
 			response.status(400).json(returnPackage);
 			return;
 		}
@@ -527,7 +536,7 @@ app.post('/api/login', async (request, response, next) =>
 	}
 	catch (e)
 	{
-		returnPackage.error = e.toString;
+		returnPackage.error = e.toString();
 		response.status(500).json(returnPackage);
 		return;
 	}
@@ -818,6 +827,54 @@ app.post('/api/resetPassword', async (request, response, next) =>
 
 	returnPackage.success = true;
   response.status(200).json(returnPackage);
+});
+
+
+// Update user information
+app.post('/api/updateUserInfo', async (request, response, next) =>
+{
+	/*
+		Incoming:
+		{
+			userID : string,
+			newInfo : json package
+		}
+
+		Outgoing:
+		{
+			success : bool,
+			error : string
+		}
+	*/
+
+	var returnPackage = {
+		success : false,
+		error : ''
+	}
+
+	const criteria = {
+		_id : ObjectID(request.body.userID)
+	}
+
+	const updatePackage = {
+		$set : request.body.newInfo
+	}
+
+	try
+	{
+		const db = await client.db(process.env.APP_DATABASE);
+
+		await db.collection(process.env.COLLECTION_USERS).updateOne(criteria, updatePackage);
+	}
+	catch (e)
+	{
+		returnPackage.error = e.toString();
+		response.status(500).json(returnPackage);
+		return;
+	}
+
+	returnPackage.success = true;
+	response.status(200).json(returnPackage);
 });
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -1200,4 +1257,4 @@ async function processCategories(incoming)
 }
 
 
-app.listen(process.env.PORT || 5000); // start Node + Expresponses server on port 5000
+app.listen(PORT); // start Node + Expresponses server on port 5000

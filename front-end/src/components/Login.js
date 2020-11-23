@@ -14,8 +14,6 @@ function Login()
 
 	const [message, setMessage] = useState('');
 
-	const INVALID_USER = -1;
-
 	const doLogin = async event =>
 	{
 		// cancels the event if it is cancelable
@@ -26,6 +24,18 @@ function Login()
 			password : password.value
 		}
 
+		// integrity check input data
+		if (apiPayload.username === '')
+		{
+			setMessage('Username is required');
+			return;
+		}
+		else if (apiPayload.password === '')
+		{
+			setMessage('Password is required');
+			return;
+		}
+
 		// try to do the login
 		try
 		{
@@ -33,35 +43,31 @@ function Login()
 				{
 					method:'POST',
 					body : JSON.stringify(apiPayload),
-					headers : {'Content-Type': 'application/json'}}); 
+					headers : {'Content-Type': 'application/json'}});
 
-            var responseJson = JSON.parse(await response.text());
-            console.log(responseJson);
+			var responseJson = await JSON.parse(await response.text());
 
-            if(!responseJson.success)
-            {
-                setMessage(responseJson.error);
-            }
-			// Check if the user has not been validated yet
-			// else if (!responseJson.isVerified)
-			// {
-			// 	setMessage('Please verify email before logging in');
-			// }
+			if(!responseJson.success)
+			{
+				setMessage(responseJson.error);
+				return;
+			}
 
 			// Store the user information in local storage
 			else
 			{
-
 				var userInfo = {
-					userID : responseJson._id,
+					userID : responseJson.userID,
+					username : responseJson.username,
 					email : responseJson.email,
 					firstname : responseJson.firstname,
 					lastname : responseJson.lastname,
 					usesMetric : responseJson.usesMetric,
 					favoriteRecipes : responseJson.favoriteRecipes
-				};
+				}
 
 				localStorage.setItem('user_data', JSON.stringify(userInfo));
+
 				setMessage('');
 				window.location.href = '/recipes';
 			}
@@ -73,24 +79,26 @@ function Login()
 		}
 	}
 
-	return (    
-		<div>
+	return (  
+		<div className="login-dialog">
 			<form className="login-form">
 				<h1 className="dialog-header">Login</h1>
-				<input className="form-input" type="text" id="loginName" placeholder="Username"   ref={(c) => username = c} />
-				<br />
-				<input className="form-input" type="password" id="loginPassword" placeholder="Password"   ref={(c) => password = c} />
-				<br />
-				<span className="fpwrd-text" >Forgot Password?</span>
-				<br />
-				<div className="loginButton">
-						<input type="submit" className="buttons" value="Login" onClick={doLogin} />       
+				<input className="login-text-input" type="text" id="loginName" placeholder="Username"   ref={(c) => username = c} />
+				<input className="login-text-input" type="password" id="loginPassword" placeholder="Password"   ref={(c) => password = c} />
+				<div>
+					<span className="fpwrd-text" >Forgot Password?</span>
+				</div>
+				<div>
+					<input className="login-button" type="submit" value="Login" onClick={doLogin} />       
 				</div>
 			</form>
-            <Link to="/register">
-                  {"Don't have an account? Sign Up"}
-                </Link>
-            <span id="loginResult">{message}</span>
+			<div>
+			<Link to="/register">
+				{"Don't have an account? Sign Up"}
+			</Link>
+			<br />
+			<span id="loginResult" className="error-message">{message}</span>
+			</div>
 		</div>
 	);
 }
