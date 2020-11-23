@@ -16,7 +16,7 @@ app.use(bodyParser.json());
 
 // Environment variables
 const PORT = process.env.PORT || 5000;
-app.set('port', (process.env.PORT || 5000));
+app.set('port', PORT);
 const url = process.env.MONGODB_URI;
 
 // Initialize database object and connect
