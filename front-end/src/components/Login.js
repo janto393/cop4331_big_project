@@ -83,48 +83,27 @@ function Login()
 
 	return (  
 		<div className="login-dialog">
-			{/* <form className="login-form">
 				<h1 className="dialog-header">Login</h1>
-				<input className="login-text-input" type="text" id="loginName" placeholder="Username"   ref={(c) => username = c} />
-				<input className="login-text-input" type="password" id="loginPassword" placeholder="Password"   ref={(c) => password = c} />
-				<div>
-					<span className="fpwrd-text" >Forgot Password?</span>
-				</div>
-				<div>
-					<input className="login-button" type="submit" value="Login" onClick={doLogin} />       
-				</div>
-			</form>
-			<div>
-			<Link to="/register">
-				{"Don't have an account? Sign Up"}
-			</Link>
-			<br />
-			<span id="loginResult" className="error-message">{message}</span>
-			</div> */}
 
-			<Form>
-				<h1 className="dialog-header">Login</h1>
 				<Form.Group controlId="loginName">
 					<Form.Label></Form.Label>
 					<Form.Control type="text" placeholder="Username" ref={(c) => username = c}/>
 				</Form.Group>
+
 				<Form.Group controlId="loginPassword">
 					<Form.Label></Form.Label>
 					<Form.Control type="password" placeholder="Password"  ref={(c) => password = c}/>
 				</Form.Group>
-				<Form id="resetPassword">
-  					<a href="#"> Forgot Password? </a>
-				</Form>
+
+				<Link id="forgotPasswordLink" to="/resetPassword">Forgot Password</Link>
+				<br />
 				<Button variant="primary" type="submit" onClick={doLogin}>
 					Login
 				</Button>
-				<Form id="resetPassword">
-  					<a href="/register"> Don't have an account? Sign Up </a>
-				</Form>
+				<br />
+				<Link id="registerLink" to="/register">Don't have an account? Sign Up</Link>
+				<br />
 				<span id="loginResult" className="error-message">{message}</span>
-				
-			</Form>
-
 		</div>
 	);
 }
