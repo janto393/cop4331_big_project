@@ -1,6 +1,10 @@
 // React imports
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import Form from 'react-bootstrap/Form';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 
 // CSS imports
 import './CreateAccount.css'
@@ -135,36 +139,83 @@ function Register()
 
 	return (
 		<div className="register-dialog">
+			<br />
 			<h1 className="dialog-header">Create Account</h1>
-			<div>
-				<form className="register-form">
-					<input className="register-text-input" type="text" id="username" placeholder="Username"   ref={(c) => username = c} />
-					<input className="register-text-input" type="text" id="firstname" placeholder="Firstname"  ref={(c) => firstname = c}/>
-					<input className="register-text-input" type="text" id="lastname" placeholder="Lastname"  ref={(c) => lastname = c}/>
-					<input className="register-text-input" type="text" id="email" placeholder="Email"  ref={(c) => email = c}/>
-					<input className="register-text-input" type="password" id="password" placeholder="Password"   ref={(c) => password = c} />
-					<input className="register-text-input" type="password" id="password" placeholder="Confirm Password"   ref={(c) => confirmPassword = c} />
-				</form>
-			</div>
-			<div className="measurement-switch-div">
-				<div>
-					<label className="form-label">Metric</label>
-					<label className="switch">
-						<input type="checkbox" onClick={ changeMeasurementSystem } />
-						<span className="slider round" />
-					</label>
-					<label className="form-label">Imperial</label>
+				<br />
+				<Form.Group as={Row} controlId="formRegisterUser">
+					<Form.Label column sm={2}>
+						Username
+					</Form.Label>
+					<Col sm={10}>
+						<Form.Control type="text" placeholder="Username" id="username" ref={(c) => username = c}/>
+					</Col>
+				</Form.Group>
+				<Form.Group as={Row} controlId="formRegisterUser">
+					<Form.Label column sm={2}>
+						First Name
+					</Form.Label>
+					<Col sm={10}>
+						<Form.Control type="text" placeholder="First Name" id="firstname" ref={(c) => firstname = c}/>
+					</Col>
+				</Form.Group>
+				<Form.Group as={Row} controlId="formRegisterUser">
+					<Form.Label column sm={2}>
+						Last name
+					</Form.Label>
+					<Col sm={10}>
+						<Form.Control type="text" placeholder="Lastname" id="lastname" ref={(c) => lastname = c}/>
+					</Col>
+				</Form.Group>
+				<Form.Group as={Row} controlId="formRegisterUser">
+					<Form.Label column sm={2}>
+						Email
+					</Form.Label>
+					<Col sm={10}>
+						<Form.Control type="text" placeholder="Email" id="email" ref={(c) => email = c}/>
+					</Col>
+				</Form.Group>
+				<Form.Group as={Row} controlId="formRegisterUser">
+					<Form.Label column sm={2}>
+						Password
+					</Form.Label>
+					<Col sm={10}>
+						<Form.Control type="password" placeholder="Password" id="password" ref={(c) => password = c}/>
+					</Col>
+				</Form.Group>
+				<Form.Group as={Row} controlId="formRegisterUser">
+					<Form.Label column sm={2}>
+						Confirm Password
+					</Form.Label>
+					<Col sm={10}>
+						<Form.Control type="password" placeholder="Confirm Password" id="password" ref={(c) => confirmPassword = c}/>
+					</Col>
+				</Form.Group>
+				<div className="measurement-switch-div">
+					<div>
+						<label className="form-label">Metric</label>
+						<label className="switch">
+							<input type="checkbox" onClick={ changeMeasurementSystem } />
+							<span className="slider round" />
+						</label>
+						<label className="form-label">Imperial</label>
+					</div>
 				</div>
-			</div>
-			<br />
-			<label className="error-message">{message}</label>
-			<div className="registerButton">
-					<input className="buttons" type="submit" id="loginButton" value="Create Account" onClick={ doCreation } />
-			</div>
-			<br />
-			<Link to="/">{ "Return to Login" }</Link>
+				<Button type="submit" id="loginButton" value="Create Account" onClick={ doCreation }>Create Account</Button>
+				<br />
+				<label className="error-message">{message}</label>
+				<br />
+				<Link to="/">{ "Return to Login" }</Link>
 		</div>
 	);
 }
 
 export default Register;
+
+{/* <Form.Check 
+    				type="switch"
+    				id="custom-switch"
+					label="Metric"
+					label="Imperial"
+					// input type="checkbox" onClick={ changeMeasurementSystem }
+  				/> */}
+
