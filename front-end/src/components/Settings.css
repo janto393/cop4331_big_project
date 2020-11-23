@@ -1,0 +1,22 @@
+.settings-dialog
+{
+	width: 50%;
+	background-color: white;
+	margin: auto;
+	padding: 5%;
+}
+
+.submit-div
+{
+	text-align: center;
+}
+
+.measurement-dropdown
+{
+	width: 100%;
+}
+
+.unit-button
+{
+	width: 20%;
+}

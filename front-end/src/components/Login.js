@@ -59,7 +59,7 @@ function Login()
 			else
 			{
 				var userInfo = {
-					userID : responseJson._id,
+					userID : responseJson.userID,
 					username : responseJson.username,
 					email : responseJson.email,
 					firstname : responseJson.firstname,
