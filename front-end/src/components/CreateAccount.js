@@ -2,9 +2,8 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import BootstrapSwitchButton from 'bootstrap-switch-button-react';
 
 // CSS imports
 import './CreateAccount.css'
@@ -139,83 +138,56 @@ function Register()
 
 	return (
 		<div className="register-dialog">
-			<br />
-			<h1 className="dialog-header">Create Account</h1>
-				<br />
-				<Form.Group as={Row} controlId="formRegisterUser">
-					<Form.Label column sm={2}>
-						Username
-					</Form.Label>
-					<Col sm={10}>
-						<Form.Control type="text" placeholder="Username" id="username" ref={(c) => username = c}/>
-					</Col>
-				</Form.Group>
-				<Form.Group as={Row} controlId="formRegisterUser">
-					<Form.Label column sm={2}>
-						First Name
-					</Form.Label>
-					<Col sm={10}>
-						<Form.Control type="text" placeholder="First Name" id="firstname" ref={(c) => firstname = c}/>
-					</Col>
-				</Form.Group>
-				<Form.Group as={Row} controlId="formRegisterUser">
-					<Form.Label column sm={2}>
-						Last name
-					</Form.Label>
-					<Col sm={10}>
-						<Form.Control type="text" placeholder="Lastname" id="lastname" ref={(c) => lastname = c}/>
-					</Col>
-				</Form.Group>
-				<Form.Group as={Row} controlId="formRegisterUser">
-					<Form.Label column sm={2}>
-						Email
-					</Form.Label>
-					<Col sm={10}>
-						<Form.Control type="text" placeholder="Email" id="email" ref={(c) => email = c}/>
-					</Col>
-				</Form.Group>
-				<Form.Group as={Row} controlId="formRegisterUser">
-					<Form.Label column sm={2}>
-						Password
-					</Form.Label>
-					<Col sm={10}>
-						<Form.Control type="password" placeholder="Password" id="password" ref={(c) => password = c}/>
-					</Col>
-				</Form.Group>
-				<Form.Group as={Row} controlId="formRegisterUser">
-					<Form.Label column sm={2}>
-						Confirm Password
-					</Form.Label>
-					<Col sm={10}>
-						<Form.Control type="password" placeholder="Confirm Password" id="password" ref={(c) => confirmPassword = c}/>
-					</Col>
-				</Form.Group>
-				<div className="measurement-switch-div">
-					<div>
-						<label className="form-label">Metric</label>
-						<label className="switch">
-							<input type="checkbox" onClick={ changeMeasurementSystem } />
-							<span className="slider round" />
-						</label>
-						<label className="form-label">Imperial</label>
+			<h1 className="dialog-headers">Create Account</h1>
+			<div className="form-div">
+				<Form>
+					<Form.Group>
+						<Form.Label className="form-label">Username:</Form.Label>
+						<Form.Control required type="text" className="register-text-input" placeholder="Username" id="username" ref={(c)=> username = c} />
+					</Form.Group>
+
+					<Form.Group>
+						<Form.Label className="form-label">Email</Form.Label>
+						<Form.Control required type="text" className="register-text-input" placeholder="Email"  id="email" ref={(c) => email = c} />
+					</Form.Group>
+
+					<Form.Group>
+						<Form.Label className="form-label">Firstname</Form.Label>
+						<Form.Control required type="text" className="register-text-input" placeholder="Firstname" id="firstname" ref={(c) => firstname = c} />
+					</Form.Group>
+
+					<Form.Group>
+						<Form.Label className="form-label">Lastname:</Form.Label>
+						<Form.Control type="text" className="register-text-input" placeholder="Lastname" id="lastname" ref={(c) => lastname = c} />
+					</Form.Group>
+
+					<Form.Group>
+						<Form.Label className="form-label">Password:</Form.Label>
+						<Form.Control required type="password" className="register-text-input" placeholder="Password" id="password" ref={(c) => password = c} />
+					</Form.Group>
+
+					<Form.Group>
+						<Form.Label className="form-label">Confirm Password:</Form.Label>
+						<Form.Control required type="password" className="register-text-input" placeholder="Password" id="confirmPassword" ref={(c) => confirmPassword = c} />
+					</Form.Group>
+
+					<Form.Group>
+						<Form.Label className="form-label">Unit System</Form.Label>
+						<BootstrapSwitchButton onstyle="primary" offstyle="primary" width={100} checked={true} onlabel="Metric" offlabel="Imperial" onChange={changeMeasurementSystem} />
+					</Form.Group>
+
+					<div className="submit-div">
+						<Button variant="outline-primary" onClick={doCreation}>Create Account</Button>
 					</div>
-				</div>
-				<Button type="submit" id="loginButton" value="Create Account" onClick={ doCreation }>Create Account</Button>
+				</Form>
+			</div>
+
+				<Link to="/">Return to Login</Link>
 				<br />
-				<label className="error-message">{message}</label>
-				<br />
-				<Link to="/">{ "Return to Login" }</Link>
+				<span className="error-message">{message}</span>
 		</div>
 	);
 }
 
 export default Register;
-
-{/* <Form.Check 
-    				type="switch"
-    				id="custom-switch"
-					label="Metric"
-					label="Imperial"
-					// input type="checkbox" onClick={ changeMeasurementSystem }
-  				/> */}
 
