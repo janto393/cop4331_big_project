@@ -1,9 +1,12 @@
 import React from 'react';
 
+// Component includes
+import Settings from '../components/Settings';
+
 const SettingsPage = () => {
     return(
       <div>
-        <h1>Settings</h1>
+        <Settings />
       </div>
     );
 };
