@@ -1209,4 +1209,4 @@ async function processCategories(incoming)
 }
 
 
-app.listen(process.env.PORT || 5000); // start Node + Expresponses server on port 5000
+app.listen(PORT); // start Node + Expresponses server on port 5000
