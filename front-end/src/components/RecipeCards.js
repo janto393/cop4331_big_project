@@ -13,8 +13,10 @@ const RecipeCards = (json) =>
 			<Card key={key} className="recipe-card">
 				<Card.Img className="card-img-top" src={recipe.picture} alt={recipe.picture.toString()} />
 				<Card.Body className="card-body">
-					<Card.Title>{recipe.title}</Card.Title>
-					<Button variant="primary" className="view-button">View</Button>
+					<div className="card-info">
+						<p className="card-title">{recipe.title}</p>
+						<Button variant="primary" className="view-button">View</Button>
+					</div>
 				</Card.Body>
 			</Card>
 		);
