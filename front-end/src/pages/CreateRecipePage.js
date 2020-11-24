@@ -19,12 +19,13 @@ const CreateRecipePage = () =>{
     var _ud = localStorage.getItem('user_data');
     var ud = JSON.parse(_ud);
     var userId = ud.userID;
-    var isMetric = ud.usesMetric;
-    console.log(ud);
+    var metric = ud.usesMetric;
 
 
     var newRecipe = {
-      title : "", 
+      title : "",
+      isMetric : metric,
+      picture : "", 
       publicRecipe : false,
       author : userId,
       categories : [],
@@ -73,12 +74,13 @@ const CreateRecipePage = () =>{
 				else
 				{
 					window.location.href = '/createrecipe';
-					setMessage('Card has been added');
+          setMessage('Card has been added');
+          
 				}
 			}
 			catch(e)
 			{
-				setMessage(e.toString());
+        setMessage(e.toString());
 			}
   };
 
@@ -261,22 +263,25 @@ const CreateRecipePage = () =>{
                     <Form.Control size="lg" type ="text" name="ingredient" placeholder="Enter Ingredient" value={x.ingredient} onChange={e => handleIngredientChange(e, i)} />
                     <Form.Control type ="number" name="quantity" min={0} max={50} step={0.25} precision={2} placeholder="Enter Numeric Quantity" value={x.quantity} onChange={e => handleIngredientChange(e, i)} />
                     <div>
-                      {isMetric ? <Form.Control name="unit" as="select" value={x.unit} onChange={e => handleIngredientChange(e, i) }>
-                      <option>ml</option>
-                      <option>l</option>
-                      <option>g</option>
-                      <option>kg</option>
-                      <option>c</option></Form.Control> : 
+                      {metric ? 
                       <Form.Control name="unit" as="select" value={x.unit} onChange={e => handleIngredientChange(e, i) }>
-                      <option>lb</option>
-                      <option>oz</option>
-                      <option>fl-oz</option>
-                      <option>cup</option>
-                      <option>qt</option>
-                      <option>gal</option>
-                      <option>tsp</option>
-                      <option>Tbsp</option>
-                      <option>f</option></Form.Control> }
+                        <option>Select Unit...</option>
+                        <option>ml</option>
+                        <option>l</option>
+                        <option>g</option>
+                        <option>kg</option>
+                        <option>c</option></Form.Control> : 
+                      <Form.Control name="unit" as="select" value={x.unit} onChange={e => handleIngredientChange(e, i) }>
+                        <option>Select Unit...</option>
+                        <option>lb</option>
+                        <option>oz</option>
+                        <option>fl-oz</option>
+                        <option>cup</option>
+                        <option>qt</option>
+                        <option>gal</option>
+                        <option>tsp</option>
+                        <option>Tbsp</option>
+                        <option>f</option></Form.Control> }
                     </div>
                     {ingredientList.length - 1 === i && i !== 0 && <Button onClick={() => handleRemoveClick(i)}>Remove</Button>}
                     {ingredientList.length - 1 === i && <Button onClick={handleAddClick}>Add</Button>}

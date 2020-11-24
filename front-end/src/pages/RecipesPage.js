@@ -1,5 +1,6 @@
 // React imports
 import React from 'react';
+import { CardDeck } from 'react-bootstrap';
 
 // Component imports
 import RecipeCards from '../components/RecipeCards';
@@ -56,7 +57,9 @@ class RecipesPage extends React.Component
 	{
 		return (
 			<div>
-				<RecipeCards recipes={this.state.data} />
+				{/* <CardDeck> */}
+					<RecipeCards recipes={this.state.data} />
+				{/* </CardDeck> */}
 			</div>
 		);
 	}

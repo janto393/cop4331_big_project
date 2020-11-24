@@ -83,6 +83,7 @@ app.post('/api/createRecipe', async (request, response, next) =>
 	try
 	{
 		var processedIngredients = await processIngredients(ingredientPayload);
+
 		var processedCategories = await processCategories(categoriesPayload);
 	}
 	catch (e)
