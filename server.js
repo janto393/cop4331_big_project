@@ -181,67 +181,6 @@ app.post('/api/deleteRecipe', async (request, response, next) =>
 });
 
 
-// Fetches all units depending on system selected
-app.post('/api/fetchUnits', async (request, response, next) => {
-	/*
-		Incoming:
-		{
-			isMetric : bool
-		}
-
-		Outgoing:
-		{
-			units : array,
-			error : string
-		}
-	*/
-
-	var collection;
-
-	var returnPackage = {
-												units : [],
-												error : ''
-											};
-
-
-	// Determine collection to pull from
-	if (request.body.isMetric)
-	{
-		collection = process.env.COLLECTION_METRIC_UNITS;
-	}
-	else
-	{
-		collection = process.env.COLLECTION_IMPERIAL_UNITS;
-	}
-
-	// Fetch the units from the database
-	try
-	{
-		const db = await client.db(process.env.APP_DATABASE);
-
-		const data = await db.collection(collection).find().toArray();
-
-		// exit if no units were returned
-		if (!data)
-		{
-			returnPackage.error = 'No units returned from database.';
-			response.status(400).json(returnPackage);
-			return;
-		}
-
-		returnPackage.units = data;
-	}
-	catch (e)
-	{
-		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
-		return;
-	}
-
-	response.status(200).json(returnPackage);
-});
-
-
 // Fetches recipes according to title
 app.post('/api/fetchRecipes', async (request, response, next) => {
 	/*
