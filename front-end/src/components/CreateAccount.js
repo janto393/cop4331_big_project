@@ -101,8 +101,6 @@ function Register()
 
 			var responseJson = await JSON.parse(await response.text());
 
-			console.log(responseJson);
-
 			// Check if register failed
 			if (responseJson.success === false)
 			{

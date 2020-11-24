@@ -1,6 +1,7 @@
 // Program dependencies
 const bodyParser = require('body-parser');
 const unitConversion = require('convert-units');
+const { metric } = require('convert-units/lib/definitions/length');
 const cors = require('cors');
 const { response, request } = require('express');
 require('dotenv').config();
@@ -65,20 +66,20 @@ app.post('/api/createRecipe', async (request, response, next) =>
 	*/
 
 	var returnPackage = {
-												recipeID : '',
-												categories : [],
-												ingredients : [],
-												error : ''
-											};
+		recipeID : '',
+		categories : [],
+		ingredients : [],
+		error : ''
+	};
 
 	var ingredientPayload = {
-														isMetric : request.body.isMetric,
-														ingredients : request.body.ingredients
-													};
+		isMetric : request.body.isMetric,
+		ingredients : request.body.ingredients
+	};
 
 	var categoriesPayload = {
-														categories : request.body.categories
-													}
+		categories : request.body.categories
+	}
 
 	try
 	{
@@ -92,18 +93,16 @@ app.post('/api/createRecipe', async (request, response, next) =>
 		return;
 	}
 
-	
-
 	// create json of new recipe to be inserted into database
 	var newRecipe = {
-										picture : request.body.picture,
-										publicRecipe : request.body.publicRecipe,
-										title : request.body.title.toLowerCase(),
-										author : ObjectID(request.body.author),
-										instructions : request.body.instructions,
-										categories : processedCategories.databaseCategories,
-										ingredients : processedIngredients.databaseIngredients
-									};
+		picture : request.body.picture,
+		publicRecipe : request.body.publicRecipe,
+		title : request.body.title.toLowerCase(),
+		author : ObjectID(request.body.author),
+		instructions : request.body.instructions,
+		categories : processedCategories.databaseCategories,
+		ingredients : processedIngredients.ingredients
+	};
 
 	// Insert the new recipe into the database
 	try
@@ -123,8 +122,8 @@ app.post('/api/createRecipe', async (request, response, next) =>
 	}
 
 	// Assign values to the return package
-	returnPackage.ingredients = processedIngredients.frontendIngredients;
 	returnPackage.categories = processedCategories.frontendCategories;
+	returnPackage.ingredients = processedIngredients.ingredients;
 	
   response.status(200).json(returnPackage);
 });
@@ -147,13 +146,13 @@ app.post('/api/deleteRecipe', async (request, response, next) =>
 	*/
 
   var recipeToDelete = {
-					_id : ObjectID(request.body.recipeID)
+		_id : ObjectID(request.body.recipeID)
 	};
 
   var returnPackage = {
-						success : false,
-						error : ''
-					  };
+		success : false,
+		error : ''
+	};
 					  
   // Delete recipe record. 
   try
@@ -168,7 +167,7 @@ app.post('/api/deleteRecipe', async (request, response, next) =>
 		}
 		else
 		{
-			returnPackage.error = 'Recipe was not deleted or didn\'t exist to begin with'
+			returnPackage.error = 'Unable to delete recipe'
 		}
   }
   catch (e)
@@ -179,137 +178,6 @@ app.post('/api/deleteRecipe', async (request, response, next) =>
 	}
 
   response.status(200).json(returnPackage);
-});
-
-
-// edit favorite recipes Endpoint
-app.post('/api/editFavoriteRecipes', async (request, response, next) =>
-{
-	/*
-		Incoming:
-		{
-			userID : string,
-			favorites : array
-		}
-
-		Outgoing:
-		{
-			userID : string,
-			success : bool,
-			error : string
-		}
-	*/
-	
-  const INVALID_USER = -1;
-
-  var returnPackage = {
-    userID : INVALID_USER,
-		success : false,
-		favorites : [],
-		error : ''
-	};
-	
-	const user = {
-		_id : ObjectID(request.body.userID)
-	};
-
-	var updatePackage = {
-		$set : {
-			favoriteRecipes : []
-		}
-	};
-
-	// convert the strings in the favorites array to objectIDs
-	for (var i = 0; i < request.body.favorites.length; i++)
-	{
-		updatePackage.$set.favoriteRecipes.push(ObjectID(request.body.favorites[i]));
-	}
-	
-  // Update user record
-  try
-  {
-		const db = await client.db(process.env.APP_DATABASE);
-		
-		await db.collection(process.env.COLLECTION_USERS).updateOne(user, updatePackage);
-
-		var result = await db.collection(process.env.COLLECTION_USERS).findOne(user);
-
-		if (result)
-		{
-			returnPackage.userID = result._id;
-			returnPackage.success = true;
-			returnPackage.favorites = result.favoriteRecipes;
-		}
-  }
-  catch(e)
-  {
-    returnPackage.error = e.toString();
-    response.status(500).json(returnPackage);
-    return;
-	}
-
-  response.status(200).json(returnPackage);
-});
-
-
-// Fetches all units depending on system selected
-app.post('/api/fetchUnits', async (request, response, next) => {
-	/*
-		Incoming:
-		{
-			isMetric : bool
-		}
-
-		Outgoing:
-		{
-			units : array,
-			error : string
-		}
-	*/
-
-	var collection;
-
-	var returnPackage = {
-												units : [],
-												error : ''
-											};
-
-
-	// Determine collection to pull from
-	if (request.body.isMetric)
-	{
-		collection = process.env.COLLECTION_METRIC_UNITS;
-	}
-	else
-	{
-		collection = process.env.COLLECTION_IMPERIAL_UNITS;
-	}
-
-	// Fetch the units from the database
-	try
-	{
-		const db = await client.db(process.env.APP_DATABASE);
-
-		const data = await db.collection(collection).find().toArray();
-
-		// exit if no units were returned
-		if (!data)
-		{
-			returnPackage.error = 'No units returned from database.';
-			response.status(400).json(returnPackage);
-			return;
-		}
-
-		returnPackage.units = data;
-	}
-	catch (e)
-	{
-		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
-		return;
-	}
-
-	response.status(200).json(returnPackage);
 });
 
 
@@ -340,11 +208,11 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	const pageCapacity = request.body.pageCapacity;
 
 	var returnPackage = {
-												recipes : [],
-												numInPage : 0,
-												totalNumRecipes : 0,
-												error : ''
-											};
+		recipes : [],
+		numInPage : 0,
+		totalNumRecipes : 0,
+		error : ''
+	};
 
 	// Empty package on initialization, will be populated as we preocess input
 	var criteria = {}
@@ -388,7 +256,7 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 		criteria.author = ObjectID(request.body.userID);
 	}
 
-	// Query database based on title
+	// Query the database based on criteria supplied
 	try
 	{
 		const db = await client.db(process.env.APP_DATABASE);
@@ -396,6 +264,9 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 		var result = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).skip(Math.floor(skipOffset)).limit(Math.floor(pageCapacity)).toArray();
 
 		returnPackage.recipes = result;
+
+		// get the count of total recipes that matched the criteria so front-end can figure out how many pages to display
+		returnPackage.totalNumRecipes = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).count();
 	}
 	catch (e)
 	{
@@ -404,55 +275,8 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 		return;
 	}
 
-	response.status(200).json(returnPackage);
-});
-
-
-// Find Ingredient Endpoint
-app.post('/api/findIngredient', async (request, response, next) => {
-	/*
-		Incoming:
-		{
-			name : string
-		}
-
-		Outgoing:
-		{
-			ingredientID : string,
-			name : string,
-			error : string
-		}
-	*/
-
-	returnPackage = {
-										ingredientID : '',
-										name : '',
-										error : ''
-									};
-
-	// look for ingredient in database
-	try
-	{
-		const db = await client.db(process.env.APP_DATABASE);
-
-		const criteria = {
-											 name : request.body.name.toLowerCase()
-										 };
-
-		var result = await db.collection(process.env.COLLECTION_INGREDIENTS).findOne(criteria);
-
-		if (result)
-		{
-			returnPackage.ingredientID = result._id;
-			returnPackage.name = result.name;
-		}
-	}
-	catch (e)
-	{
-		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
-		return;
-	}
+	// Update the numeric indexes for the return package
+	returnPackage.numInPage = returnPackage.recipes.length;
 
 	response.status(200).json(returnPackage);
 });
@@ -477,7 +301,6 @@ app.post('/api/login', async (request, response, next) =>
 			firstname : string,
 			lastname : string,
 			usesMetric : bool,
-			favoriteRecipes : array,
 			error : string
 		}
 	*/
@@ -493,7 +316,6 @@ app.post('/api/login', async (request, response, next) =>
 		firstname : '',
 		lastname : '',
 		usesMetric : false,
-		favoriteRecipes : [],
 		error : ''
 	}
 
@@ -532,7 +354,6 @@ app.post('/api/login', async (request, response, next) =>
 		returnPackage.firstname = result.firstName;
 		returnPackage.lastname = result.lastName;
 		returnPackage.usesMetric = result.usesMetric;
-		returnPackage.favoriteRecipes = result.favoriteRecipes;
 	}
 	catch (e)
 	{
@@ -575,11 +396,10 @@ app.post('/api/modifyRecipe', async (request, response, next) =>
 	const criteria = {_id : ObjectID(request.body.recipeID)};
 
 	var returnPackage = {
-												success : false,
-												recipeID : '',
-												error : ''
-											};
-
+		success : false,
+		recipeID : '',
+		error : ''
+	};
 	
 	// Check if publicRecipe changed
 	if ((request.body.publicRecipe != null) && (typeof request.body.publicRecipe == 'boolean'))
@@ -646,6 +466,14 @@ app.post('/api/modifyRecipe', async (request, response, next) =>
 		{
 			const db = await client.db(process.env.APP_DATABASE);
 			await db.collection(process.env.COLLECTION_RECIPES).updateOne(criteria, updatePackage);
+
+			// Find the recipe to return the ID
+			var result = await db.collection(process.env.COLLECTION_RECIPES).findOne(criteria);
+
+			if (result)
+			{
+				returnPackage.recipeID = result._id;
+			}
 		}
 		catch (e)
 		{
@@ -1044,88 +872,35 @@ async function processIngredients(incoming)
 	const IN_AMOUNT_INDEX = 1;
 	const IN_UNIT_INDEX = 2;
 
-	// Offset values for database ingredients array
-	const DB_ID_INDEX = 0;
-	const DB_AMOUNT_METRIC_INDEX = 1;
-	const DB_METRIC_UNIT_INDEX = 2;
-	const DB_AMOUNT_IMPERIAL_INDEX = 3;
-	const DB_IMPERIAL_UNIT_INDEX = 4;
-
-	// Offset values for frontend ingredients array
-	const FE_ID_INDEX = 0;
-	const FE_NAME_INDEX = 1;
-	const FE_AMOUNT_METRIC_INDEX = 2;
-	const FE_METRIC_UNIT_INDEX = 3;
-	const FE_METRIC_UNIT_NAME_INDEX = 4;
-	const FE_AMOUNT_IMPERIAL_INDEX = 5;
-	const FE_IMPERIAL_UNIT_INDEX = 6;
-	const FE_IMPERIAL_UNIT_NAME_INDEX = 7;
+	// Offset values for processed ingredients array
+	const PI_NAME_INDEX = 0;
+	const PI_AMOUNT_METRIC_INDEX = 1;
+	const PI_METRIC_UNIT_INDEX = 2;
+	const PI_AMOUNT_IMPERIAL_INDEX = 3;
+	const PI_IMPERIAL_UNIT_INDEX = 4;
 
 	var returnPackage = {
-												success : true,
-												databaseIngredients : [],
-												frontendIngredients : [],
-												error : ''
-											};
+		success : false,
+		ingredients : [],
+		error : ''
+	};
 
-	// iterate through all ingredients in array to do unit conversions and match IDs
+	// Iterate through all ingredients in array to do unit conversions
 	for (var i = 0; i < incoming.ingredients.length; i++)
 	{
-		// local arrays to be added to the ingredient arrays at the end of each iteration
-		var dbIngredient = [];
-		var feIngredient = [];
+		// empty array to store the processed information for each ingredient
+		var ingredient = [];
 
-		// Locate ingredient in database
-		{
-			try
-			{
-				const db = await client.db(process.env.APP_DATABASE);
+		// Store the name of the ingredient
+		ingredient[PI_NAME_INDEX] = incoming.ingredients[i][IN_INGREDIENT_NAME_INDEX];
 
-				const criteria = {
-													 name : incoming.ingredients[i][IN_INGREDIENT_NAME_INDEX].toLowerCase()
-												 };
-
-				var result = await db.collection(process.env.COLLECTION_INGREDIENTS).findOne(criteria);
-
-				// Add ingredient to the database if it doesn't exist
-				if (!result)
-				{
-					try
-					{
-						await db.collection(process.env.COLLECTION_INGREDIENTS).insertOne(criteria);
-
-						// Find the new ingredient to get it's info
-						result = await db.collection(process.env.COLLECTION_INGREDIENTS).findOne(criteria);
-					}
-					catch (e)
-					{
-						returnPackage.error = e.toString();
-						return;
-					}
-				}
-
-				// Add the information from the ingredient to the local array
-				dbIngredient[DB_ID_INDEX] = result._id;
-
-				feIngredient[FE_ID_INDEX] = result._id;
-				feIngredient[FE_NAME_INDEX] = result.name;
-			}
-			catch (e)
-			{
-				returnPackage.error = e.toString();
-				return;
-			}
-		}
-
-		// Perform the unit conversions and unit processing
+		// Perform the unit conversions and unit processing (block to limit scope of variables)
 		{
 			var isMetric = incoming.isMetric;
 			var amountMetric = 0.0;
 			var amountImperial = 0.0;
 			var metricUnit = '';
 			var imperialUnit = '';
-			var metricID = '';
-			var imperialID = '';
 
 			if (isMetric)
 			{
@@ -1168,43 +943,18 @@ async function processIngredients(incoming)
 			amountMetric = Number(amountMetric.toFixed(2));
 			amountImperial = Number(amountImperial.toFixed(2));
 
-			// get the IDs from the database
-			try
-			{
-				const db = await client.db(process.env.APP_DATABASE);
-
-				var metricResult = await db.collection(process.env.COLLECTION_METRIC_UNITS).findOne({unit : metricUnit});
-				var imperialResult = await db.collection(process.env.COLLECTION_IMPERIAL_UNITS).findOne({unit : imperialUnit});
-
-				metricID = ObjectID(metricResult._id);
-				imperialID = ObjectID(imperialResult._id);
-			}
-			catch (e)
-			{
-				returnPackage.error = e.toString();
-				return;
-			}
-
-			// Add data to the database ingredients array
-			dbIngredient[DB_AMOUNT_METRIC_INDEX] = amountMetric;
-			dbIngredient[DB_METRIC_UNIT_INDEX] = metricID;
-			dbIngredient[DB_AMOUNT_IMPERIAL_INDEX] = amountImperial;
-			dbIngredient[DB_IMPERIAL_UNIT_INDEX] = imperialID;
-
-			// Add data to the frontend ingredients array
-			feIngredient[FE_AMOUNT_METRIC_INDEX] = amountMetric;
-			feIngredient[FE_METRIC_UNIT_INDEX] = metricID;
-			feIngredient[FE_METRIC_UNIT_NAME_INDEX] = metricResult.unit;
-			feIngredient[FE_AMOUNT_IMPERIAL_INDEX] = amountImperial;
-			feIngredient[FE_IMPERIAL_UNIT_INDEX] = imperialID;
-			feIngredient[FE_IMPERIAL_UNIT_NAME_INDEX] = imperialResult.unit;
+			// Add the data to the array of the processed ingredient
+			ingredient[PI_AMOUNT_METRIC_INDEX] = amountMetric;
+			ingredient[PI_METRIC_UNIT_INDEX] = metricUnit;
+			ingredient[PI_AMOUNT_IMPERIAL_INDEX] = amountImperial;
+			ingredient[PI_IMPERIAL_UNIT_INDEX] = imperialUnit;
 		}
 
-		// Add the processed ingredient to the array to be returned at end of function
-		returnPackage.databaseIngredients[i] = dbIngredient;
-		returnPackage.frontendIngredients[i] = feIngredient;
+		// Add the processed ingredient to the return package
+		returnPackage.ingredients[i] = ingredient;
 	}
 
+	returnPackage.success = true;
 	return returnPackage;
 }
 
@@ -1228,10 +978,10 @@ async function processCategories(incoming)
 	const FE_CATEGORY_NAME_INDEX = 1;
 
 	var returnPackage = {
-												databaseCategories : [],
-												frontendCategories : [],
-												error : ''
-											};
+		databaseCategories : [],
+		frontendCategories : [],
+		error : ''
+	};
 
 	// Process the categories of the recipe
 	for (var i = 0; i < incoming.categories.length; i++)
@@ -1245,8 +995,8 @@ async function processCategories(incoming)
 			const db = await client.db(process.env.APP_DATABASE);
 
 			const criteria = {
-												 name : incoming.categories[i].toLowerCase()
-											 };
+				name : incoming.categories[i].toLowerCase()
+			};
 			
 			var result = await db.collection(process.env.COLLECTION_CATEGORIES).findOne(criteria);
 
