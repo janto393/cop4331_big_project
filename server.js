@@ -146,13 +146,13 @@ app.post('/api/deleteRecipe', async (request, response, next) =>
 	*/
 
   var recipeToDelete = {
-					_id : ObjectID(request.body.recipeID)
+		_id : ObjectID(request.body.recipeID)
 	};
 
   var returnPackage = {
-						success : false,
-						error : ''
-					  };
+		success : false,
+		error : ''
+	};
 					  
   // Delete recipe record. 
   try
@@ -167,7 +167,7 @@ app.post('/api/deleteRecipe', async (request, response, next) =>
 		}
 		else
 		{
-			returnPackage.error = 'Recipe was not deleted or didn\'t exist to begin with'
+			returnPackage.error = 'Unable to delete recipe'
 		}
   }
   catch (e)
