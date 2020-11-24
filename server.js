@@ -917,7 +917,7 @@ async function processIngredients(incoming)
 				}
 
 				// calculate the ammounts for each ingredient
-				amountMetric = incoming.ingredients[i][IN_AMOUNT_INDEX];
+				amountMetric = Number(incoming.ingredients[i][IN_AMOUNT_INDEX]);
 				amountImperial = unitConversion(amountMetric).from(metricUnit).to(imperialUnit);
 			}
 			else
@@ -935,7 +935,7 @@ async function processIngredients(incoming)
 				}
 
 				// calculate the amounts for each ingredient
-				amountImperial = incoming.ingredients[i][IN_AMOUNT_INDEX];
+				amountImperial = Number(incoming.ingredients[i][IN_AMOUNT_INDEX]);
 				amountMetric = unitConversion(amountImperial).from(imperialUnit).to(metricUnit);
 			}
 
