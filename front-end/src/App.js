@@ -10,7 +10,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 // -== Pages ==-
 import RecipesPage from './pages/RecipesPage';
 import MyRecipesPage from './pages/MyRecipesPage';
-import IngListPage from './pages/IngListPage';
 import CreateRecipePage from './pages/CreateRecipePage';
 import SettingsPage from './pages/SettingsPage';
 import ViewRecipePage from './pages/ViewRecipePage';
@@ -33,9 +32,6 @@ const DefaultContainer = () => (
         </Route>
         <Route path="/myrecipes" exact>
           <MyRecipesPage />
-        </Route>
-        <Route path="/ingredients" exact>
-          <IngListPage />
         </Route>
         <Route path="/createrecipe" exact>
           <CreateRecipePage />

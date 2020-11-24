@@ -15,12 +15,6 @@ export const SidebarData = [
         cName: 'sidebar-text'
     },
     {
-        title: 'Ingredients List',
-        path:'/ingredients',
-        icon: <FaList />,
-        cName: 'sidebar-text'
-    },
-    {
         title: 'Create Recipe',
         path:'/createrecipe',
         icon: <FaCookieBite />,
