@@ -73,7 +73,7 @@ const CreateRecipePage = () =>{
 				}
 				else
 				{
-					window.location.href = '/createrecipe';
+					// window.location.href = '/createrecipe';
           setMessage('Card has been added');
           
 				}
