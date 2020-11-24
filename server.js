@@ -208,11 +208,11 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	const pageCapacity = request.body.pageCapacity;
 
 	var returnPackage = {
-												recipes : [],
-												numInPage : 0,
-												totalNumRecipes : 0,
-												error : ''
-											};
+		recipes : [],
+		numInPage : 0,
+		totalNumRecipes : 0,
+		error : ''
+	};
 
 	// Empty package on initialization, will be populated as we preocess input
 	var criteria = {}
@@ -256,7 +256,7 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 		criteria.author = ObjectID(request.body.userID);
 	}
 
-	// Query database based on title
+	// Query the database based on criteria supplied
 	try
 	{
 		const db = await client.db(process.env.APP_DATABASE);
@@ -264,6 +264,9 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 		var result = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).skip(Math.floor(skipOffset)).limit(Math.floor(pageCapacity)).toArray();
 
 		returnPackage.recipes = result;
+
+		// get the count of total recipes that matched the criteria so front-end can figure out how many pages to display
+		returnPackage.totalNumRecipes = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).count();
 	}
 	catch (e)
 	{
@@ -272,55 +275,8 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 		return;
 	}
 
-	response.status(200).json(returnPackage);
-});
-
-
-// Find Ingredient Endpoint
-app.post('/api/findIngredient', async (request, response, next) => {
-	/*
-		Incoming:
-		{
-			name : string
-		}
-
-		Outgoing:
-		{
-			ingredientID : string,
-			name : string,
-			error : string
-		}
-	*/
-
-	returnPackage = {
-										ingredientID : '',
-										name : '',
-										error : ''
-									};
-
-	// look for ingredient in database
-	try
-	{
-		const db = await client.db(process.env.APP_DATABASE);
-
-		const criteria = {
-											 name : request.body.name.toLowerCase()
-										 };
-
-		var result = await db.collection(process.env.COLLECTION_INGREDIENTS).findOne(criteria);
-
-		if (result)
-		{
-			returnPackage.ingredientID = result._id;
-			returnPackage.name = result.name;
-		}
-	}
-	catch (e)
-	{
-		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
-		return;
-	}
+	// Update the numeric indexes for the return package
+	returnPackage.numInPage = returnPackage.recipes.length;
 
 	response.status(200).json(returnPackage);
 });
@@ -361,7 +317,6 @@ app.post('/api/login', async (request, response, next) =>
 		firstname : '',
 		lastname : '',
 		usesMetric : false,
-		favoriteRecipes : [],
 		error : ''
 	}
 
@@ -400,7 +355,6 @@ app.post('/api/login', async (request, response, next) =>
 		returnPackage.firstname = result.firstName;
 		returnPackage.lastname = result.lastName;
 		returnPackage.usesMetric = result.usesMetric;
-		returnPackage.favoriteRecipes = result.favoriteRecipes;
 	}
 	catch (e)
 	{
