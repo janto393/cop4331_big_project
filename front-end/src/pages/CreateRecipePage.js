@@ -50,15 +50,53 @@ const CreateRecipePage = () =>{
     {
       event.preventDefault();
 
-        try
-        {
-          newRecipe.title = newRecipe.title.value;
-          newRecipe.categories = categoryList;
-          newRecipe.publicRecipe = publicize;
-          newRecipe.ingredients = ingredientList;
-          newRecipe.instructions = instructionList;
+      newRecipe.title = newRecipe.title.value;
+      newRecipe.categories = categoryList;
+      newRecipe.publicRecipe = publicize;
+      newRecipe.ingredients = ingredientList;
+      newRecipe.instructions = instructionList;
 
-          console.log(newRecipe);
+      if (newRecipe.title === '')
+      {
+        setMessage('Title is required');
+        return;
+      }
+      else if (newRecipe.categories.length === 0)
+      {
+        setMessage('Please select at least one Category');
+        return;
+      }
+      else if (newRecipe.ingredients.length === 0)
+      {
+        setMessage('Please select at least one Category');
+        return;
+      }
+      for(var i = 0 ; i < newRecipe.instructions.length; i++)
+      {
+        if(newRecipe.instructions[i].instruction === "")
+        {
+          setMessage('Please input missing Instruction');
+          return;
+        }
+      }
+      for(i = 0 ; i < newRecipe.ingredients.length; i++)
+      {
+        if(newRecipe.ingredients[i].ingredient === "")
+        {
+          setMessage('Please input missing Ingredient');
+          return;
+        }
+        if(newRecipe.ingredients[i].unit === "")
+        {
+          setMessage('Please select a Unit');
+          return;
+        }
+      }
+
+      try
+      {
+
+        console.log(newRecipe);
 
 				const response = await fetch( buildPath('/api/createRecipe'),
         {method:'POST',body:JSON.stringify(newRecipe),headers:{'Content-Type': 'application/json'}});
@@ -73,7 +111,7 @@ const CreateRecipePage = () =>{
 				}
 				else
 				{
-					// window.location.href = '/createrecipe';
+					window.location.href = '/createrecipe';
           setMessage('Card has been added');
           
 				}
@@ -83,8 +121,6 @@ const CreateRecipePage = () =>{
         setMessage(e.toString());
 			}
   };
-
-  
   
   // handle checkboxes
   const [box1,setCheckBox1] = useState(true);
@@ -166,7 +202,6 @@ const CreateRecipePage = () =>{
       setCategoryList(list);
     };
 
-
   // handle ingredients
   const handleIngredientChange = (e, index) => {
     const { name, value } = e.target;
@@ -199,8 +234,6 @@ const CreateRecipePage = () =>{
     setInstructionList([...instructionList, { instruction: "" }]);
   };
 
-  
-
     return(
       <div>
         <h1>CreateRecipePage</h1>
@@ -230,7 +263,7 @@ const CreateRecipePage = () =>{
                 <Form.Check label="Deserts" type="checkbox" size="lg" onClick={e => checkBox5("desert")}/>
                 <Form.Check label="Drinks" type="checkbox" size="lg" onClick={e => checkBox6("drinks")}/>
               </Col>
-              </Form.Group>
+            </Form.Group>
 
             <Form.Group as={Row} controlId="formBasicText">
               <Form.Label column = "lg" sm={2}>
@@ -250,60 +283,57 @@ const CreateRecipePage = () =>{
             </Form.Group>
 
             <Form.Group as={Row} controlId="formBasicText">
-            <Form.Group as={Col} controlId="formBasicSwitch">
-              <Form.Label column = "lg" lg={2}>
-              Ingredients
-              </Form.Label>
+              <Form.Group as={Col} controlId="formBasicSwitch">
+                <Form.Label column = "lg" lg={2}>
+                Ingredients
+                </Form.Label>
               </Form.Group>
 
               <Col lg={{span:10}}>
-              {ingredientList.map((x, i) => {
-                return (
-                  <div key={i}>
-                    <Form.Control size="lg" type ="text" name="ingredient" placeholder="Enter Ingredient" value={x.ingredient} onChange={e => handleIngredientChange(e, i)} />
-                    <Form.Control type ="number" name="quantity" min={0} max={50} step={0.25} precision={2} placeholder="Enter Numeric Quantity" value={x.quantity} onChange={e => handleIngredientChange(e, i)} />
-                    <div>
-                      {metric ? 
-                      <Form.Control name="unit" as="select" value={x.unit} onChange={e => handleIngredientChange(e, i) }>
-                        <option>Select Unit...</option>
-                        <option>ml</option>
-                        <option>l</option>
-                        <option>g</option>
-                        <option>kg</option>
-                        <option>c</option></Form.Control> : 
-                      <Form.Control name="unit" as="select" value={x.unit} onChange={e => handleIngredientChange(e, i) }>
-                        <option>Select Unit...</option>
-                        <option>lb</option>
-                        <option>oz</option>
-                        <option>fl-oz</option>
-                        <option>cup</option>
-                        <option>qt</option>
-                        <option>gal</option>
-                        <option>tsp</option>
-                        <option>Tbsp</option>
-                        <option>f</option></Form.Control> }
+                {ingredientList.map((x, i) => {
+                  return (
+                    <div key={i}>
+                      <Form.Control size="lg" type ="text" name="ingredient" placeholder="Enter Ingredient" value={x.ingredient} onChange={e => handleIngredientChange(e, i)} />
+                      <Form.Control type ="number" name="quantity" min={0} max={50} step={0.25} precision={2} placeholder="Enter Numeric Quantity" value={x.quantity} onChange={e => handleIngredientChange(e, i)} />
+                      <div>
+                        {metric ? 
+                        <Form.Control name="unit" as="select" value={x.unit} onChange={e => handleIngredientChange(e, i) }>
+                          <option>Select Unit...</option>
+                          <option>ml</option>
+                          <option>l</option>
+                          <option>g</option>
+                          <option>kg</option></Form.Control> : 
+                        <Form.Control name="unit" as="select" value={x.unit} onChange={e => handleIngredientChange(e, i) }>
+                          <option>Select Unit...</option>
+                          <option>lb</option>
+                          <option>oz</option>
+                          <option>fl-oz</option>
+                          <option>cup</option>
+                          <option>qt</option>
+                          <option>gal</option>
+                          <option>tsp</option>
+                          <option>Tbsp</option></Form.Control> }
+                      </div>
+                      {ingredientList.length - 1 === i && i !== 0 && <Button onClick={() => handleRemoveClick(i)}>Remove</Button>}
+                      {ingredientList.length - 1 === i && <Button onClick={handleAddClick}>Add</Button>}
                     </div>
-                    {ingredientList.length - 1 === i && i !== 0 && <Button onClick={() => handleRemoveClick(i)}>Remove</Button>}
-                    {ingredientList.length - 1 === i && <Button onClick={handleAddClick}>Add</Button>}
-                  </div>
-                );
-              })}
-              <Form.Group as={Row} controlId="formBasicCheck">
-                <Col lg={{ span: 10}}>
-                <Form.Check label="Private Recipe" type="switch" size="lg" onClick={isPublicized}/>
-                </Col>
-              </Form.Group>
-            </Col>
+                  );
+                })}
+                <Form.Group as={Row} controlId="formBasicCheck">
+                  <Col lg={{ span: 10}}>
+                  <Form.Check label="Private Recipe" type="switch" size="lg" onClick={isPublicized}/>
+                  </Col>
+                </Form.Group>
+
+              </Col>
             </Form.Group>
 
             <Form.Group as={Row}>
               <Col sm={{ span: 10, offset: 2 }}>
-                <Button type="submit" onClick={addRecipe} >Create</Button>
+                <Button type="submit" variant="primary"onClick={addRecipe} >Create</Button>
+                <span id="loginResult" className="error-message">{message}</span>
               </Col>
             </Form.Group>
-            {/* <div style={{ marginTop: 20 }}>{JSON.stringify(categoryList)}</div> */}
-            {/* <div style={{ marginTop: 20 }}>{JSON.stringify(box1)}</div> */}
-
           </Form>
         </div>
       </div>
