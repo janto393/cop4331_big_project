@@ -61,6 +61,7 @@ app.post('/api/createRecipe', async (request, response, next) =>
 			recipeID : string,
 			categories : array,
 			ingredients : array,
+			instructions : array,
 			error : string
 		}
 	*/
@@ -69,6 +70,7 @@ app.post('/api/createRecipe', async (request, response, next) =>
 		recipeID : '',
 		categories : [],
 		ingredients : [],
+		instructions : [],
 		error : ''
 	};
 
@@ -79,10 +81,15 @@ app.post('/api/createRecipe', async (request, response, next) =>
 
 	var categoriesPayload = {
 		categories : request.body.categories
-	}
+	};
+
+	var instructionsPayload = {
+		instructions : request.body.instructions
+	};
 
 	try
 	{
+		var processedInstructions = await processInstructions(instructionsPayload);
 		var processedIngredients = await processIngredients(ingredientPayload);
 		var processedCategories = await processCategories(categoriesPayload);
 	}
@@ -99,7 +106,7 @@ app.post('/api/createRecipe', async (request, response, next) =>
 		publicRecipe : request.body.publicRecipe,
 		title : request.body.title.toLowerCase(),
 		author : ObjectID(request.body.author),
-		instructions : request.body.instructions,
+		instructions : processedInstructions.instructions,
 		categories : processedCategories.databaseCategories,
 		ingredients : processedIngredients.ingredients
 	};
@@ -124,6 +131,7 @@ app.post('/api/createRecipe', async (request, response, next) =>
 	// Assign values to the return package
 	returnPackage.categories = processedCategories.frontendCategories;
 	returnPackage.ingredients = processedIngredients.ingredients;
+	returnPackage.instructions = processedInstructions.instructions;
 	
   response.status(200).json(returnPackage);
 });
@@ -950,6 +958,33 @@ async function processIngredients(incoming)
 	}
 
 	returnPackage.success = true;
+	return returnPackage;
+}
+
+async function processInstructions(incoming)
+{
+	/*
+		Incoming:
+		{
+			instructions : array of JSON objects
+		}
+
+		Outgoing:
+		{
+			instructions : array of sub-arrays of strings
+		}
+	*/
+
+	var returnPackage = {
+		instructions : []
+	}
+
+	// extract the instructions out of the sub-json objects
+	for (var i = 0; i < incoming.instructions.length; i++)
+	{
+		returnPackage.instructions.push(incoming.instructions[i].instruction);
+	}
+
 	return returnPackage;
 }
 
