@@ -855,7 +855,7 @@ async function processIngredients(incoming)
 		incoming:
 		{
 			isMetric : bool,
-			ingredients : array
+			ingredients : array of json objects
 		}
 
 		Outgoing:
@@ -866,11 +866,6 @@ async function processIngredients(incoming)
 			error : string
 		}
 	*/
-
-	// Offset values for input array of ingredients
-	const IN_INGREDIENT_NAME_INDEX = 0;
-	const IN_AMOUNT_INDEX = 1;
-	const IN_UNIT_INDEX = 2;
 
 	// Offset values for processed ingredients array
 	const PI_NAME_INDEX = 0;
@@ -892,7 +887,7 @@ async function processIngredients(incoming)
 		var ingredient = [];
 
 		// Store the name of the ingredient
-		ingredient[PI_NAME_INDEX] = incoming.ingredients[i][IN_INGREDIENT_NAME_INDEX];
+		ingredient[PI_NAME_INDEX] = incoming.ingredients[i].ingredient;
 
 		// Perform the unit conversions and unit processing (block to limit scope of variables)
 		{
@@ -904,7 +899,7 @@ async function processIngredients(incoming)
 
 			if (isMetric)
 			{
-				metricUnit = incoming.ingredients[i][IN_UNIT_INDEX];
+				metricUnit = incoming.ingredients[i].unit;
 
 				// match the unit to imperial
 				imperialUnit = fromMetricToImperial({unit : metricUnit}).unit;
@@ -917,12 +912,12 @@ async function processIngredients(incoming)
 				}
 
 				// calculate the ammounts for each ingredient
-				amountMetric = Number(incoming.ingredients[i][IN_AMOUNT_INDEX]);
+				amountMetric = Number(incoming.ingredients[i].quantity);
 				amountImperial = unitConversion(amountMetric).from(metricUnit).to(imperialUnit);
 			}
 			else
 			{
-				imperialUnit = incoming.ingredients[i][IN_UNIT_INDEX];
+				imperialUnit = incoming.ingredients[i].unit;
 
 				// match the unit to metric
 				metricUnit = fromImperialToMetric({unit : imperialUnit}).unit;
@@ -935,7 +930,7 @@ async function processIngredients(incoming)
 				}
 
 				// calculate the amounts for each ingredient
-				amountImperial = Number(incoming.ingredients[i][IN_AMOUNT_INDEX]);
+				amountImperial = Number(incoming.ingredients[i].quantity);
 				amountMetric = unitConversion(amountImperial).from(imperialUnit).to(metricUnit);
 			}
 
