@@ -301,7 +301,6 @@ app.post('/api/login', async (request, response, next) =>
 			firstname : string,
 			lastname : string,
 			usesMetric : bool,
-			favoriteRecipes : array,
 			error : string
 		}
 	*/
