@@ -1,0 +1,9 @@
+.no-recipes-dialog
+{
+	background-color: white;
+	border: 3px solid black;
+	margin: auto;
+	width: 50%;
+	text-align: center;
+	padding: 5%;
+}

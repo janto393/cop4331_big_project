@@ -11,12 +11,9 @@ const PORT = (process.env.PORT || 5000)
 
 function updateUserRecord(userData)
 {
-	const criteria = {
-		_id : userData.userID
-	}
-
-	var updatePackage = {
-		$set : {
+	const apiPayload = {
+		userID : userData.userID,
+		newInfo : {
 			firstName : userData.firstname,
 			lastName : userData.lastname,
 			usesMetric : userData.usesMetric
@@ -25,10 +22,10 @@ function updateUserRecord(userData)
 
 	try
 	{
-		const response = fetch('http://localhost:' + PORT + '/api/fetchRecipes',
+		const response = fetch('http://localhost:' + PORT + '/api/updateUserInfo',
 			{
 				method:'POST',
-				body : JSON.stringify(criteria),
+				body : JSON.stringify(apiPayload),
 				headers : {'Content-Type': 'application/json'}});
 
 		return response;
@@ -47,7 +44,7 @@ class Settings extends React.Component
 		this.userData = JSON.parse(localStorage.getItem('user_data'));
 	}
 
-	componetWillUnmount()
+	componentDidUpdate()
 	{
 		updateUserRecord(this.userData);
 	}
@@ -74,6 +71,8 @@ class Settings extends React.Component
 			}
 
 			localStorage.setItem('user_data', JSON.stringify(this.userData));
+
+			this.forceUpdate();
 		}
 
 		return (
