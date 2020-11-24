@@ -6,9 +6,13 @@ import Button from 'react-bootstrap/esm/Button';
 // CSS imports
 import './RecipeCards.css';
 
+// Component imports
+import NoRecipes from './NoRecipes';
+
 const RecipeCards = (json) =>
 {
-	const createCard = (recipe, key) => {
+	const createCard = (recipe, key) =>
+	{
 		return (
 			<Card key={key} className="recipe-card">
 				<Card.Img className="card-img-top" src={recipe.picture} alt={recipe.picture.toString()} />
@@ -24,7 +28,7 @@ const RecipeCards = (json) =>
 
 	return (
 		<div>
-			{json.recipes.map(createCard)}
+			{ (json.recipes.length > 0) ? json.recipes.map(createCard) : <NoRecipes />}
 		</div>
 	);
 }
