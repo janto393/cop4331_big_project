@@ -58,14 +58,14 @@ const CreateRecipePage = () =>{
           newRecipe.ingredients = ingredientList;
           newRecipe.instructions = instructionList;
 
-				console.log(newRecipe);
+          console.log(newRecipe);
 
 				const response = await fetch( buildPath('/api/createRecipe'),
-				{method:'POST',body:JSON.stringify(newRecipe),headers:{'Content-Type': 'application/json'}});
-				
+        {method:'POST',body:JSON.stringify(newRecipe),headers:{'Content-Type': 'application/json'}});
+        				
 				var txt = await response.text();
 				var res = JSON.parse(txt);
-				console.log(response);
+				console.log(res);
 
 				if( res.error.length > 0 )
 				{
