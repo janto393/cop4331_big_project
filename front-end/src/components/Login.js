@@ -85,21 +85,21 @@ function Login()
 		<div className="login-dialog">
 				<h1 className="dialog-header">Login</h1>
 
-				<Form.Group controlId="loginName">
-					<Form.Label></Form.Label>
-					<Form.Control type="text" placeholder="Username" ref={(c) => username = c}/>
-				</Form.Group>
+				<Form>
+					<Form.Group controlId="loginName">
+						<Form.Label></Form.Label>
+						<Form.Control type="text" placeholder="Username" ref={(c) => username = c}/>
+					</Form.Group>
 
-				<Form.Group controlId="loginPassword">
-					<Form.Label></Form.Label>
-					<Form.Control type="password" placeholder="Password"  ref={(c) => password = c}/>
-				</Form.Group>
+					<Form.Group controlId="loginPassword">
+						<Form.Label></Form.Label>
+						<Form.Control type="password" placeholder="Password"  ref={(c) => password = c}/>
+					</Form.Group>
 
-				<Link id="forgotPasswordLink" to="/resetPassword">Forgot Password</Link>
-				<br />
-				<Button variant="primary" type="submit" onClick={doLogin}>
-					Login
-				</Button>
+					<Link id="forgotPasswordLink" to="/resetPassword">Forgot Password</Link>
+					<br />
+					<Button variant="primary" type="submit" onClick={doLogin}>Login</Button>
+				</Form>
 				<br />
 				<Link id="registerLink" to="/register">Don't have an account? Sign Up</Link>
 				<br />
