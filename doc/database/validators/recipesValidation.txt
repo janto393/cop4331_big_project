@@ -54,7 +54,7 @@
               description: 'Amount (in metric)'
             },
             {
-              bsonType: 'objectId',
+              bsonType: 'string',
               description: 'units type (in metric)'
             },
             {
@@ -62,7 +62,7 @@
               description: 'Amount (in imperial)'
             },
             {
-              bsonType: 'objectId',
+              bsonType: 'string',
               description: 'units type (in imperial)'
             }
           ]
