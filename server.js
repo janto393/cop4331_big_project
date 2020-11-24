@@ -397,11 +397,10 @@ app.post('/api/modifyRecipe', async (request, response, next) =>
 	const criteria = {_id : ObjectID(request.body.recipeID)};
 
 	var returnPackage = {
-												success : false,
-												recipeID : '',
-												error : ''
-											};
-
+		success : false,
+		recipeID : '',
+		error : ''
+	};
 	
 	// Check if publicRecipe changed
 	if ((request.body.publicRecipe != null) && (typeof request.body.publicRecipe == 'boolean'))
@@ -468,6 +467,14 @@ app.post('/api/modifyRecipe', async (request, response, next) =>
 		{
 			const db = await client.db(process.env.APP_DATABASE);
 			await db.collection(process.env.COLLECTION_RECIPES).updateOne(criteria, updatePackage);
+
+			// Find the recipe to return the ID
+			var result = await db.collection(process.env.COLLECTION_RECIPES).findOne(criteria);
+
+			if (result)
+			{
+				returnPackage.recipeID = result._id;
+			}
 		}
 		catch (e)
 		{
