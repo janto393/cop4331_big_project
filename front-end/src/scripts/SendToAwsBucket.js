@@ -6,8 +6,8 @@ import AWS from 'aws-sdk';
 export function sendToAwsBucket(file)
 {
 	const accessInfo = {
-		accessKeyId : 'AKIAINSVI26BCGQ6S4CA',
-		secretAccessKey : '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'
+		accessKeyId : 'AKIARRT3LVNEMPDZLXWF',
+		secretAccessKey : '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'
 	};
 
 	const bucketInfo = {
