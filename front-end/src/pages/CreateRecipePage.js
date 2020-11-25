@@ -4,6 +4,9 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
+// Script includes
+import uploadImage from '../scripts/uploadImage';
+
 const CreateRecipePage = () =>{
 
     const [message,setMessage] = useState('');
@@ -14,13 +17,14 @@ const CreateRecipePage = () =>{
     const [categoryList, setCategoryList] = useState([]);
 
     const [instructionList, setInstructionList] = useState([{ instruction: "" }]);
-    const [ingredientList, setIngredientList] = useState([{ ingredient: "", quantity: 0, unit: "" }]);
+		const [ingredientList, setIngredientList] = useState([{ ingredient: "", quantity: 0, unit: "" }]);
+		
+		const [recipeCoverImage, setRecipeCoverImage] = useState({file : null});
 
     var _ud = localStorage.getItem('user_data');
     var ud = JSON.parse(_ud);
     var userId = ud.userID;
     var metric = ud.usesMetric;
-
 
     var newRecipe = {
       title : "",
@@ -48,7 +52,7 @@ const CreateRecipePage = () =>{
 
     const addRecipe = async event => 
     {
-      event.preventDefault();
+			event.preventDefault();
 
       newRecipe.title = newRecipe.title.value;
       newRecipe.categories = categoryList;
@@ -91,16 +95,31 @@ const CreateRecipePage = () =>{
           setMessage('Please select a Unit');
           return;
         }
-      }
+			}
+			
+			if (recipeCoverImage.file === null)
+			{
+				setMessage('Please select an image');
+				return;
+			}
+
+			var uploadResponse = uploadImage(recipeCoverImage.file);
+
+			if (uploadResponse.success)
+			{
+				newRecipe.picture = uploadResponse.uri;
+			}
+			else
+			{
+				setMessage('Failed to upload image, please try agian');
+				return;
+			}
 
       try
       {
-
-        console.log(newRecipe);
-
 				const response = await fetch( buildPath('/api/createRecipe'),
-        {method:'POST',body:JSON.stringify(newRecipe),headers:{'Content-Type': 'application/json'}});
-        				
+				{method:'POST',body:JSON.stringify(newRecipe),headers:{'Content-Type': 'application/json'}});
+				
 				var txt = await response.text();
 				var res = JSON.parse(txt);
 
@@ -231,13 +250,27 @@ const CreateRecipePage = () =>{
   };
   const handleAddClickIns = () => {
     setInstructionList([...instructionList, { instruction: "" }]);
-  };
+	};
+
+	// handle picture upload
+	const handlePictureUpload = (e) => {
+		setRecipeCoverImage({file : e.target.files[0]});
+	};
 
     return(
       <div>
         <h1>CreateRecipePage</h1>
         <div className="createRecipe" style={{borderRadius:"10px" }}>
           <Form style={{padding:"5%"}}>
+
+						<Form.Group as={Row}>
+							<Form.Label column="lg" lg={2}>
+								Cover Picture
+							</Form.Label>
+							<Col lg={10}>
+								<Form.File required id="recipeImageUpload" label="Recipe Cover Image" onChange={handlePictureUpload} />
+							</Col>
+						</Form.Group>
 
             <Form.Group as={Row}>
               <Form.Label column = "lg" lg={2}>
@@ -311,7 +344,7 @@ const CreateRecipePage = () =>{
                           <option>qt</option>
                           <option>gal</option>
                           <option>tsp</option>
-                          <option>Tbsp</option></Form.Control> }
+                          <option>Tbs</option></Form.Control> }
                       </div>
                       {ingredientList.length - 1 === i && i !== 0 && <Button onClick={() => handleRemoveClick(i)}>Remove</Button>}
                       {ingredientList.length - 1 === i && <Button onClick={handleAddClick}>Add</Button>}

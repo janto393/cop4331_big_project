@@ -22,7 +22,6 @@ import CreateAccount from './components/CreateAccount';
 import Sidebar from './components/SidebarFiles/Sidebar';
 import LoginPage from './pages/LoginPage';
 
-
 // -== SideBar Component present for all other pages
 const DefaultContainer = () => (
   <div className="pages">

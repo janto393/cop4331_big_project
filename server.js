@@ -96,7 +96,6 @@ app.post('/api/createRecipe', async (request, response, next) =>
 	{
 		var processedInstructions = await processInstructions(instructionsPayload);
 		var processedIngredients = await processIngredients(ingredientPayload);
-
 		var processedCategories = await processCategories(categoriesPayload);
 	}
 	catch (e)
@@ -1079,6 +1078,5 @@ async function processCategories(incoming)
 	
 	return returnPackage;
 }
-
 
 app.listen(PORT); // start Node + Expresponses server on port 5000

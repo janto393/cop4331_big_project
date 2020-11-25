@@ -2,6 +2,7 @@
 import React from 'react';
 import Card from 'react-bootstrap/esm/Card';
 import Button from 'react-bootstrap/esm/Button';
+import { Link } from 'react-router-dom';
 
 // CSS imports
 import './RecipeCards.css';
@@ -19,7 +20,9 @@ const RecipeCards = (json) =>
 				<Card.Body className="card-body">
 					<div className="card-info">
 						<p className="card-title">{recipe.title}</p>
-						<Button variant="primary" className="view-button">View</Button>
+						<Link to="/viewRecipe">
+							<Button variant="primary" className="view-button">View</Button>
+						</Link>
 					</div>
 				</Card.Body>
 			</Card>
