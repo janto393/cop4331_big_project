@@ -36,7 +36,8 @@ body
 }
 
 .pages{
-  background: url("cuttingboard.jpg") no-repeat center fixed;
+  /* background: url("cuttingboard.jpg") no-repeat center fixed; */
+  background: url("cookbook.jpg") no-repeat center fixed;
   background-size: cover;
   min-height: 100vh;
   height: 100%;

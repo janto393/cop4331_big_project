@@ -1,23 +1,48 @@
+  .container-fluid 
+  {
+	background: url("strawberries.jpg") no-repeat center fixed;
+	background-size: cover;
+	min-height: 100vh;
+	height: 100%;
+	width: 100vw;
+
+  }
+
+  .header
+  {
+	background-color:rgb(124, 25, 25);
+	color: white;
+  }
+
 .register-dialog
 {
 	border: 3px solid black;
 	margin: auto;
 	text-align: center;
-	width: 60%;
+	font-family: "Courier New", Courier, monospace;
+	width: 40%;
 	display: block;
+	background-color:pink;
+
 }
+
 
 .register-text-input
 {
 	font-size: 16pt;
-	padding: 12px 20px;
-	border-radius: 5%;
-	border: 3px solid lightgray;
+	font-family: "Courier New", Courier, monospace;
+	padding: 12px 30px;
+	border-radius: 10%;
+	width: 90%;
+	text-align: center;
+	margin: 0px auto;
+	border: 3px solid rgb(124, 25, 25);
 }
 
 .create-account-form
 {
 	text-align: left;
+	font-family: "Courier New", Courier, monospace;
 	margin: auto;
 }
 
@@ -29,11 +54,33 @@
 .form-div
 {
 	text-align: left;
+	font-family: "Courier New", Courier, monospace;
 	margin: auto;
 }
 
 .form-label
 {
 	font-size: 16pt;
+	font-family: "Courier New", Courier, monospace;
+	font-weight: bold;
+	text-align: center;
 	padding: 2px 5px;
+}
+
+.submit-div
+{
+	font-family: "Courier New", Courier, monospace;
+
+}
+
+.dialog-headers 
+{
+	font-family: "Courier New", Courier, monospace;
+	/* font-weight: bold; */
+}
+
+.returnLogIn 
+{
+	font-family: "Courier New", Courier, monospace;
+
 }

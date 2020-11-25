@@ -135,8 +135,11 @@ function Register()
 	}
 
 	return (
+		<div class = "container-fluid">
 		<div className="register-dialog">
-			<h1 className="dialog-headers">Create Account</h1>
+			<div className="header">
+				<h1 className="dialog-headers">Create Account</h1>
+			</div>
 			<div className="form-div">
 				<Form>
 					<Form.Group>
@@ -150,12 +153,12 @@ function Register()
 					</Form.Group>
 
 					<Form.Group>
-						<Form.Label className="form-label">Firstname</Form.Label>
+						<Form.Label className="form-label">First Name</Form.Label>
 						<Form.Control required type="text" className="register-text-input" placeholder="Firstname" id="firstname" ref={(c) => firstname = c} />
 					</Form.Group>
 
 					<Form.Group>
-						<Form.Label className="form-label">Lastname:</Form.Label>
+						<Form.Label className="form-label">Last Name:</Form.Label>
 						<Form.Control type="text" className="register-text-input" placeholder="Lastname" id="lastname" ref={(c) => lastname = c} />
 					</Form.Group>
 
@@ -175,14 +178,15 @@ function Register()
 					</Form.Group>
 
 					<div className="submit-div">
-						<Button variant="outline-primary" onClick={doCreation}>Create Account</Button>
+						<Button variant="outline-dark" onClick={doCreation}>Create Account</Button>
 					</div>
 				</Form>
 			</div>
 
-				<Link to="/">Return to Login</Link>
+				<Link className = "returnLogIn" to="/">Return to Login</Link>
 				<br />
 				<span className="error-message">{message}</span>
+		</div>
 		</div>
 	);
 }

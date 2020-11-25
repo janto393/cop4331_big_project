@@ -42,12 +42,14 @@
     "mongodb": "^3.6.3",
     "multer": "^1.4.2",
     "multer-gridfs-storage": "^4.2.0",
-    "nodemon": "^2.0.6",
     "react-icons": "^3.11.0"
   },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/Deadcoast/cop4331_big_project/issues"
   },
-  "homepage": "https://github.com/Deadcoast/cop4331_big_project#readme"
+  "homepage": "https://github.com/Deadcoast/cop4331_big_project#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
 }

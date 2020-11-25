@@ -195,7 +195,7 @@ const CreateRecipePage = () =>{
 
     return(
       <div>
-        <h1>CreateRecipePage</h1>
+        <h1 align = "center">Create Recipe</h1>
         <div className="createRecipe" style={{borderRadius:"10px" }}>
           <Form style={{padding:"5%"}}>
 
