@@ -1,28 +1,80 @@
-// React imports
-import React from 'react';
-
 // AWS s3 imports
-import S3FileUpload from 'react-s3';
+import AWS from 'aws-sdk';
 
 // Modularized script to upload an image to the AWS bucket and return the
 // URI to the image
-export function sendToAwsBucket(e)
+export function sendToAwsBucket(file)
 {
-	const bucketPayload = {
-		bucketName : process.env.AWS_BUCKET_NAME,
-		dirName : process.env.AWS_RECIPE_IMG_DIR,
-		region : process.env.AWS_REGION_NAME,
-		accessKeyId : process.env.AWS_ACCESS_KEY_ID,
-		secretAccessKey : process.env.AWS_SECRET_ACCESS_KEY
+	const accessInfo = {
+		accessKeyId : 'AKIAINSVI26BCGQ6S4CA',
+		secretAccessKey : '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'
 	};
 
-	// create a filename with the date and timestamp
-	var filename = Date.now().toString() + ':' + Date.getTime().toString();
-	var object_uri = '';
+	const bucketInfo = {
+		params: {
+			Bucket: 'browniepointsbucket'
+		},
 
-	S3FileUpload.uploadFile(e.target.files[0], bucketPayload)
-		.then((data) => {object_uri = data.location})
-		.catch((error) => {object_uri = 'FAILED TO UPLOAD'});
+		region: 'us-east-2'
+	}
 
-	return object_uri;
+	// URI prefix for objects to be stored in bucket
+	const BUCKET_URI = 'https://browniepointsbucket.s3.us-east-2.amazonaws.com/';
+
+	// configure the access data for the bucket
+	AWS.config.update(accessInfo);
+	const bucket = new AWS.S3(bucketInfo);
+
+	// get file prefix type
+	var suffix = '';
+	var type = '';
+
+	// check if jpeg
+	if (file.type === 'image/jpeg')
+	{
+		suffix = '.jpg';
+		type = 'image/jpeg';
+	}
+
+	// check if png
+	else if (file.type === 'image/png')
+	{
+		suffix = '.png';
+		type = 'image/png';
+	}
+
+	else
+	{
+		return 'Invalid filetype';
+	}
+
+	// generate a unique filename
+	var date = new Date();
+	var filename = date.getFullYear() + '-' + date.getDay() + '-' + date.getMonth() + '_' + date.getTime() + suffix;
+
+	// generate a new file with the new name
+	var blob = file.slice(0, file.size, type);
+	file = new File([blob], filename, {type : type});
+	var progress = 0;
+
+	const params = {
+		ACL: 'public-read',
+    Key: file.name,
+    ContentType: file.type,
+    Body: file,
+	};
+
+	bucket.putObject(params)
+		.on('httpUploadProgress', (evt) => {
+			// that's how you can keep track of your upload progress
+			progress = Math.round((evt.loaded / evt.total) * 100)
+			})
+		.send((err) => {
+			if (err)
+			{
+				return 'Upload Failed';
+			}
+		});
+
+	return (BUCKET_URI + filename);
 }
