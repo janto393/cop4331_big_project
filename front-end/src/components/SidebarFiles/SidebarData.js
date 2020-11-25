@@ -1,5 +1,5 @@
 import React from 'react'
-import { FaHome, FaUtensils, FaList, FaUserCircle, FaCookieBite } from "react-icons/fa";
+import { FaHome, FaUtensils, FaUserCircle, FaCookieBite } from "react-icons/fa";
 
 export const SidebarData = [
     {

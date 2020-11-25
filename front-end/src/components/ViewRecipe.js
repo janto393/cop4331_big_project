@@ -8,7 +8,7 @@ const ViewRecipe = (recipe) => {
 	return (
 		<div className="view-recipe-container">
 			<div>
-				<img src={info.picture} className="view-recipe-image" />
+				{/* <img src={info.picture} className="view-recipe-image" /> */}
 				<h1 className="recipe-title">{info.title}</h1>
 			</div>
 			<div>
