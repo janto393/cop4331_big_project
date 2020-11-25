@@ -1,6 +1,5 @@
 // React imports
 import React from 'react';
-import { CardDeck } from 'react-bootstrap';
 
 // Component imports
 import RecipeCards from '../components/RecipeCards';
