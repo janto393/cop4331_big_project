@@ -4,9 +4,6 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
-// Script imports
-import {sendToAwsBucket} from '../scripts/SendToAwsBucket';
-
 const CreateRecipePage = () =>{
 
     const [message,setMessage] = useState('');
@@ -54,6 +51,7 @@ const CreateRecipePage = () =>{
     {
 			event.preventDefault();
 
+			newRecipe.picture = recipeCoverImage.file;
       newRecipe.title = newRecipe.title.value;
       newRecipe.categories = categoryList;
       newRecipe.publicRecipe = publicize;
@@ -97,17 +95,16 @@ const CreateRecipePage = () =>{
         }
 			}
 			
-			if (recipeCoverImage.file != null)
+			if (recipeCoverImage.file === null)
 			{
-				newRecipe.picture = sendToAwsBucket(recipeCoverImage.file);
-				console.log(newRecipe.picture);
+				setMessage('Please select an image');
+				return;
 			}
+
+			console.log(newRecipe);
 
       try
       {
-
-        console.log(newRecipe);
-
 				const response = await fetch( buildPath('/api/createRecipe'),
         {method:'POST',body:JSON.stringify(newRecipe),headers:{'Content-Type': 'application/json'}});
         				
