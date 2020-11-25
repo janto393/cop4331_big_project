@@ -1,5 +1,4 @@
 // Program dependencies
-const AWS = require('aws-sdk');
 const bodyParser = require('body-parser');
 const unitConversion = require('convert-units');
 const { metric } = require('convert-units/lib/definitions/length');
@@ -53,7 +52,7 @@ app.post('/api/createRecipe', async (request, response, next) =>
 		Incoming:
 		{
 			isMetric : bool,
-			picture : file
+			picture : string,
 			publicRecipe : bool,
 			title : string,
 			author : string,
@@ -93,24 +92,11 @@ app.post('/api/createRecipe', async (request, response, next) =>
 		instructions : request.body.instructions
 	};
 
-	var imagePayload = {
-		file : request.body.picture
-	};
-
-	console.log('picture');
-	console.log(request.body.picture);
-
 	try
 	{
 		var processedInstructions = await processInstructions(instructionsPayload);
 		var processedIngredients = await processIngredients(ingredientPayload);
 		var processedCategories = await processCategories(categoriesPayload);
-		var uploadedImage = await uploadImage(imagePayload);
-
-		if (!uploadedImage.success)
-		{
-			throw 'Failed to upload image';
-		}
 	}
 	catch (e)
 	{
@@ -1090,116 +1076,6 @@ async function processCategories(incoming)
 		}
 	}
 	
-	return returnPackage;
-}
-
-// Uploads file to aws bucket
-async function uploadImage(incoming)
-{
-	/*
-		Incoming:
-		{
-			file : file object
-		}
-
-		Outgoing:
-		{
-			success : bool,
-			uri : string
-		}
-	*/
-
-	const BUCKET_URI = 'https://browniepointsbucket.s3.us-east-2.amazonaws.com/';
-
-	var returnPackage = {
-		success : false,
-		uri : ''
-	};
-
-	const accessInfo = {
-		accessKeyId : process.env.AWS_ACCESS_ID,
-		secretAccessKey : process.env.AWS_SECRET_KEY
-	};
-
-	const bucketInfo = {
-		params: {
-			Bucket: 'browniepointsbucket'
-		},
-
-		region: 'us-east-2'
-	}
-
-	// configure the access data for the bucket
-	AWS.config.update(accessInfo);
-	const bucket = new AWS.S3(bucketInfo);
-
-	// bring the file to local scope
-	var file = incoming.file;
-
-	// get file prefix type
-	var suffix = '';
-	var type = '';
-
-	// check if jpeg
-	if (file.type === 'image/jpeg')
-	{
-		suffix = '.jpg';
-		type = 'image/jpeg';
-	}
-
-	// check if png
-	else if (file.type === 'image/png')
-	{
-		suffix = '.png';
-		type = 'image/png';
-	}
-
-	else
-	{
-		returnPackage.error = 'Invalid file';
-		console.log('invalid file');
-		console.log(file.type);
-		return returnPackage;
-	}
-
-	// generate a unique filename
-	var date = new Date();
-	var filename = date.getFullYear() + '-' + date.getDay() + '-' + date.getMonth() + '_' + date.getTime() + suffix;
-
-	// generate a new file with the new name
-	var blob = file.slice(0, file.size, type);
-	file = new File([blob], filename, {type : type});
-	var progress = 0;
-
-	const params = {
-		ACL: 'public-read',
-    Key: file.name,
-    ContentType: file.type,
-    Body: file,
-	};
-
-	try
-	{
-		bucket.putObject(params)
-			.on('httpUploadProgress', (evt) => {
-				// that's how you can keep track of your upload progress
-				progress = Math.round((evt.loaded / evt.total) * 100)
-				})
-			.send((err) => {
-				// only set the success value of the return to true if no error
-				if (!err)
-				{
-					returnPackage.success = true;
-				}
-			});
-	}
-	catch (e)
-	{
-		throw 'upload function failed';
-	}
-
-	returnPackage.uri = (BUCKET_URI + filename);
-
 	return returnPackage;
 }
 

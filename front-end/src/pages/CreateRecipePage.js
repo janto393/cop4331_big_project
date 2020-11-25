@@ -4,6 +4,9 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 
+// Script includes
+import uploadImage from '../scripts/uploadImage';
+
 const CreateRecipePage = () =>{
 
     const [message,setMessage] = useState('');
@@ -51,7 +54,6 @@ const CreateRecipePage = () =>{
     {
 			event.preventDefault();
 
-			newRecipe.picture = recipeCoverImage.file;
       newRecipe.title = newRecipe.title.value;
       newRecipe.categories = categoryList;
       newRecipe.publicRecipe = publicize;
@@ -101,13 +103,23 @@ const CreateRecipePage = () =>{
 				return;
 			}
 
-			console.log(newRecipe);
+			var uploadResponse = uploadImage(recipeCoverImage.file);
+
+			if (uploadResponse.success)
+			{
+				newRecipe.picture = uploadResponse.uri;
+			}
+			else
+			{
+				setMessage('Failed to upload image, please try agian');
+				return;
+			}
 
       try
       {
 				const response = await fetch( buildPath('/api/createRecipe'),
-        {method:'POST',body:JSON.stringify(newRecipe),headers:{'Content-Type': 'application/json'}});
-        				
+				{method:'POST',body:JSON.stringify(newRecipe),headers:{'Content-Type': 'application/json'}});
+				
 				var txt = await response.text();
 				var res = JSON.parse(txt);
 
@@ -332,7 +344,7 @@ const CreateRecipePage = () =>{
                           <option>qt</option>
                           <option>gal</option>
                           <option>tsp</option>
-                          <option>Tbsp</option></Form.Control> }
+                          <option>Tbs</option></Form.Control> }
                       </div>
                       {ingredientList.length - 1 === i && i !== 0 && <Button onClick={() => handleRemoveClick(i)}>Remove</Button>}
                       {ingredientList.length - 1 === i && <Button onClick={handleAddClick}>Add</Button>}
