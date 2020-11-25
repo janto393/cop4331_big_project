@@ -1,13 +1,16 @@
 // AWS s3 imports
 import AWS from 'aws-sdk';
 
+const { AWS_ACCESS_ID } = process.env;
+const { AWS_SECRET_KEY } = process.env;
+
 // Modularized script to upload an image to the AWS bucket and return the
 // URI to the image
 export function sendToAwsBucket(file)
 {
 	const accessInfo = {
-		accessKeyId : 'AKIARRT3LVNEMPDZLXWF',
-		secretAccessKey : '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'
+		accessKeyId : AWS_ACCESS_ID,
+		secretAccessKey : AWS_SECRET_KEY
 	};
 
 	const bucketInfo = {
