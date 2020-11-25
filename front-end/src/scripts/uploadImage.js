@@ -71,7 +71,7 @@ function uploadImage(file)
 	// generate a new file with the new name
 	var blob = file.slice(0, file.size, type);
 	file = new File([blob], filename, {type : type});
-	var progress = 0;
+	// var progress = 0;
 
 	const params = {
 		ACL: 'public-read',

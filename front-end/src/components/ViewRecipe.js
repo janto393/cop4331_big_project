@@ -6,7 +6,7 @@ const ViewRecipe = (recipe) => {
 	// var info = JSON.parse(recipe);
 
 	return (
-		<div className="view-recipe-container">
+		<div className="view-recipe-dialog">
 			
 		</div>
 	);
