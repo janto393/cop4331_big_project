@@ -103,7 +103,6 @@ const CreateRecipePage = () =>{
         				
 				var txt = await response.text();
 				var res = JSON.parse(txt);
-				console.log(res);
 
 				if( res.error.length > 0 )
 				{
