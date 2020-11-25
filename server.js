@@ -616,13 +616,9 @@ app.post('/api/registerUser', async (request, response, next) =>
 	try
 	{
 		sgMail
-		.send(msg)
-		.then(() => {
-			console.log('Email sent')
-		})
-		.catch((error) => {
-			console.error(error)
-		})
+			.send(msg)
+			.then()
+			.catch((error) => {returnPackage.error = error.toString()});
 	}
 	catch (e)
 	{

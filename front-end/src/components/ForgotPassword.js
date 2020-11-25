@@ -59,7 +59,7 @@ function ForgotPassword()
 		else
 		{
 			// use regex to see if email is valid
-			if (!/^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z]+$/.test(data.email.value))
+			if (!/^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]+$/.test(data.email.value))
 			{
 				setMessage('Email not valid');
 				return;
