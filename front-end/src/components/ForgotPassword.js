@@ -7,6 +7,9 @@ import Button from 'react-bootstrap/Button';
 // CSS imports
 import './ForgotPassword.css';
 
+// jwt imports
+import jwt_decode from 'jwt-decode';
+
 const PORT = (process.env.PORT || 5000);
 
 function resetPassword(request)
@@ -81,23 +84,7 @@ function ForgotPassword()
 		// call the api through it's gateway function
 		resetPassword(extractedData)
 			.then(response => response.json())
-			.then(json => setMessage(json.error));
-
-		// var result = resetPassword(extractedData);
-
-		// // check if response is a promise
-		// if (typeof result == 'object')
-		// {
-		// 	console.log('promise returned');
-		// 	result
-		// }
-
-		// // response is not a promise, so just print the string returned
-		// else
-		// {
-		// 	setMessage(result);
-		// 	console.log('string returned');
-		// }
+			.then(json => setMessage(jwt_decode(json).error));
 	}
 
 	return (

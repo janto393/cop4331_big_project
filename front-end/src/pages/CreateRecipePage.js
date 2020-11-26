@@ -7,6 +7,9 @@ import Row from 'react-bootstrap/Row';
 // Script includes
 import uploadImage from '../scripts/uploadImage';
 
+// jwt imports
+import jwt_decode from 'jwt-decode';
+
 const CreateRecipePage = () =>{
 
     const [message,setMessage] = useState('');
@@ -122,6 +125,9 @@ const CreateRecipePage = () =>{
 				
 				var txt = await response.text();
 				var res = JSON.parse(txt);
+
+				// decode the jwt
+				res = jwt_decode(res);
 
 				if( res.error.length > 0 )
 				{
