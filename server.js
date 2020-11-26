@@ -864,7 +864,7 @@ app.post('/api/updateUserInfo', async (request, response, next) =>
 			success : bool,
 			error : string
 		}
-	*/
+	*/ 
 
 	var returnPackage = {
 		success : false,

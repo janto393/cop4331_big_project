@@ -8,6 +8,30 @@ import './VerifyDialog.css';
 
 // enviornment variables
 const PORT = (process.env.PORT || 5000);
+async function isVerified(id)
+{
+	// create a criteria package
+	const criteria = {
+		userID : id
+	};
+
+	try
+	{
+		const response = fetch('http://localhost:' + PORT + '/api/......',
+			{
+				method:'POST',
+				body : JSON.stringify(criteria),
+				headers : {'Content-Type': 'application/json'}
+			});
+
+		return response;
+	}
+	catch(e)
+	{
+		console.log(e.toString());
+		return;
+	}
+}
 
 class VerifyDialog extends React.Component
 {
@@ -16,7 +40,7 @@ class VerifyDialog extends React.Component
 		super();
 
 		// hook to store the recipe
-		this.state = {recipe : {}};
+		this.state = {info : {}};
 
 		// container for any message needing to be displayed in the component
 		this.message = '';
@@ -34,6 +58,9 @@ class VerifyDialog extends React.Component
 		const userID = extracted[0].slice(3);
 
 		// TODO: fetch API (look at view Recipe for guidance)
+		isVerified(userID)
+			.then(response => response.json())
+			.then(json => this.setState({info : json}));
 	}
 
 	render()
