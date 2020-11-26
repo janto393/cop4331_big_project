@@ -52,7 +52,7 @@ class MyRecipesPage extends React.Component
 	{
 		fetchRecipes()
 			.then(response => response.json())
-			.then(json => this.setState({data: json.recipes}));
+			.then(json => this.setState({data: jwt_decode(json).recipes}));
 	}
 
 	render()

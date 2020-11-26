@@ -408,7 +408,8 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 		catch (e)
 		{
 			returnPackage.error = e.toString();
-			response.status(400).json(returnPackage);
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(400).json(encryptedPackage.compact());
 			return;
 		}
 	}
@@ -434,14 +435,16 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	catch (e)
 	{
 		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(500).json(encryptedPackage.compact());
 		return;
 	}
 
 	// Update the numeric indexes for the return package
 	returnPackage.numInPage = returnPackage.recipes.length;
 
-	response.status(200).json(returnPackage);
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+	response.status(200).json(encryptedPackage.compact());
 });
 
 

@@ -4,6 +4,9 @@ import React from 'react';
 // Component imports
 import RecipeCards from '../components/RecipeCards';
 
+// jwt imports
+import jwt_decode from 'jwt-decode';
+
 // environment variables
 const PORT = (process.env.PORT || 5000);
 
@@ -49,7 +52,7 @@ class RecipesPage extends React.Component
 	{
 		fetchRecipes()
 			.then(response => response.json())
-			.then(json => this.setState({data: json.recipes}));
+			.then(json => this.setState({data: jwt_decode(json).recipes}));
 	}
 
 	render()
