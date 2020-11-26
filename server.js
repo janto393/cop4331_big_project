@@ -11,9 +11,14 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectId;
 const path = require('path');
 
+// New SendGrid resources
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
+
 
 // Environment variables
 const PORT = process.env.PORT || 5000;
@@ -597,6 +602,29 @@ app.post('/api/registerUser', async (request, response, next) =>
     response.status(500).json(returnPackage);
     return;
 	}
+
+	// Send the email to the user for verification
+	const msg = {
+		to: returnPackage.email, // Change to your recipient
+		from: 'browniepoints12345@gmail.com', // Change to your verified sender
+		subject: 'Sending with SendGrid is Fun',
+		text: 'and easy to do anywhere, even with Node.js',
+		html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+	}
+
+	try
+	{
+		sgMail
+			.send(msg)
+			.then()
+			.catch((error) => {returnPackage.error = error.toString()});
+	}
+	catch (e)
+	{
+		returnPackage.error = e.toString();
+		response.status(400).json(returnPackage);
+		return;
+	}
 	
   response.status(200).json(returnPackage);
 });
@@ -1050,6 +1078,5 @@ async function processCategories(incoming)
 	
 	return returnPackage;
 }
-
 
 app.listen(PORT); // start Node + Expresponses server on port 5000

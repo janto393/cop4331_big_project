@@ -22,7 +22,7 @@
 	font-family: "Courier New", Courier, monospace;
 	width: 40%;
 	display: block;
-	background-color:pink;
+	background-color:white;
 
 }
 
@@ -32,7 +32,7 @@
 	font-size: 16pt;
 	font-family: "Courier New", Courier, monospace;
 	padding: 12px 30px;
-	border-radius: 10%;
+	border-radius: 0%;
 	width: 90%;
 	text-align: center;
 	margin: 0px auto;

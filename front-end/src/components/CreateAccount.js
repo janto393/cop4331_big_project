@@ -72,7 +72,7 @@ function Register()
 		else
 		{
 			// use regex to see if email is valid
-			if (!/^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z]+$/.test(email.value))
+			if (!/^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]+$/.test(email.value))
 			{
 				setMessage('Email not valid');
 				return;
@@ -174,7 +174,7 @@ function Register()
 
 					<Form.Group>
 						<Form.Label className="form-label">Unit System</Form.Label>
-						<BootstrapSwitchButton onstyle="primary" offstyle="primary" width={100} checked={true} onlabel="Metric" offlabel="Imperial" onChange={changeMeasurementSystem} />
+						<BootstrapSwitchButton onstyle="danger" offstyle="dark" width={100} checked={true} onlabel="Metric" offlabel="Imperial" onChange={changeMeasurementSystem} />
 					</Form.Group>
 
 					<div className="submit-div">

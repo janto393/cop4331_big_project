@@ -4,15 +4,31 @@
 	color: red;
 }
 
+.loginDiv-fluid
+{
+	background: url("shelves.jpg") no-repeat center fixed;
+	background-size: cover;
+	min-height: 100vh;
+	height: 100%;
+	width: 100vw;
+}
+
 .login-dialog
 {
 	display: block;
-	width: 60%;
+	width: 40%;
 	margin: auto;
 	text-align: center;
 	padding: 5%;
 	border: 3px solid black;
 	border-radius: 10%;
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	background-color: white;
 }
 
 .login-text-input
@@ -22,6 +38,7 @@
 	padding: 12px 20px;
 	border-radius: 5%;
 	border: 3px solid lightgray;
+	font-family: "Courier New", Courier, monospace;
 }
 
 .login-text-input:focus
@@ -30,9 +47,24 @@
 	size: 10% 2%;
 }
 
+.input
+{
+	font-family: "Courier New", Courier, monospace;
+}
+
 .login-button
 {
 	border-radius: 40px;
 	font-size: 16pt;
 	padding: 2% 5%;
+}
+
+.forgotPwLink
+{
+	font-family: "Courier New", Courier, monospace;
+}
+
+.registerLink
+{
+	font-family: "Courier New", Courier, monospace;
 }

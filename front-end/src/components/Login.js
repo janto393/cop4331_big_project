@@ -82,28 +82,30 @@ function Login()
 	}
 
 	return (  
+		<div className = "loginDiv-fluid">
 		<div className="login-dialog">
 				<h1 className="dialog-header">Login</h1>
 
 				<Form>
 					<Form.Group controlId="loginName">
 						<Form.Label></Form.Label>
-						<Form.Control type="text" placeholder="Username" ref={(c) => username = c}/>
+						<Form.Control className="input" type="text" placeholder="Username" ref={(c) => username = c}/>
 					</Form.Group>
 
 					<Form.Group controlId="loginPassword">
 						<Form.Label></Form.Label>
-						<Form.Control type="password" placeholder="Password"  ref={(c) => password = c}/>
+						<Form.Control className="input" type="password" placeholder="Password"  ref={(c) => password = c}/>
 					</Form.Group>
 
-					<Link id="forgotPasswordLink" to="/resetPassword">Forgot Password</Link>
+					<Link className="forgotPwLink" id="forgotPasswordLink" to="/resetPassword">Forgot Password</Link>
 					<br />
-					<Button variant="primary" type="submit" onClick={doLogin}>Login</Button>
+					<Button className="LoginBtn" variant="danger" type="submit" onClick={doLogin}>Login</Button>
 				</Form>
 				<br />
-				<Link id="registerLink" to="/register">Don't have an account? Sign Up</Link>
+				<Link className="registerLink" id="registerLink" to="/register">Don't have an account? Sign Up</Link>
 				<br />
 				<span id="loginResult" className="error-message">{message}</span>
+		</div>
 		</div>
 	);
 }

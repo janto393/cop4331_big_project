@@ -56,7 +56,9 @@ class RecipesPage extends React.Component
 	{
 		return (
 			<div>
-				<RecipeCards recipes={this.state.data} />
+				{/* <CardDeck> */}
+					<RecipeCards recipes={this.state.data} />
+				{/* </CardDeck> */}
 			</div>
 		);
 	}

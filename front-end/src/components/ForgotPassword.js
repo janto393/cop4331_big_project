@@ -59,7 +59,7 @@ function ForgotPassword()
 		else
 		{
 			// use regex to see if email is valid
-			if (!/^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z]+$/.test(data.email.value))
+			if (!/^[a-zA-Z0-9.!#$%&'*+=?^_`{|}~-]+@[a-zA-Z0-9-]+\.[a-zA-Z.]+$/.test(data.email.value))
 			{
 				setMessage('Email not valid');
 				return;
@@ -101,6 +101,7 @@ function ForgotPassword()
 	}
 
 	return (
+		<div className="forgotpwpage-fluid">
 		<div className="forgot-password-dialog">
 			<Form>
 				<div className="dialog-header-div">
@@ -123,7 +124,7 @@ function ForgotPassword()
 				</Form.Group>
 
 				<div className="submit-div">
-					<Button variant="outline-primary" onClick={doReset}>Reset Password</Button>
+					<Button variant="dark" onClick={doReset}>Reset Password</Button>
 				</div>
 			</Form>
 			<div className="message-div">
@@ -132,6 +133,7 @@ function ForgotPassword()
 			<div className="link-div">
 				<Link to="/">Return to Login</Link>
 			</div>
+		</div>
 		</div>
 	);
 }
