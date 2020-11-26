@@ -11,6 +11,9 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectId;
 const path = require('path');
 
+// JWT utilities
+const JWT = require('njwt');
+
 // New SendGrid resources
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -137,6 +140,9 @@ app.post('/api/createRecipe', async (request, response, next) =>
 	returnPackage.categories = processedCategories.frontendCategories;
 	returnPackage.ingredients = processedIngredients.ingredients;
 	returnPackage.instructions = processedInstructions.instructions;
+
+	// // encrypt the return package with a JWT
+	// const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
 	
   response.status(200).json(returnPackage);
 });
@@ -516,7 +522,11 @@ app.post('/api/login', async (request, response, next) =>
 	}
 
 	returnPackage.success = true;
-	response.status(200).json(returnPackage);
+
+	// encrypt the return package with a jwt
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+
+	response.status(200).json(encryptedPackage.compact());
 });
 
 
