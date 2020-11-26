@@ -12,20 +12,19 @@ import NoRecipes from './NoRecipes';
 
 const RecipeCards = (json) =>
 {
-	const createCard = (recipe, key) =>
+	const createCard = (recipe, index) =>
 	{
 		return (
-			<Card key={key} className="recipe-card">
+		<a href={'/viewRecipe?id=' + recipe._id}>
+			<Card key={'recipe-'+index} className="recipe-card" style={{display: "inline-block"}}>
 				<Card.Img className="card-img-top" src={recipe.picture} alt={recipe.picture.toString()} />
 				<Card.Body className="card-body">
 					<div className="card-info">
 						<p className="card-title">{recipe.title}</p>
-						<Link to={'/viewRecipe?id=' + recipe._id}>
-							<Button variant="primary" className="view-button">View</Button>
-						</Link>
 					</div>
 				</Card.Body>
 			</Card>
+			</a>
 		);
 	}
 
