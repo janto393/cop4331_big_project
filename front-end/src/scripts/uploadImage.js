@@ -81,7 +81,7 @@ function uploadImage(file)
 	};
 
 	bucket.putObject(params)
-		.on('httpUploadProgress', (evt) => {
+		.on('httpUploadProgress', () => {
 			// // that's how you can keep track of your upload progress
 			// progress = Math.round((evt.loaded / evt.total) * 100)
 			})
