@@ -925,12 +925,14 @@ app.post('/api/updateUserInfo', async (request, response, next) =>
 	catch (e)
 	{
 		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(500).json(encryptedPackage.compact());
 		return;
 	}
 
 	returnPackage.success = true;
-	response.status(200).json(returnPackage);
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+	response.status(200).json(encryptedPackage.compact());
 });
 
 //////////////////////////////////////////////////////////////////////////////////
