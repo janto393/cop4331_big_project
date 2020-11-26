@@ -115,17 +115,6 @@ function Register()
 			}
 			else
 			{
-				var userInfo = {
-					userID : responseJson._id,
-					email : responseJson.email,
-					firstname : responseJson.firstname,
-					lastname : responseJson.lastname,
-					usesMetric : responseJson.usesMetric,
-					favoriteRecipes : responseJson.favoriteRecipes
-				};
-
-				localStorage.setItem('user_data', JSON.stringify(userInfo));
-
 				setMessage('Registration successful. Please check your email.');
 			}
 		}
