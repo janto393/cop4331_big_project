@@ -265,112 +265,134 @@ const CreateRecipePage = () =>{
 
     return(
       <div>
-        <h1>CreateRecipePage</h1>
-        <div className="createRecipe" style={{borderRadius:"10px" }}>
-          <Form style={{padding:"5%"}}>
+        <div className="createRecipe" style={{borderRadius:"2%"}}>
+          <Form style={{padding:"10%"}}>
 
-						<Form.Group as={Row}>
-							<Form.Label column="lg" lg={2}>
-								Cover Picture
-							</Form.Label>
-							<Col lg={10}>
-								<Form.File required id="recipeImageUpload" label="Recipe Cover Image" onChange={handlePictureUpload} />
-							</Col>
-						</Form.Group>
-
-            <Form.Group as={Row}>
-              <Form.Label column = "lg" lg={2}>
-                Recipe Title
-              </Form.Label>
-              <Col lg={10}>
-                <Form.Control required type="text" size="lg" placeholder="Name your Recipe" ref={(c) => newRecipe.title = c} />
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} controlId="formBasicCheckboxes">
-            <Form.Label column = "lg" lg={2}>
-                Category
-              </Form.Label>
-              <Col lg={5}>
-                <Form.Check label="Breakfast" type="checkbox" size="lg" onClick={e => checkBox1("breakfast")}/>
-                <Form.Check label="Lunch" type="checkbox" size="lg" onClick={e => checkBox2("lunch")}/>
-                <Form.Check label="Dinner" type="checkbox" size="lg" onClick={e => checkBox3("dinner")}/>
-              </Col>
-              <Col lg={5}>
-                <Form.Check label="Snacks" type="checkbox" size="lg" onClick={e => checkBox4("snacks")}/>
-                <Form.Check label="Deserts" type="checkbox" size="lg" onClick={e => checkBox5("desert")}/>
-                <Form.Check label="Drinks" type="checkbox" size="lg" onClick={e => checkBox6("drinks")}/>
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} controlId="formBasicText">
-              <Form.Label column = "lg" sm={2}>
-              Instructions
-              </Form.Label>
-              <Col lg={10}>
-              {instructionList.map((x,i) => {
-                  return(
-                      <div key={i}>
-                        <Form.Control type ="text" name="instruction" size="lg" placeholder="Enter Instructions" value={x.instruction} onChange={e => handleInstructionChange(e,i)}/>
-                        {instructionList.length - 1 === i && i !== 0 && <Button onClick={() => handleRemoveClickIns(i)}>Remove</Button>}
-                        {instructionList.length - 1 === i && <Button onClick={handleAddClickIns}>Add</Button>}
-                      </div>
-                  );
-              })}
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row} controlId="formBasicText">
-              <Form.Group as={Col} controlId="formBasicSwitch">
-                <Form.Label column = "lg" lg={2}>
-                Ingredients
+            <Form.Row>
+              <Form.Group as={Col}>
+                <Form.Label>
+                  Recipe Title
                 </Form.Label>
+                <Col>
+                  <Form.Control required type="text" size="lg" placeholder="Name your Recipe" ref={(c) => newRecipe.title = c} />
+                </Col>
               </Form.Group>
 
-              <Col lg={{span:10}}>
-                {ingredientList.map((x, i) => {
-                  return (
-                    <div key={i}>
-                      <Form.Control size="lg" type ="text" name="ingredient" placeholder="Enter Ingredient" value={x.ingredient} onChange={e => handleIngredientChange(e, i)} />
-                      <Form.Control type ="number" name="quantity" min={0} max={50} step={0.25} precision={2} placeholder="Enter Numeric Quantity" value={x.quantity} onChange={e => handleIngredientChange(e, i)} />
-                      <div>
-                        {metric ? 
-                        <Form.Control name="unit" as="select" value={x.unit} onChange={e => handleIngredientChange(e, i) }>
-                          <option>Select Unit...</option>
-                          <option>ml</option>
-                          <option>l</option>
-                          <option>g</option>
-                          <option>kg</option></Form.Control> : 
-                        <Form.Control name="unit" as="select" value={x.unit} onChange={e => handleIngredientChange(e, i) }>
-                          <option>Select Unit...</option>
-                          <option>lb</option>
-                          <option>oz</option>
-                          <option>fl-oz</option>
-                          <option>cup</option>
-                          <option>qt</option>
-                          <option>gal</option>
-                          <option>tsp</option>
-                          <option>Tbs</option></Form.Control> }
-                      </div>
-                      {ingredientList.length - 1 === i && i !== 0 && <Button onClick={() => handleRemoveClick(i)}>Remove</Button>}
-                      {ingredientList.length - 1 === i && <Button onClick={handleAddClick}>Add</Button>}
-                    </div>
-                  );
+              <Form.Group  as={Col}>
+                <Form.Label>
+                  Recipe Picture
+                </Form.Label>
+								<Form.File required id="recipeImageUpload" onChange={handlePictureUpload} />
+						  </Form.Group>
+            </Form.Row>
+
+            <Form.Row>
+              <Form.Group as={Col}>
+                <Form.Label>
+                  Category
+                </Form.Label>
+                <Form.Group as={Row}>
+                  <Form.Group as={Col}>
+                    <Form.Check label="Breakfast" type="checkbox" onClick={e => checkBox1("breakfast")}/>
+                  </Form.Group>
+
+                  <Form.Group as={Col}>
+                    <Form.Check label="Lunch" type="checkbox" onClick={e => checkBox2("lunch")}/>
+                  </Form.Group>
+
+                  <Form.Group as={Col}>
+                    <Form.Check label="Dinner" type="checkbox" onClick={e => checkBox3("dinner")}/>
+                  </Form.Group>
+
+                  <Form.Group as={Col}>
+                    <Form.Check label="Snacks" type="checkbox" onClick={e => checkBox4("snacks")}/>
+                  </Form.Group>
+
+                  <Form.Group as={Col}>
+                    <Form.Check label="Deserts" type="checkbox" onClick={e => checkBox5("desert")}/>
+                  </Form.Group>
+
+                  <Form.Group as={Col}>
+                    <Form.Check label="Drinks" type="checkbox" onClick={e => checkBox6("drinks")}/>
+                  </Form.Group>
+                </Form.Group>
+              </Form.Group>
+            </Form.Row>
+
+            <Form.Row>
+              <Form.Group as={Col}>
+                <Form.Label>
+                Instructions
+                </Form.Label>
+                {instructionList.map((x,i) => {
+                    return(
+                        <Form.Group as={Row} key={i}>
+                          <Form.Group as={Col}>
+                            <Form.Control type ="text" name="instruction" size="lg" placeholder="Enter Instructions" value={x.instruction} onChange={e => handleInstructionChange(e,i)}/>
+                            {instructionList.length - 1 === i && i !== 0 && <Button variant="danger" style={{margin:"0.4%"}} onClick={() => handleRemoveClickIns(i)}>Remove</Button>}
+                            {instructionList.length - 1 === i && <Button style={{margin:"0.4%"}}onClick={handleAddClickIns}>Add</Button>}
+                          </Form.Group>
+                        </Form.Group>
+
+                    );
                 })}
-                <Form.Group as={Row} controlId="formBasicCheck">
+              </Form.Group>
+            </Form.Row>
+
+            <Form.Row>
+              <Form.Group as={Col}>
+                <Form.Label>
+                Ingredients
+                </Form.Label>
+                
+                  {ingredientList.map((x, i) => {
+                    return (
+                      <Form.Group as={Row} key={i}>
+                        <Form.Group as={Col}>
+                          <Form.Control size="lg" type ="text" name="ingredient" placeholder="Enter Ingredient" value={x.ingredient} onChange={e => handleIngredientChange(e, i)} />
+                          {ingredientList.length - 1 === i && i !== 0 && <Button variant="danger" style={{margin:"1%"}} onClick={() => handleRemoveClick(i)}>Remove</Button>}
+                          {ingredientList.length - 1 === i && <Button style={{margin:"1%"}} onClick={handleAddClick}>Add</Button>}
+                        </Form.Group>
+
+                        <Form.Group as={Col}>
+                          <Form.Control size="lg" type ="number" name="quantity" min={0} max={50} step={0.25} precision={2} placeholder="Enter Numeric Quantity" value={x.quantity} onChange={e => handleIngredientChange(e, i)} />
+                        </Form.Group>
+
+                        <Form.Group as={Col}>
+                            {metric ? 
+                            <Form.Control size="lg" name="unit" as="select" value={x.unit} onChange={e => handleIngredientChange(e, i) }>
+                              <option>Select Unit...</option>
+                              <option>ml</option>
+                              <option>l</option>
+                              <option>g</option>
+                              <option>kg</option></Form.Control> : 
+                            <Form.Control size="lg" name="unit" as="select" value={x.unit} onChange={e => handleIngredientChange(e, i) }>
+                              <option>Select Unit...</option>
+                              <option>lb</option>
+                              <option>oz</option>
+                              <option>fl-oz</option>
+                              <option>cup</option>
+                              <option>qt</option>
+                              <option>gal</option>
+                              <option>tsp</option>
+                              <option>Tbs</option></Form.Control> }
+                        </Form.Group>
+                        
+                      </Form.Group>
+                    );
+                  })}
+                </Form.Group>
+            </Form.Row>
+
+            <Form.Group as={Row} controlId="formBasicCheck">
                   <Col lg={{ span: 10}}>
                   <Form.Check label="Private Recipe" type="switch" size="lg" onClick={isPublicized}/>
                   </Col>
                 </Form.Group>
 
-              </Col>
-            </Form.Group>
-
-            <Form.Group as={Row}>
-              <Col sm={{ span: 10, offset: 2 }}>
-                <Button type="submit" variant="primary"onClick={addRecipe} >Create</Button>
+            <Form.Group>
+                <Button style={{padding: "1% 3.5% 1% 3.5%"}}type="submit" variant="success" onClick={addRecipe} >Create</Button>
                 <span id="loginResult" className="error-message">{message}</span>
-              </Col>
             </Form.Group>
           </Form>
         </div>
