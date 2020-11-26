@@ -46,6 +46,7 @@ class Settings extends React.Component
 
 	componentDidUpdate()
 	{
+		// recieves jwt from api
 		updateUserRecord(this.userData);
 	}
 
