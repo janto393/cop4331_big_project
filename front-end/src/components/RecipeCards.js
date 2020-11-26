@@ -20,7 +20,7 @@ const RecipeCards = (json) =>
 				<Card.Body className="card-body">
 					<div className="card-info">
 						<p className="card-title">{recipe.title}</p>
-						<Link to="/viewRecipe">
+						<Link to={'/viewRecipe?id=' + recipe._id}>
 							<Button variant="primary" className="view-button">View</Button>
 						</Link>
 					</div>

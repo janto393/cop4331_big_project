@@ -4,11 +4,11 @@ import React from 'react';
 // Component includes
 import ViewRecipe from '../components/ViewRecipe';
 
-const ViewRecipePage = (recipeJson) => {
+const ViewRecipePage = () => {
 
 	return (
 		<div>
-			<ViewRecipe recipe={JSON.stringify(recipeJson)} />
+			<ViewRecipe />
 		</div>
 	);
 };

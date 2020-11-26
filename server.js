@@ -194,6 +194,146 @@ app.post('/api/deleteRecipe', async (request, response, next) =>
 });
 
 
+// Fetch recipe by id
+app.post('/api/fetchRecipeByID', async (request, response, next) => {
+	/*
+		Incoming:
+		{
+			recipeID : string
+		}
+
+		Outgoing:
+		{
+			success : boolean,
+			recipeID : string,
+			picture : string, // URI to picture in aws bucket
+			publicRecipe : boolean,
+			title : string,
+			author : JSON object,
+			instructions : array,
+			categories : JSON object,
+			ingredients : array,
+			error : string
+		}
+
+		author JSON object:
+		{
+			userID : string,
+			name : string
+		}
+
+		categories JSON object:
+		{
+			categoryID : string,
+			name : string
+		}
+	*/
+
+	var returnPackage = {
+		success : false,
+		recipeID : '',
+		picture : '',
+		publicRecipe : false,
+		title : '',
+		author : '',
+		instructions : [],
+		categories : [],
+		ingredients : [],
+		error : ''
+	};
+
+	var categories = [];
+	var author = '';
+
+	// fetch the recipe record from the database
+	try
+	{
+		const db = await client.db(process.env.APP_DATABASE);
+
+		let criteria = {
+			_id : ObjectID(request.body.recipeID)
+		};
+
+		let result = await db.collection(process.env.COLLECTION_RECIPES).findOne(criteria);
+
+		if (!result)
+		{
+			throw 'Recipe ID invalid';
+		}
+
+		// Assign record data to the return package and local variables for processing
+		returnPackage.recipeID = result._id;
+		returnPackage.picture = result.picture;
+		returnPackage.publicRecipe = result.publicRecipe;
+		returnPackage.title = result.title;
+		returnPackage.instructions = result.instructions;
+		returnPackage.ingredients = result.ingredients;
+		categories = result.categories;
+		author = result.author;
+
+		// configure criteria package for user collection
+		criteria = {
+			_id : ObjectID(author)
+		};
+
+		// search for the author in the database
+		result = await db.collection(process.env.COLLECTION_USERS).findOne(criteria);
+
+		let authorObject = {
+			userID : '',
+			name : ''
+		};
+
+		if (!result)
+		{
+			authorObject.userID = '';
+			authorObject.name = '[User unavailable]';
+		}
+		else
+		{
+			authorObject.userID = result._id;
+			authorObject.name = (result.firstName + ' ' + result.lastName);
+		}
+
+		// assign the author package to the return package
+		returnPackage.author = authorObject;
+
+		// search for each category in the categories collection to get the name
+		for (let i = 0; i < categories.length; i++)
+		{
+			// configure criteria package for the criteria collection
+			criteria = {
+				_id : ObjectID(categories[i])
+			};
+
+			// search for the category in the database
+			result = await db.collection(process.env.COLLECTION_CATEGORIES).findOne(criteria);
+
+			if (!result)
+			{
+				throw 'invalid category detected';
+			}
+
+			let processedCategory = {
+				categoryID : result._id,
+				name : result.name
+			};
+
+			returnPackage.categories.push(processedCategory);
+		}
+	}
+	catch (e)
+	{
+		returnPackage.error = e.toString();
+		response.status(400).json(returnPackage);
+		return;
+	}
+
+	returnPackage.success = true;
+	response.status(200).json(returnPackage);
+});
+
+
 // Fetches recipes according to title
 app.post('/api/fetchRecipes', async (request, response, next) => {
 	/*

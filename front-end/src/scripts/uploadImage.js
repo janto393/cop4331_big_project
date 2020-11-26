@@ -71,7 +71,7 @@ function uploadImage(file)
 	// generate a new file with the new name
 	var blob = file.slice(0, file.size, type);
 	file = new File([blob], filename, {type : type});
-	var progress = 0;
+	// var progress = 0;
 
 	const params = {
 		ACL: 'public-read',
@@ -81,7 +81,7 @@ function uploadImage(file)
 	};
 
 	bucket.putObject(params)
-		.on('httpUploadProgress', (evt) => {
+		.on('httpUploadProgress', () => {
 			// // that's how you can keep track of your upload progress
 			// progress = Math.round((evt.loaded / evt.total) * 100)
 			})
