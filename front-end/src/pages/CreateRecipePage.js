@@ -267,7 +267,7 @@ const CreateRecipePage = () =>{
       <div>
         <div className="createRecipe" style={{borderRadius:"2%"}}>
           <Form style={{padding:"10%"}}>
-
+          <h1>Create Recipe</h1><br/>
             <Form.Row>
               <Form.Group as={Col}>
                 <Form.Label>
@@ -375,7 +375,7 @@ const CreateRecipePage = () =>{
                               <option>qt</option>
                               <option>gal</option>
                               <option>tsp</option>
-                              <option>Tbs</option></Form.Control> }
+                              <option>tbsp</option></Form.Control> }
                         </Form.Group>
                         
                       </Form.Group>
