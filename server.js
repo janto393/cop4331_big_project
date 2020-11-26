@@ -104,7 +104,8 @@ app.post('/api/createRecipe', async (request, response, next) =>
 	catch (e)
 	{
 		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(500).json(encryptedPackage.compact());
 		return;
 	}
 
@@ -132,7 +133,8 @@ app.post('/api/createRecipe', async (request, response, next) =>
 	catch (e)
 	{
 		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(500).json(encryptedPackage.compact());
 		return;
 	}
 
@@ -141,10 +143,8 @@ app.post('/api/createRecipe', async (request, response, next) =>
 	returnPackage.ingredients = processedIngredients.ingredients;
 	returnPackage.instructions = processedInstructions.instructions;
 
-	// // encrypt the return package with a JWT
-	// const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
-	
-  response.status(200).json(returnPackage);
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+  response.status(200).json(encryptedPackage.compact());
 });
 
 
@@ -191,12 +191,14 @@ app.post('/api/deleteRecipe', async (request, response, next) =>
   }
   catch (e)
   {
-    returnPackage.error = e.toString();
-    response.status(500).json(returnPackage);
+		returnPackage.error = e.toString();
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+    response.status(500).json(encryptedPackage.compact());
     return;
 	}
 
-  response.status(200).json(returnPackage);
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+  response.status(200).json(encryptedPackage.compact());
 });
 
 
@@ -331,12 +333,14 @@ app.post('/api/fetchRecipeByID', async (request, response, next) => {
 	catch (e)
 	{
 		returnPackage.error = e.toString();
-		response.status(400).json(returnPackage);
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(400).json(encryptedPackage.compact());
 		return;
 	}
 
 	returnPackage.success = true;
-	response.status(200).json(returnPackage);
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+	response.status(200).json(encryptedPackage.compact());
 });
 
 
@@ -494,7 +498,10 @@ app.post('/api/login', async (request, response, next) =>
 		if ((!result) || (result.password !== request.body.password))
 		{
 			returnPackage.error = INVALID_CREDENTIALS_MSG;
-			response.status(400).json(returnPackage);
+			
+			// encrypt the return package with a jwt
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(400).json(encryptedPackage.compact());
 			return;
 		}
 
@@ -502,7 +509,10 @@ app.post('/api/login', async (request, response, next) =>
 		if (!result.isVerified)
 		{
 			returnPackage.error = NOT_VERIFIED_MSG;
-			response.status(400).json(returnPackage);
+
+			// encrypt the return package with a jwt
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(400).json(encryptedPackage.compact());
 			return;
 		}
 
@@ -517,7 +527,10 @@ app.post('/api/login', async (request, response, next) =>
 	catch (e)
 	{
 		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
+		
+		// encrypt the return package with a jwt
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(500).json(encryptedPackage.compact());
 		return;
 	}
 
@@ -525,7 +538,6 @@ app.post('/api/login', async (request, response, next) =>
 
 	// encrypt the return package with a jwt
 	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
-
 	response.status(200).json(encryptedPackage.compact());
 });
 

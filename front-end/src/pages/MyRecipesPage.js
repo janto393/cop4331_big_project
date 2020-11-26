@@ -4,6 +4,9 @@ import React from 'react';
 // Component imports
 import RecipeCards from '../components/RecipeCards';
 
+// JWT imports
+import jwt_decode from 'jwt-decode';
+
 // environment variables
 const PORT = (process.env.PORT || 5000);
 

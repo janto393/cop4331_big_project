@@ -6,6 +6,9 @@ import { Link } from 'react-router-dom';
 // CSS imports
 import './ViewRecipe.css';
 
+// jwt imports
+import jwt_decode from 'jwt-decode';
+
 const PORT = (process.env.PORT || 5000);
 
 async function fetchRecipe(id)
@@ -198,7 +201,7 @@ class ViewRecipe extends React.Component
 		// call function to submit the API call
 		fetchRecipe(recipeID)
 			.then(response => response.json())
-			.then(json => this.setState({recipe : json}));
+			.then(json => this.setState({recipe : jwt_decode(json)}));
 	}
 
 	render()
