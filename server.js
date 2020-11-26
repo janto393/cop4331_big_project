@@ -850,7 +850,8 @@ app.post('/api/resetPassword', async (request, response, next) =>
 		if (!result)
 		{
 			returnPackage.error = 'Account does not exist. Please create an account.';
-			response.status(404).json(returnPackage);
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(404).json(encryptedPackage.compact());
 			return;
 		}
 
@@ -865,20 +866,23 @@ app.post('/api/resetPassword', async (request, response, next) =>
 		else
 		{
 			returnPackage.error = 'Credentials invalid'
-			response.status(404).json(returnPackage);
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(404).json(encryptedPackage.compact());
 			return;
 		}
   }
   catch(e)
   {
-    returnPackage.error = e.toString();
-    response.status(500).json(returnPackage);
+		returnPackage.error = e.toString();
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+    response.status(500).json(encryptedPackage.compact());
     return;
 	}
 
 	returnPackage.error = 'Password Reset';
 	returnPackage.success = true;
-  response.status(200).json(returnPackage);
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+  response.status(200).json(encryptedPackage.compact());
 });
 
 
