@@ -3,6 +3,7 @@ import React from 'react';
 
 // Component imports
 import RecipeCards from '../components/RecipeCards';
+import Searchbar from '../components/Searchbar';
 
 // jwt imports
 import jwt_decode from 'jwt-decode';
@@ -59,6 +60,7 @@ class RecipesPage extends React.Component
 	{
 		return (
 			<div>
+				<Searchbar />
 				<RecipeCards recipes={this.state.data} />
 			</div>
 		);
