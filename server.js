@@ -611,7 +611,8 @@ app.post('/api/modifyRecipe', async (request, response, next) =>
 		catch (e)
 		{
 			returnPackage.error = e.toString();
-			response.status(400).json(returnPackage);
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(400).json(encryptedPackage.compact());
 			return;
 		}
 	}
@@ -631,7 +632,8 @@ app.post('/api/modifyRecipe', async (request, response, next) =>
 		catch (e)
 		{
 			returnPackage.error = e.toString();
-			response.status(400).json(returnPackage);
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(400).json(encryptedPackage.compact());
 			return;
 		}
 	}
@@ -656,13 +658,15 @@ app.post('/api/modifyRecipe', async (request, response, next) =>
 		catch (e)
 		{
 			returnPackage.error = e.toString();
-			response.status(500).json(returnPackage);
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(500).json(encryptedPackage.compact());
 			return;
 		}
 	}
 
 	returnPackage.success = true;
-	response.status(200).json(returnPackage);
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+	response.status(200).json(encryptedPackage.compact());
 });
 
 
@@ -734,8 +738,9 @@ app.post('/api/registerUser', async (request, response, next) =>
   }
   catch(e)
   {
-    returnPackage.error = e.toString();
-    response.status(400).json(returnPackage);
+		returnPackage.error = e.toString();
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+    response.status(400).json(encryptedPackage.compact());
     return;
   }
 
@@ -763,8 +768,9 @@ app.post('/api/registerUser', async (request, response, next) =>
   }
   catch(e)
   {
-    returnPackage.error = e.toString();
-    response.status(500).json(returnPackage);
+		returnPackage.error = e.toString();
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+    response.status(500).json(encryptedPackage.compact());
     return;
 	}
 
@@ -787,11 +793,13 @@ app.post('/api/registerUser', async (request, response, next) =>
 	catch (e)
 	{
 		returnPackage.error = e.toString();
-		response.status(400).json(returnPackage);
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(400).json(encryptedPackage.compact());
 		return;
 	}
 	
-  response.status(200).json(returnPackage);
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+  response.status(200).json(encryptedPackage.compact());
 });
 
 
