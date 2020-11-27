@@ -378,31 +378,44 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	};
 
 	// Empty package on initialization, will be populated as we preocess input
-	var criteria = {}
+	var criteria = {};
+
+	var andConditions = [];
 
 	// process title
 	if ((request.body.title != null) && (typeof request.body.title == 'string'))
 	{
-		// format the title into a regex equivalent of SQL's "like"
-		criteria.title =  {$regex : ('^' + request.body.title.toLowerCase())};
+		let titleCriteria = {
+			title : {
+				$regex : '^' + request.body.title.toLowerCase(),
+				$options : 'i'
+			}
+		};
+
+		andConditions.push(titleCriteria);
 	}
 
 	// process category
 	if ((request.body.category != null) && (typeof request.body.category == 'string'))
 	{
 		// package the category given into format for the helper function
-		const rawCategories = {
-			categories : [request.body.category]
-		}
+		const rawCategory = {
+			name : request.body.category.toLowerCase()
+		};
 
 		try
 		{
-			var processedCategories = (await processCategories(rawCategories)).databaseCategories;
+			const db = client.db(process.env.APP_DATABASE);
 
-			// Only take the first element since we are only searching by one category at a time
-			if (processedCategories.length > 0)
+			let processedCategory = await db.collection(process.env.COLLECTION_CATEGORIES).findOne(rawCategory);
+
+			if (processedCategory)
 			{
-				criteria.category = ObjectID(processedCategries[0]);
+				let categoryCriteria = {
+					categories : ObjectID(processedCategory._id)
+				};
+
+				andConditions.push(categoryCriteria);
 			}
 		}
 		catch (e)
@@ -417,7 +430,17 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	// process if we are fetching user recipes only
 	if (request.body.fetchUserRecipes)
 	{
-		criteria.author = ObjectID(request.body.userID);
+		let authorCriteria = {
+			author : ObjectID(request.body.userID)
+		};
+
+		andConditions.push(authorCriteria);
+	}
+
+	// Add AND conditions to criteria if criteria was specified
+	if (andConditions.length > 0)
+	{
+		criteria.$and = andConditions;
 	}
 
 	// Query the database based on criteria supplied
