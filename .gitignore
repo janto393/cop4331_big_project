@@ -1,6 +1,9 @@
 # Ignore node modules directory
 node_modules/*
 
+# front-end ignores
+front-end/debug.log
+
 # ignore environment variables
 .env
 sendgrid.env
