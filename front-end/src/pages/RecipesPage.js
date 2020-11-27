@@ -89,7 +89,7 @@ class RecipesPage extends React.Component
 		{
 			this.title = title.target.value;
 			search();
-		}
+		};
 
 		return (
 			<div>

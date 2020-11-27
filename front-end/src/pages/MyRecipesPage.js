@@ -1,5 +1,6 @@
 // React imports
 import React from 'react';
+import { Form } from 'react-bootstrap';
 
 // Component imports
 import RecipeCards from '../components/RecipeCards';
@@ -46,6 +47,8 @@ class MyRecipesPage extends React.Component
 	{
 		super();
 		this.state = {data : []};
+		this.category = 'Any Category';
+		this.title = '';
 	}
 
 	componentDidMount()
@@ -57,8 +60,50 @@ class MyRecipesPage extends React.Component
 
 	render()
 	{
+		const search = () =>
+		{
+			fetchRecipes(this.title, this.category)
+				.then(response => response.json())
+				.then(json => this.setState({data : jwt_decode(json).recipes}));
+		};
+
+		const handleCategoryChange = (cat) =>
+		{
+			this.category = cat.target.value;
+			search();
+		};
+
+		const handleTitleChange = (title) =>
+		{
+			this.title = title.target.value;
+			search();
+		};
+
 		return (
 			<div>
+				<div className="searchbar-div">
+					<Form>
+						<Form.Row>
+
+							<Form.Group>
+								<Form.Control type="text" placeholder="Recipe Title" onChange={handleTitleChange} />
+							</Form.Group>
+							
+							<Form.Group>
+								<Form.Control as="select" onChange={handleCategoryChange}>
+									<option>Any Category</option>
+									<option>Breakfast</option>
+									<option>Lunch</option>
+									<option>Dinner</option>
+									<option>Desert</option>
+									<option>Drinks</option>
+									<option>Snacks</option>
+								</Form.Control>
+							</Form.Group>
+
+						</Form.Row>
+					</Form>
+				</div>
 				<RecipeCards recipes={this.state.data} />
 			</div>
 		);
