@@ -378,38 +378,54 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	};
 
 	// Empty package on initialization, will be populated as we preocess input
-	var criteria = {}
+	var criteria = {
+		$and : []
+	};
 
 	// process title
 	if ((request.body.title != null) && (typeof request.body.title == 'string'))
 	{
-		// format the title into a regex equivalent of SQL's "like"
-		criteria.title =  {$regex : ('^' + request.body.title.toLowerCase())};
+		let titleCriteria = {
+			title : {
+				$regex : '^' + request.body.title.toLowerCase(),
+				$options : 'i'
+			}
+		};
+
+		criteria.$and.push(titleCriteria);
 	}
 
 	// process category
 	if ((request.body.category != null) && (typeof request.body.category == 'string'))
 	{
 		// package the category given into format for the helper function
-		const rawCategories = {
-			categories : [request.body.category]
-		}
+		const rawCategory = {
+			name : request.body.category.toLowerCase()
+		};
 
 		try
 		{
-			var processedCategories = (await processCategories(rawCategories)).databaseCategories;
+			const db = client.db(process.env.APP_DATABASE);
 
-			// Only take the first element since we are only searching by one category at a time
-			if (processedCategories.length > 0)
+			let processedCategory = await db.collection(process.env.COLLECTION_CATEGORIES).findOne(rawCategory);
+
+			if (processedCategory)
 			{
-				criteria.category = ObjectID(processedCategries[0]);
+				let categoryCriteria = {
+					categories : ObjectID(processedCategory._id)
+				};
+
+				criteria.$and.push(categoryCriteria);
+
+				console.log('processed category');
 			}
 		}
 		catch (e)
 		{
 			returnPackage.error = e.toString();
-			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
-			response.status(400).json(encryptedPackage.compact());
+			// const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			// response.status(400).json(encryptedPackage.compact());
+			response.status(400).json(returnPackage);
 			return;
 		}
 	}
@@ -417,8 +433,14 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	// process if we are fetching user recipes only
 	if (request.body.fetchUserRecipes)
 	{
-		criteria.author = ObjectID(request.body.userID);
+		let authorCriteria = {
+			author : ObjectID(request.body.userID)
+		};
+
+		criteria.$and.push(authorCriteria);
 	}
+
+	console.log(criteria);
 
 	// Query the database based on criteria supplied
 	try
@@ -435,16 +457,18 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	catch (e)
 	{
 		returnPackage.error = e.toString();
-		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
-		response.status(500).json(encryptedPackage.compact());
+		// const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		// response.status(500).json(encryptedPackage.compact());
+		response.status(500).json(returnPackage);
 		return;
 	}
 
 	// Update the numeric indexes for the return package
 	returnPackage.numInPage = returnPackage.recipes.length;
 
-	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
-	response.status(200).json(encryptedPackage.compact());
+	// const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+	// response.status(200).json(encryptedPackage.compact());
+	response.status(200).json(returnPackage);
 });
 
 
