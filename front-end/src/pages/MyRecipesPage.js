@@ -11,7 +11,7 @@ import jwt_decode from 'jwt-decode';
 // environment variables
 const PORT = (process.env.PORT || 5000);
 
-function fetchRecipes()
+function fetchRecipes(title, category)
 {
 	// Create a criteria package that will return any recipes
 	var criteria = {
@@ -21,6 +21,18 @@ function fetchRecipes()
 		userID : '',
 		currentPage : 1,
 		pageCapacity : 10
+	}
+
+	// filter title
+	if (title !== '')
+	{
+		criteria.title = title;
+	}
+
+	// filter category
+	if (category !== 'Any Category')
+	{
+		criteria.category = category;
 	}
 
 	// fetch the recipes from the database
