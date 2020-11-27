@@ -378,9 +378,9 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	};
 
 	// Empty package on initialization, will be populated as we preocess input
-	var criteria = {
-		$and : []
-	};
+	var criteria = {};
+
+	var andConditions = [];
 
 	// process title
 	if ((request.body.title != null) && (typeof request.body.title == 'string'))
@@ -392,7 +392,7 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 			}
 		};
 
-		criteria.$and.push(titleCriteria);
+		andConditions.push(titleCriteria);
 	}
 
 	// process category
@@ -415,17 +415,14 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 					categories : ObjectID(processedCategory._id)
 				};
 
-				criteria.$and.push(categoryCriteria);
-
-				console.log('processed category');
+				andConditions.push(categoryCriteria);
 			}
 		}
 		catch (e)
 		{
 			returnPackage.error = e.toString();
-			// const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
-			// response.status(400).json(encryptedPackage.compact());
-			response.status(400).json(returnPackage);
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(400).json(encryptedPackage.compact());
 			return;
 		}
 	}
@@ -437,10 +434,14 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 			author : ObjectID(request.body.userID)
 		};
 
-		criteria.$and.push(authorCriteria);
+		andConditions.push(authorCriteria);
 	}
 
-	console.log(criteria);
+	// Add AND conditions to criteria if criteria was specified
+	if (andConditions.length > 0)
+	{
+		criteria.$and = andConditions;
+	}
 
 	// Query the database based on criteria supplied
 	try
@@ -457,18 +458,16 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	catch (e)
 	{
 		returnPackage.error = e.toString();
-		// const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
-		// response.status(500).json(encryptedPackage.compact());
-		response.status(500).json(returnPackage);
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(500).json(encryptedPackage.compact());
 		return;
 	}
 
 	// Update the numeric indexes for the return package
 	returnPackage.numInPage = returnPackage.recipes.length;
 
-	// const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
-	// response.status(200).json(encryptedPackage.compact());
-	response.status(200).json(returnPackage);
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+	response.status(200).json(encryptedPackage.compact());
 });
 
 
