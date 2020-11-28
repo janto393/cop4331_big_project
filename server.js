@@ -950,7 +950,7 @@ app.post('/api/updateUserInfo', async (request, response, next) =>
 		$set : request.body.newInfo
 	}
 
-	try
+	try 
 	{
 		const db = await client.db(process.env.APP_DATABASE);
 
