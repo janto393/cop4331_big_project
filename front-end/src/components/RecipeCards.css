@@ -8,4 +8,12 @@
 .card-title
 {
 	font-size: 16pt;
+	font-family: "Courier New", Courier, monospace;
+	font-weight: bold;
+}
+
+.view-button
+{
+	font-family: "Courier New", Courier, monospace;
+	background-color: crimson;
 }
