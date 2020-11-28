@@ -6,7 +6,7 @@
 
 .loginDiv-fluid
 {
-	background: url("shelves.jpg") no-repeat center fixed;
+	background: url("./img/shelves.jpg") no-repeat center fixed;
 	background-size: cover;
 	min-height: 100vh;
 	height: 100%;
@@ -19,7 +19,7 @@
 	width: 40%;
 	margin: auto;
 	text-align: center;
-	padding: 5%;
+	padding: 3%;
 	border: 3px solid black;
 	border-radius: 10%;
 	margin: 0;
@@ -47,9 +47,16 @@
 	size: 10% 2%;
 }
 
-.input
+.register-text-input
 {
+	font-size: 16pt;
 	font-family: "Courier New", Courier, monospace;
+	padding: 12px 30px;
+	border-radius: 0%;
+	width: 90%;
+	text-align: center;
+	margin: 0px auto;
+	border: 1px solid gray;
 }
 
 .login-button
@@ -67,4 +74,9 @@
 .registerLink
 {
 	font-family: "Courier New", Courier, monospace;
+}
+
+.dialog-header
+{
+	font-weight: bold;
 }

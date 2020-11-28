@@ -133,13 +133,13 @@ function Register()
 	return (
 		<div class = "container-fluid">
 		<div className="register-dialog">
-			<div className="header">
+			<div>
 				<h1 className="dialog-headers">Create Account</h1>
 			</div>
 			<div className="form-div">
 				<Form>
 					<Form.Group>
-						<Form.Label className="form-label">Username:</Form.Label>
+						<Form.Label className="form-label">Username</Form.Label>
 						<Form.Control required type="text" className="register-text-input" placeholder="Username" id="username" ref={(c)=> username = c} />
 					</Form.Group>
 
@@ -154,32 +154,34 @@ function Register()
 					</Form.Group>
 
 					<Form.Group>
-						<Form.Label className="form-label">Last Name:</Form.Label>
+						<Form.Label className="form-label">Last Name</Form.Label>
 						<Form.Control type="text" className="register-text-input" placeholder="Lastname" id="lastname" ref={(c) => lastname = c} />
 					</Form.Group>
 
 					<Form.Group>
-						<Form.Label className="form-label">Password:</Form.Label>
+						<Form.Label className="form-label">Password</Form.Label>
 						<Form.Control required type="password" className="register-text-input" placeholder="Password" id="password" ref={(c) => password = c} />
 					</Form.Group>
 
 					<Form.Group>
-						<Form.Label className="form-label">Confirm Password:</Form.Label>
-						<Form.Control required type="password" className="register-text-input" placeholder="Password" id="confirmPassword" ref={(c) => confirmPassword = c} />
+						<Form.Label className="form-label">Confirm Password</Form.Label>
+						<Form.Control required type="password" className="register-text-input" placeholder="Confirm Password" id="confirmPassword" ref={(c) => confirmPassword = c} />
 					</Form.Group>
 
 					<Form.Group>
 						<Form.Label className="form-label">Unit System</Form.Label>
-						<BootstrapSwitchButton onstyle="danger" offstyle="dark" width={100} checked={true} onlabel="Metric" offlabel="Imperial" onChange={changeMeasurementSystem} />
+						<br />
+						<BootstrapSwitchButton onstyle="primary" offstyle="primary" width={100} checked={true} onlabel="Metric" offlabel="Imperial" onChange={changeMeasurementSystem} />
 					</Form.Group>
 
 					<div className="submit-div">
-						<Button variant="outline-dark" onClick={doCreation}>Create Account</Button>
+						<Button variant="primary" size="lg" onClick={doCreation}>Create Account</Button>
 					</div>
 				</Form>
 			</div>
 
-				<Link className = "returnLogIn" to="/">Return to Login</Link>
+				<br />
+				<Link className="returnLogIn" to="/">Return to Login</Link>
 				<br />
 				<span className="error-message">{message}</span>
 		</div>

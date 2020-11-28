@@ -1,42 +1,38 @@
-  .container-fluid 
-  {
-	background: url("strawberries.jpg") no-repeat center fixed;
-	background-size: cover;
-	min-height: 100vh;
-	height: 100%;
-	width: 100vw;
-
-  }
-
-  .header
-  {
-	background-color:rgb(124, 25, 25);
-	color: white;
-  }
+.container-fluid 
+{
+background: url("./img/registration_background.jpg") no-repeat center fixed;
+background-size: cover;
+min-height: 100vh;
+height: 100%;
+width: 100vw;
+}
 
 .register-dialog
 {
-	border: 3px solid black;
+	display: block;
+	width: 40%;
 	margin: auto;
 	text-align: center;
-	font-family: "Courier New", Courier, monospace;
-	width: 40%;
-	display: block;
-	background-color:white;
-
+	padding: 1% 0.5%;
+	border: 3px solid black;
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	background-color: white;
 }
 
 
 .register-text-input
 {
-	font-size: 16pt;
 	font-family: "Courier New", Courier, monospace;
-	padding: 12px 30px;
 	border-radius: 0%;
-	width: 90%;
+	width: 80%;
 	text-align: center;
-	margin: 0px auto;
-	border: 3px solid rgb(124, 25, 25);
+	margin: auto;
+	border: 1px solid gray;
 }
 
 .create-account-form
@@ -48,14 +44,13 @@
 
 .measurement-switch-div
 {
-	padding: 5%;
+	padding: 2.5%;
 }
 
 .form-div
 {
-	text-align: left;
+	text-align: center;
 	font-family: "Courier New", Courier, monospace;
-	margin: auto;
 }
 
 .form-label
@@ -64,7 +59,7 @@
 	font-family: "Courier New", Courier, monospace;
 	font-weight: bold;
 	text-align: center;
-	padding: 2px 5px;
+	padding: 0.5% 1%;
 }
 
 .submit-div
@@ -75,12 +70,17 @@
 
 .dialog-headers 
 {
+	font-size: 24pt;
 	font-family: "Courier New", Courier, monospace;
-	/* font-weight: bold; */
+	font-weight: bold;
 }
 
 .returnLogIn 
 {
 	font-family: "Courier New", Courier, monospace;
+}
 
+.error-message
+{
+	font-style: normal red;
 }

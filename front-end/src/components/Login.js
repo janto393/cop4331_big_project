@@ -95,17 +95,18 @@ function Login()
 				<Form>
 					<Form.Group controlId="loginName">
 						<Form.Label></Form.Label>
-						<Form.Control className="input" type="text" placeholder="Username" ref={(c) => username = c}/>
+						<Form.Control required className="register-text-input" type="text" placeholder="Username" ref={(c) => username = c}/>
 					</Form.Group>
 
 					<Form.Group controlId="loginPassword">
 						<Form.Label></Form.Label>
-						<Form.Control className="input" type="password" placeholder="Password"  ref={(c) => password = c}/>
+						<Form.Control required className="register-text-input" type="password" placeholder="Password"  ref={(c) => password = c}/>
 					</Form.Group>
 
 					<Link className="forgotPwLink" id="forgotPasswordLink" to="/resetPassword">Forgot Password</Link>
 					<br />
-					<Button className="LoginBtn" variant="danger" type="submit" onClick={doLogin}>Login</Button>
+					<br />
+					<Button variant="primary" size="lg" type="submit" onClick={doLogin}>Login</Button>
 				</Form>
 				<br />
 				<Link className="registerLink" id="registerLink" to="/register">Don't have an account? Sign Up</Link>
