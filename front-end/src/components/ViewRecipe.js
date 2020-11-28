@@ -40,7 +40,8 @@ async function fetchRecipe(id)
 // Not called by any function yet.
 function redirectToDelete(recipeID)
 {
-	window.location.href = "/DeleteRecipe?id="+ recipeID.toString();
+	console.log(recipeID);
+	window.location.href = "/DeleteRecipe?id="+ recipeID;
 }
 
 
@@ -122,6 +123,8 @@ function renderInstruction(instruction, index)
 	);
 }
 
+
+
 // takes a json package with the shematic of the return
 // package from the fetchRecipByID API endpoint
 function renderRecipe(recipe)
@@ -149,7 +152,7 @@ function renderRecipe(recipe)
 	}
 
 	var userData = JSON.parse(localStorage.getItem('user_data'));
-
+	// console.log(recipe.recipeID);
 	return (
 		<div className="recipe-div">
 			<div className="recipe-title-div">
@@ -179,7 +182,7 @@ function renderRecipe(recipe)
 				<div>
 					{recipe.author.userID === userData.userID ?
 					<div>
-						<Button variant="danger" onClick={redirectToDelete(recipe.recipeID)}> Delete </Button>
+						<Button variant="danger" onClick={() => redirectToDelete(recipe.recipeID)}> Delete </Button>
 						<Button> Edit </Button></div> :
 					<div>
 						<small><em>*Only the author can delete and edit this recipe*</em></small><br/>

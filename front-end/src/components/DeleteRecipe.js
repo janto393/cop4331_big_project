@@ -48,7 +48,7 @@ class DeleteRecipe extends React.Component
 		const regex = /id=[[a-zA-Z0-9]+/;
         const extracted = regex.exec(uri);
         
-        const recipeID = extracted[0].slice(3);
+        const recipeID = (extracted[0].slice(3)).toString();
 
         // TODO: fetch API (look at view Recipe for guidance)
         deleteRecipe(recipeID)
