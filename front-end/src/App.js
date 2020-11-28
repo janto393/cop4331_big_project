@@ -15,6 +15,7 @@ import SettingsPage from './pages/SettingsPage';
 import ViewRecipePage from './pages/ViewRecipePage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
+import DeleteRecipePage from './pages/DeleteRecipePage';
 
 // Component includes
 import CreateAccount from './components/CreateAccount';
@@ -43,6 +44,9 @@ const DefaultContainer = () => (
 					<ViewRecipePage />
 				</Route>
         <Redirect to="/recipes" />
+        <Route path="/DeleteRecipe" exact>
+          <DeleteRecipePage />
+        </Route>
   </div>
 )
 
