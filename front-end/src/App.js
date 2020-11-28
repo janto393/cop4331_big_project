@@ -15,6 +15,7 @@ import SettingsPage from './pages/SettingsPage';
 import ViewRecipePage from './pages/ViewRecipePage';
 import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import VerifyEmailPage from './pages/VerifyEmailPage';
+import UpdatePasswordPage from './pages/UpdatePasswordPage';
 
 // Component includes
 import CreateAccount from './components/CreateAccount';
@@ -42,6 +43,9 @@ const DefaultContainer = () => (
 				<Route path="/viewRecipe" exact>
 					<ViewRecipePage />
 				</Route>
+        <Route path="/updatePassword" exact>
+						<UpdatePasswordPage />
+					</Route>
         <Redirect to="/recipes" />
   </div>
 )
@@ -63,6 +67,8 @@ function App()
 					<Route path="/verify" exact>
 						<VerifyEmailPage />
 					</Route>
+
+          
           <Route>
             <DefaultContainer />
           </Route>

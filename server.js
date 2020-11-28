@@ -839,14 +839,13 @@ app.post('/api/registerUser', async (request, response, next) =>
 
 
 // Reset Password Endpoint
-app.post('/api/resetPassword', async (request, response, next) =>
+app.post('/api/SendResetPasswordEmail', async (request, response, next) =>
 {
 	/*
 		Incoming:
 		{
 			username : string,
 			email : string,
-			password : string
 		}
 
 		Outgoing:
@@ -873,12 +872,6 @@ app.post('/api/resetPassword', async (request, response, next) =>
 			email : request.body.email.toLowerCase()
 		}
 
-		const updatePackage = {
-			$set : {
-				password : request.body.password
-			}
-		}
-
 		// see if the user is even in the database
 		var result = await db.collection(process.env.COLLECTION_USERS).findOne(searchUser);
 
@@ -888,6 +881,95 @@ app.post('/api/resetPassword', async (request, response, next) =>
 			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
 			response.status(404).json(encryptedPackage.compact());
 			return;
+		}
+
+  }
+  catch(e)
+  {
+		returnPackage.error = e.toString();
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+    	response.status(500).json(encryptedPackage.compact());
+    	return;
+	}
+
+
+		// Send the email to the user for verification
+		const msg = {
+			to: returnPackage.email, // Change to your recipient
+			from: 'browniepoints12345@gmail.com', // Change to your verified sender
+			subject: 'Reset Password',
+			html: '<div>'+
+					'<div style="margin:0 auto;background-color:#e699ff;width:770;height:120px;border:1px solid #000;">'+
+					'<h1 style="color:rgb(0, 0, 0);text-align:center;font-size: 50px;">Click the link to reset your password.</h1>'+
+					'</div>'+
+					'<div style="margin:0 auto;background-color:#00ffff;width:770px;height:400px;border:1px solid #000;">'+
+
+					'<a style="font-weight: bold; text-align: center;font-size: 25px;" href="http://localhost:3000/      id='+id+'/" target="_blank">Verify Email</a>'+
+						'</div>'+
+				'</div>'
+		}
+	
+		try
+		{
+			sgMail
+				.send(msg)
+				.then()
+				.catch((error) => {returnPackage.error = error.toString()});
+		}
+		catch (e)
+		{
+			returnPackage.error = e.toString();
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(400).json(encryptedPackage.compact());
+			return;
+		}
+
+	returnPackage.error = 'Email Sent';
+	returnPackage.success = true;
+
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+  response.status(200).json(encryptedPackage.compact());
+});
+
+
+
+
+// Reset Password Endpoint
+app.post('/api/resetPassword', async (request, response, next) =>
+{
+	/*
+		Incoming:
+		{
+
+			password : string
+		}
+
+		Outgoing:
+		{
+			userID : string,
+			success : bool,
+			error : string
+		}
+	*/
+
+  var returnPackage = {
+		success : false,
+		error : ''
+	};
+
+  // Update user record. 
+  try
+  {
+		const db = await client.db(process.env.APP_DATABASE);
+
+		const searchUser = {
+			_id : request.body.id
+		}
+
+		const updatePackage = {
+			$set : {
+				password : request.body.password
+			}
 		}
 
 		await db.collection(process.env.COLLECTION_USERS).updateOne(searchUser, updatePackage);

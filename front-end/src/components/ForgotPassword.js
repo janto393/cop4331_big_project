@@ -12,11 +12,11 @@ import jwt_decode from 'jwt-decode';
 
 const PORT = (process.env.PORT || 5000);
 
-function resetPassword(request)
+function SendResetPasswordEmail(request)
 {
 	try
 	{
-		return fetch('http://localhost:' + PORT + '/api/resetPassword',
+		return fetch('http://localhost:' + PORT + '/api/SendResetPasswordEmail',
 			{
 				method:'POST',
 				body : JSON.stringify(request),
@@ -40,8 +40,7 @@ function ForgotPassword()
 
 	var data = {
 		email : '',
-		username : '',
-		password : ''
+		username : ''
 	}
 
 	const doReset = (event) =>
@@ -69,20 +68,13 @@ function ForgotPassword()
 			}
 		}
 
-		if (data.password.value === '')
-		{
-			changeMessage('Password is required');
-			return;
-		}
-
 		var extractedData = {
 			username : data.username.value,
 			email : data.email.value,
-			password : data.password.value
 		}
 
 		// call the api through it's gateway function
-		resetPassword(extractedData)
+		SendResetPasswordEmail(extractedData)
 			.then(response => response.json())
 			.then(json => setMessage(jwt_decode(json).error));
 	}
@@ -104,13 +96,9 @@ function ForgotPassword()
 					<Form.Control required type="text" placeholder={'Email'} ref={(c) => {data.email = c}} />
 				</Form.Group>
 
-				<Form.Group controlId="newPassword">
-					<Form.Label>New Password:</Form.Label>
-					<Form.Control required type="password" placeholder={'New Password'} ref={(c) => {data.password = c}} />
-				</Form.Group>
 
 				<div className="submit-div">
-					<Button variant="outline-primary" onClick={doReset}>Reset Password</Button>
+					<Button variant="outline-primary" onClick={doReset}>Send Email</Button>
 				</div>
 			</Form>
 			<div className="message-div">

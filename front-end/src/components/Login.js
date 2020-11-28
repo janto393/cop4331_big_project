@@ -12,7 +12,6 @@ import jwt_decode from 'jwt-decode';
 
 // enviornment variables
 const PORT = (process.env.PORT || 5000);
-
 function Login()
 {
 	var username, password;
@@ -110,11 +109,6 @@ function Login()
 				<Link id="registerLink" to="/register">Don't have an account? Sign Up</Link>
 				<br />
 				<span id="loginResult" className="error-message">{message}</span>
-
-				{/* REMEMBER TO REMOVE ME */}
-				<div id="debug-test-only">
-					<Link to={'verify?id=5fbf551344a39d02573278ed'} >Test Verification</Link>
-				</div>
 		</div>
 	);
 }
