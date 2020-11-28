@@ -37,13 +37,6 @@ async function fetchRecipe(id)
 	}
 }
 
-// Not called by any function yet.
-function handleDelete(recipeID)
-{
-	alert("Are you sure you want to delete this recipe?");
-}
-
-
 
 function renderCategory(category, index)
 {
@@ -122,6 +115,8 @@ function renderInstruction(instruction, index)
 	);
 }
 
+
+
 // takes a json package with the shematic of the return
 // package from the fetchRecipByID API endpoint
 function renderRecipe(recipe)
@@ -149,7 +144,7 @@ function renderRecipe(recipe)
 	}
 
 	var userData = JSON.parse(localStorage.getItem('user_data'));
-
+	// console.log(recipe.recipeID);
 	return (
 		<div className="recipe-div">
 			<div className="recipe-title-div">
@@ -179,7 +174,9 @@ function renderRecipe(recipe)
 				<div>
 					{recipe.author.userID === userData.userID ?
 					<div>
-						<Button variant="danger" onClick={() => handleDelete(recipe.recipeID)}> Delete </Button>
+						<Link to={'/DeleteRecipe?id=' + recipe.recipeID}>
+							<Button variant="danger"> Delete </Button>
+						</Link>
 						<Button> Edit </Button></div> :
 					<div>
 						<small><em>*Only the author can delete and edit this recipe*</em></small><br/>
