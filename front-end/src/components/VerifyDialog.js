@@ -1,12 +1,9 @@
 // React imports
 import React from 'react';
-import { Link } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
 import jwt_decode from 'jwt-decode';
 
 // CSS imports
 import './VerifyDialog.css';
-import { response } from 'express';
 
 // enviornment variables
 const PORT = (process.env.PORT || 5000);
@@ -71,8 +68,16 @@ class VerifyDialog extends React.Component
 	{
 		return (
 			<div>
-
-				<Link to="/">Go to Login</Link>
+				<div style={{margin:"0 auto",backgroundColor:"#e699ff",width:"770",height:"120px",border:"1px solid #000"}}>
+					<h1 style={{color:"rgb(0, 0, 0)",fontSize: "50px"}}>Your email has been verified!!</h1>
+				</div>
+				<div style={{margin:"0 auto",backgroundColor:"#00ffff",width:"770px", height:"300px", border:"1px solid #000"}}>
+					<br />
+					<p style={{fontSize: "25px"}}>Press the link to continue to the login page to start making your mouthwatering recipes.</p>
+					<a style={{fontSize: "25px"}} href="http://localhost:3000">
+						Go to Login
+					</a>
+				</div>
 			</div>
 		);
 	}

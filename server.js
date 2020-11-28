@@ -352,15 +352,23 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 			title : string || NULL,
 			category : string || NULL,
 			fetchUserRecipes : bool,
-			userID : string
+			userID : string,
+			currentPage : integer,
+			pageCapacity : integer
 		}
 
 		Outgoing:
 		{
 			recipes : array,
+			numInPage : integer,
+			totalNumRecipes : integer,
 			error : string
 		}
 	*/
+
+	// Determines how many results have already been displayed and skips them
+	const skipOffset = (request.body.currentPage - 1) * request.body.pageCapacity;
+	const pageCapacity = request.body.pageCapacity;
 
 	var returnPackage = {
 		recipes : [],
@@ -440,7 +448,7 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	{
 		const db = await client.db(process.env.APP_DATABASE);
 
-		var result = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).toArray();
+		var result = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).skip(Math.floor(skipOffset)).limit(Math.floor(pageCapacity)).toArray();
 
 		returnPackage.recipes = result;
 
@@ -805,9 +813,7 @@ app.post('/api/registerUser', async (request, response, next) =>
 				'<p style="font-weight: bold;text-align: center;font-size: 25px;">In order to login into your account you must verify your email address by clicking the button at the end of this email.</p>'+
 				'<br />'+
 				'<br />'+
-				'<form action="http://localhost:3000/verify/id='+id+'">'+
-            		'<button type="color: blue; submit" value="Verify email" style="height: 50px;width: 150px;">Verify Email</button>'+
-        		'</form>'+
+				'<a style="font-weight: bold; text-align: center;font-size: 25px;" href="http://localhost:3000/verify?id='+id+'/" target="_blank">Verify Email</a>'+
 					'</div>'+
 			'</div>'
 	}
@@ -931,7 +937,6 @@ app.post('/api/updateUserInfo', async (request, response, next) =>
 			error : string
 		}
 	*/ 
-	console.log("Holooo");
 	var returnPackage = {
 		success : false,
 		error : ''
@@ -953,7 +958,6 @@ app.post('/api/updateUserInfo', async (request, response, next) =>
 	}
 	catch (e)
 	{
-		console.log(returnPackage.success);
 		returnPackage.error = e.toString();
 		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
 		response.status(500).json(encryptedPackage.compact());
@@ -961,7 +965,6 @@ app.post('/api/updateUserInfo', async (request, response, next) =>
 	}
 
 	returnPackage.success = true;
-	console.log(returnPackage.success);
 	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
 	response.status(200).json(encryptedPackage.compact());
 });
