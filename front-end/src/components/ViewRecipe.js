@@ -1,6 +1,6 @@
 // React imports
 import React from 'react';
-import { Image, ListGroup } from 'react-bootstrap';
+import { Image, ListGroup, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 // CSS imports
@@ -140,6 +140,8 @@ function renderRecipe(recipe)
 		);
 	}
 
+	var userData = JSON.parse(localStorage.getItem('user_data'));
+
 	return (
 		<div className="recipe-div">
 			<div className="recipe-title-div">
@@ -165,6 +167,19 @@ function renderRecipe(recipe)
 					<ListGroup className="instructions-list">
 						{recipe.instructions.map(renderInstruction)}
 					</ListGroup>
+				</div>
+				<div>
+					{recipe.author.userID === userData.userID ?
+					<div>
+						<Button variant="danger"> Delete </Button>
+						<Button> Edit </Button></div> :
+					<div>
+						<small><em>*Only the author can delete and edit this recipe*</em></small><br/>
+						<Button disabled='true' variant="danger"> Delete </Button>
+						<Button disabled='true'> Edit </Button>
+					</div>
+					}
+					
 				</div>
 			</div>
 		</div>
