@@ -37,14 +37,6 @@ async function fetchRecipe(id)
 	}
 }
 
-// Not called by any function yet.
-function redirectToDelete(recipeID)
-{
-	console.log(recipeID);
-	window.location.href = "/DeleteRecipe?id="+ recipeID;
-}
-
-
 
 function renderCategory(category, index)
 {
@@ -182,7 +174,9 @@ function renderRecipe(recipe)
 				<div>
 					{recipe.author.userID === userData.userID ?
 					<div>
-						<Button variant="danger" onClick={() => redirectToDelete(recipe.recipeID)}> Delete </Button>
+						<Link to={'/DeleteRecipe?id=' + recipe.recipeID}>
+							<Button variant="danger"> Delete </Button>
+						</Link>
 						<Button> Edit </Button></div> :
 					<div>
 						<small><em>*Only the author can delete and edit this recipe*</em></small><br/>
@@ -209,6 +203,9 @@ class ViewRecipe extends React.Component
 	componentDidMount()
 	{
 		const uri = window.location;
+
+		console.log('view recipe URI');
+		console.log(uri);
 
 		// using regex to extract the parameter out of the URI
 		const regex = /id=[[a-zA-Z0-9]+/;

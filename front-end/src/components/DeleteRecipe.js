@@ -44,9 +44,19 @@ class DeleteRecipe extends React.Component
     {
         const uri = window.location;
 
+				console.log('uri ////////////////////////////////////');
+				console.log(uri);
+
         // using regex to extract the parameter out of the URI
-		const regex = /id=[[a-zA-Z0-9]+/;
-        const extracted = regex.exec(uri);
+				const regex = /id=[[a-zA-Z0-9]+/;
+				const extracted = regex.exec(uri);
+				
+				// check if uri was passed correctly
+				if (extracted.length < 1)
+				{
+					this.message = 'URI malformed';
+					return;
+				}
         
         const recipeID = (extracted[0].slice(3)).toString();
 
