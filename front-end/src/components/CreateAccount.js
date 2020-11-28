@@ -8,6 +8,9 @@ import BootstrapSwitchButton from 'bootstrap-switch-button-react';
 // CSS imports
 import './CreateAccount.css'
 
+// JWT imports
+import jwt_decode from 'jwt-decode';
+
 // Misc. imports
 // const passwordHash = require('password-hash');
 
@@ -101,24 +104,17 @@ function Register()
 
 			var responseJson = await JSON.parse(await response.text());
 
+			// decrtipt the jwt
+			responseJson = jwt_decode(responseJson);
+
 			// Check if register failed
-			if (responseJson.success === false)
+			if (!responseJson.success)
 			{
 				setMessage(responseJson.error);
+				return;
 			}
 			else
 			{
-				var userInfo = {
-					userID : responseJson._id,
-					email : responseJson.email,
-					firstname : responseJson.firstname,
-					lastname : responseJson.lastname,
-					usesMetric : responseJson.usesMetric,
-					favoriteRecipes : responseJson.favoriteRecipes
-				};
-
-				localStorage.setItem('user_data', JSON.stringify(userInfo));
-
 				setMessage('Registration successful. Please check your email.');
 			}
 		}

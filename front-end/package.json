@@ -9,6 +9,7 @@
     "aws-sdk": "^2.799.0",
     "bootstrap": "^4.5.3",
     "bootstrap-switch-button-react": "^1.2.0",
+    "jwt-decode": "^3.1.2",
     "password-hash": "^1.2.2",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.0",

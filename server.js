@@ -11,6 +11,9 @@ const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectId;
 const path = require('path');
 
+// JWT utilities
+const JWT = require('njwt');
+
 // New SendGrid resources
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -101,7 +104,8 @@ app.post('/api/createRecipe', async (request, response, next) =>
 	catch (e)
 	{
 		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(500).json(encryptedPackage.compact());
 		return;
 	}
 
@@ -129,7 +133,8 @@ app.post('/api/createRecipe', async (request, response, next) =>
 	catch (e)
 	{
 		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(500).json(encryptedPackage.compact());
 		return;
 	}
 
@@ -137,8 +142,9 @@ app.post('/api/createRecipe', async (request, response, next) =>
 	returnPackage.categories = processedCategories.frontendCategories;
 	returnPackage.ingredients = processedIngredients.ingredients;
 	returnPackage.instructions = processedInstructions.instructions;
-	
-  response.status(200).json(returnPackage);
+
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+  response.status(200).json(encryptedPackage.compact());
 });
 
 
@@ -185,12 +191,156 @@ app.post('/api/deleteRecipe', async (request, response, next) =>
   }
   catch (e)
   {
-    returnPackage.error = e.toString();
-    response.status(500).json(returnPackage);
+		returnPackage.error = e.toString();
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+    response.status(500).json(encryptedPackage.compact());
     return;
 	}
 
-  response.status(200).json(returnPackage);
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+  response.status(200).json(encryptedPackage.compact());
+});
+
+
+// Fetch recipe by id
+app.post('/api/fetchRecipeByID', async (request, response, next) => {
+	/*
+		Incoming:
+		{
+			recipeID : string
+		}
+
+		Outgoing:
+		{
+			success : boolean,
+			recipeID : string,
+			picture : string, // URI to picture in aws bucket
+			publicRecipe : boolean,
+			title : string,
+			author : JSON object,
+			instructions : array,
+			categories : JSON object,
+			ingredients : array,
+			error : string
+		}
+
+		author JSON object:
+		{
+			userID : string,
+			name : string
+		}
+
+		categories JSON object:
+		{
+			categoryID : string,
+			name : string
+		}
+	*/
+
+	var returnPackage = {
+		success : false,
+		recipeID : '',
+		picture : '',
+		publicRecipe : false,
+		title : '',
+		author : '',
+		instructions : [],
+		categories : [],
+		ingredients : [],
+		error : ''
+	};
+
+	var categories = [];
+	var author = '';
+
+	// fetch the recipe record from the database
+	try
+	{
+		const db = await client.db(process.env.APP_DATABASE);
+
+		let criteria = {
+			_id : ObjectID(request.body.recipeID)
+		};
+
+		let result = await db.collection(process.env.COLLECTION_RECIPES).findOne(criteria);
+
+		if (!result)
+		{
+			throw 'Recipe ID invalid';
+		}
+
+		// Assign record data to the return package and local variables for processing
+		returnPackage.recipeID = result._id;
+		returnPackage.picture = result.picture;
+		returnPackage.publicRecipe = result.publicRecipe;
+		returnPackage.title = result.title;
+		returnPackage.instructions = result.instructions;
+		returnPackage.ingredients = result.ingredients;
+		categories = result.categories;
+		author = result.author;
+
+		// configure criteria package for user collection
+		criteria = {
+			_id : ObjectID(author)
+		};
+
+		// search for the author in the database
+		result = await db.collection(process.env.COLLECTION_USERS).findOne(criteria);
+
+		let authorObject = {
+			userID : '',
+			name : ''
+		};
+
+		if (!result)
+		{
+			authorObject.userID = '';
+			authorObject.name = '[User unavailable]';
+		}
+		else
+		{
+			authorObject.userID = result._id;
+			authorObject.name = (result.firstName + ' ' + result.lastName);
+		}
+
+		// assign the author package to the return package
+		returnPackage.author = authorObject;
+
+		// search for each category in the categories collection to get the name
+		for (let i = 0; i < categories.length; i++)
+		{
+			// configure criteria package for the criteria collection
+			criteria = {
+				_id : ObjectID(categories[i])
+			};
+
+			// search for the category in the database
+			result = await db.collection(process.env.COLLECTION_CATEGORIES).findOne(criteria);
+
+			if (!result)
+			{
+				throw 'invalid category detected';
+			}
+
+			let processedCategory = {
+				categoryID : result._id,
+				name : result.name
+			};
+
+			returnPackage.categories.push(processedCategory);
+		}
+	}
+	catch (e)
+	{
+		returnPackage.error = e.toString();
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(400).json(encryptedPackage.compact());
+		return;
+	}
+
+	returnPackage.success = true;
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+	response.status(200).json(encryptedPackage.compact());
 });
 
 
@@ -202,23 +352,15 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 			title : string || NULL,
 			category : string || NULL,
 			fetchUserRecipes : bool,
-			userID : string,
-			currentPage : integer,
-			pageCapacity : integer
+			userID : string
 		}
 
 		Outgoing:
 		{
 			recipes : array,
-			numInPage : integer,
-			totalNumRecipes : integer,
 			error : string
 		}
 	*/
-
-	// Determines how many results have already been displayed and skips them
-	const skipOffset = (request.body.currentPage - 1) * request.body.pageCapacity;
-	const pageCapacity = request.body.pageCapacity;
 
 	var returnPackage = {
 		recipes : [],
@@ -228,37 +370,51 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	};
 
 	// Empty package on initialization, will be populated as we preocess input
-	var criteria = {}
+	var criteria = {};
+
+	var andConditions = [];
 
 	// process title
 	if ((request.body.title != null) && (typeof request.body.title == 'string'))
 	{
-		// format the title into a regex equivalent of SQL's "like"
-		criteria.title =  {$regex : ('^' + request.body.title.toLowerCase())};
+		let titleCriteria = {
+			title : {
+				$regex : '^' + request.body.title.toLowerCase(),
+				$options : 'i'
+			}
+		};
+
+		andConditions.push(titleCriteria);
 	}
 
 	// process category
 	if ((request.body.category != null) && (typeof request.body.category == 'string'))
 	{
 		// package the category given into format for the helper function
-		const rawCategories = {
-			categories : [request.body.category]
-		}
+		const rawCategory = {
+			name : request.body.category.toLowerCase()
+		};
 
 		try
 		{
-			var processedCategories = (await processCategories(rawCategories)).databaseCategories;
+			const db = client.db(process.env.APP_DATABASE);
 
-			// Only take the first element since we are only searching by one category at a time
-			if (processedCategories.length > 0)
+			let processedCategory = await db.collection(process.env.COLLECTION_CATEGORIES).findOne(rawCategory);
+
+			if (processedCategory)
 			{
-				criteria.category = ObjectID(processedCategries[0]);
+				let categoryCriteria = {
+					categories : ObjectID(processedCategory._id)
+				};
+
+				andConditions.push(categoryCriteria);
 			}
 		}
 		catch (e)
 		{
 			returnPackage.error = e.toString();
-			response.status(400).json(returnPackage);
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(400).json(encryptedPackage.compact());
 			return;
 		}
 	}
@@ -266,7 +422,17 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	// process if we are fetching user recipes only
 	if (request.body.fetchUserRecipes)
 	{
-		criteria.author = ObjectID(request.body.userID);
+		let authorCriteria = {
+			author : ObjectID(request.body.userID)
+		};
+
+		andConditions.push(authorCriteria);
+	}
+
+	// Add AND conditions to criteria if criteria was specified
+	if (andConditions.length > 0)
+	{
+		criteria.$and = andConditions;
 	}
 
 	// Query the database based on criteria supplied
@@ -274,7 +440,7 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	{
 		const db = await client.db(process.env.APP_DATABASE);
 
-		var result = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).skip(Math.floor(skipOffset)).limit(Math.floor(pageCapacity)).toArray();
+		var result = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).toArray();
 
 		returnPackage.recipes = result;
 
@@ -284,14 +450,16 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	catch (e)
 	{
 		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(500).json(encryptedPackage.compact());
 		return;
 	}
 
 	// Update the numeric indexes for the return package
 	returnPackage.numInPage = returnPackage.recipes.length;
 
-	response.status(200).json(returnPackage);
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+	response.status(200).json(encryptedPackage.compact());
 });
 
 
@@ -348,7 +516,10 @@ app.post('/api/login', async (request, response, next) =>
 		if ((!result) || (result.password !== request.body.password))
 		{
 			returnPackage.error = INVALID_CREDENTIALS_MSG;
-			response.status(400).json(returnPackage);
+			
+			// encrypt the return package with a jwt
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(400).json(encryptedPackage.compact());
 			return;
 		}
 
@@ -356,7 +527,10 @@ app.post('/api/login', async (request, response, next) =>
 		if (!result.isVerified)
 		{
 			returnPackage.error = NOT_VERIFIED_MSG;
-			response.status(400).json(returnPackage);
+
+			// encrypt the return package with a jwt
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(400).json(encryptedPackage.compact());
 			return;
 		}
 
@@ -371,12 +545,18 @@ app.post('/api/login', async (request, response, next) =>
 	catch (e)
 	{
 		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
+		
+		// encrypt the return package with a jwt
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(500).json(encryptedPackage.compact());
 		return;
 	}
 
 	returnPackage.success = true;
-	response.status(200).json(returnPackage);
+
+	// encrypt the return package with a jwt
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+	response.status(200).json(encryptedPackage.compact());
 });
 
 
@@ -446,7 +626,8 @@ app.post('/api/modifyRecipe', async (request, response, next) =>
 		catch (e)
 		{
 			returnPackage.error = e.toString();
-			response.status(400).json(returnPackage);
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(400).json(encryptedPackage.compact());
 			return;
 		}
 	}
@@ -466,7 +647,8 @@ app.post('/api/modifyRecipe', async (request, response, next) =>
 		catch (e)
 		{
 			returnPackage.error = e.toString();
-			response.status(400).json(returnPackage);
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(400).json(encryptedPackage.compact());
 			return;
 		}
 	}
@@ -491,13 +673,15 @@ app.post('/api/modifyRecipe', async (request, response, next) =>
 		catch (e)
 		{
 			returnPackage.error = e.toString();
-			response.status(500).json(returnPackage);
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(500).json(encryptedPackage.compact());
 			return;
 		}
 	}
 
 	returnPackage.success = true;
-	response.status(200).json(returnPackage);
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+	response.status(200).json(encryptedPackage.compact());
 });
 
 
@@ -569,8 +753,9 @@ app.post('/api/registerUser', async (request, response, next) =>
   }
   catch(e)
   {
-    returnPackage.error = e.toString();
-    response.status(400).json(returnPackage);
+		returnPackage.error = e.toString();
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+    response.status(400).json(encryptedPackage.compact());
     return;
   }
 
@@ -598,8 +783,9 @@ app.post('/api/registerUser', async (request, response, next) =>
   }
   catch(e)
   {
-    returnPackage.error = e.toString();
-    response.status(500).json(returnPackage);
+		returnPackage.error = e.toString();
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+    response.status(500).json(encryptedPackage.compact());
     return;
 	}
 
@@ -622,11 +808,13 @@ app.post('/api/registerUser', async (request, response, next) =>
 	catch (e)
 	{
 		returnPackage.error = e.toString();
-		response.status(400).json(returnPackage);
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(400).json(encryptedPackage.compact());
 		return;
 	}
 	
-  response.status(200).json(returnPackage);
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+  response.status(200).json(encryptedPackage.compact());
 });
 
 
@@ -677,7 +865,8 @@ app.post('/api/resetPassword', async (request, response, next) =>
 		if (!result)
 		{
 			returnPackage.error = 'Account does not exist. Please create an account.';
-			response.status(404).json(returnPackage);
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(404).json(encryptedPackage.compact());
 			return;
 		}
 
@@ -692,20 +881,23 @@ app.post('/api/resetPassword', async (request, response, next) =>
 		else
 		{
 			returnPackage.error = 'Credentials invalid'
-			response.status(404).json(returnPackage);
+			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+			response.status(404).json(encryptedPackage.compact());
 			return;
 		}
   }
   catch(e)
   {
-    returnPackage.error = e.toString();
-    response.status(500).json(returnPackage);
+		returnPackage.error = e.toString();
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+    response.status(500).json(encryptedPackage.compact());
     return;
 	}
 
 	returnPackage.error = 'Password Reset';
 	returnPackage.success = true;
-  response.status(200).json(returnPackage);
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+  response.status(200).json(encryptedPackage.compact());
 });
 
 
@@ -748,12 +940,14 @@ app.post('/api/updateUserInfo', async (request, response, next) =>
 	catch (e)
 	{
 		returnPackage.error = e.toString();
-		response.status(500).json(returnPackage);
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(500).json(encryptedPackage.compact());
 		return;
 	}
 
 	returnPackage.success = true;
-	response.status(200).json(returnPackage);
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+	response.status(200).json(encryptedPackage.compact());
 });
 
 //////////////////////////////////////////////////////////////////////////////////

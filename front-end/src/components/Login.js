@@ -7,6 +7,9 @@ import Button from 'react-bootstrap/Button';
 // CSS imports
 import './Login.css';
 
+// JWT includes
+import jwt_decode from 'jwt-decode';
+
 // enviornment variables
 const PORT = (process.env.PORT || 5000);
 
@@ -48,6 +51,9 @@ function Login()
 					headers : {'Content-Type': 'application/json'}});
 
 			var responseJson = await JSON.parse(await response.text());
+
+			// decode the response jwt
+			responseJson = jwt_decode(responseJson);
 
 			if(!responseJson.success)
 			{
