@@ -1,6 +1,6 @@
 // React imports
 import React from 'react';
-import { Image, ListGroup, Button } from 'react-bootstrap';
+import { Image, ListGroup, Button, Alert } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 // CSS imports
@@ -36,6 +36,14 @@ async function fetchRecipe(id)
 		return;
 	}
 }
+
+// Not called by any function yet.
+function handleDelete(recipeID)
+{
+	alert("Are you sure you want to delete this recipe?");
+}
+
+
 
 function renderCategory(category, index)
 {
@@ -171,7 +179,7 @@ function renderRecipe(recipe)
 				<div>
 					{recipe.author.userID === userData.userID ?
 					<div>
-						<Button variant="danger" > Delete </Button>
+						<Button variant="danger" onClick={() => handleDelete(recipe.recipeID)}> Delete </Button>
 						<Button> Edit </Button></div> :
 					<div>
 						<small><em>*Only the author can delete and edit this recipe*</em></small><br/>

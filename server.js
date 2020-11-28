@@ -779,7 +779,7 @@ app.post('/api/registerUser', async (request, response, next) =>
 		{
 			throw 'Could not create user account';
 		}
-
+		var id = (result._id).toString();;
 		// assign data to the return package
 		returnPackage.success = true;
 		returnPackage.username = result.username;
@@ -796,14 +796,26 @@ app.post('/api/registerUser', async (request, response, next) =>
     response.status(500).json(encryptedPackage.compact());
     return;
 	}
-
+	
 	// Send the email to the user for verification
 	const msg = {
 		to: returnPackage.email, // Change to your recipient
 		from: 'browniepoints12345@gmail.com', // Change to your verified sender
-		subject: 'Sending with SendGrid is Fun',
-		text: 'and easy to do anywhere, even with Node.js',
-		html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+		subject: 'Welcome to Brownie Points!!',
+		html: '<div>'+
+    			'<div style="margin:0 auto;background-color:#e699ff;width:770;height:120px;border:1px solid #000;">'+
+        		'<h1 style="color:rgb(0, 0, 0);text-align:center;font-size: 50px;">Welcome to Brownie Points!</h1>'+
+    			'</div>'+
+    			'<div style="margin:0 auto;background-color:#00ffff;width:770px;height:400px;border:1px solid #000;">'+
+				'<br />'+
+				'<br />'+
+				'<p style="text-align: center;font-size: 25px;">Thank you for choosing Brownie Points to keep track all you delicious recipes! We provide the most efficent and appetizing way to create, view, update and delete your mouthwatering masterpieces on your phone.</p>'+
+				'<p style="font-weight: bold;text-align: center;font-size: 25px;">In order to login into your account you must verify your email address by clicking the button at the end of this email.</p>'+
+				'<br />'+
+				'<br />'+
+				'<a style="font-weight: bold; text-align: center;font-size: 25px;" href="http://localhost:3000/verify?id='+id+'/" target="_blank">Verify Email</a>'+
+					'</div>'+
+			'</div>'
 	}
 
 	try
@@ -924,8 +936,7 @@ app.post('/api/updateUserInfo', async (request, response, next) =>
 			success : bool,
 			error : string
 		}
-	*/
-
+	*/ 
 	var returnPackage = {
 		success : false,
 		error : ''
@@ -939,7 +950,7 @@ app.post('/api/updateUserInfo', async (request, response, next) =>
 		$set : request.body.newInfo
 	}
 
-	try
+	try 
 	{
 		const db = await client.db(process.env.APP_DATABASE);
 
