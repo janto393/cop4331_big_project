@@ -10,7 +10,7 @@ function VerifyEmailPage()
 		<div>
 			<VerifyDialog />
 		</div>
-	);
+	); 
 }
 
 export default VerifyEmailPage;

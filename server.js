@@ -779,7 +779,7 @@ app.post('/api/registerUser', async (request, response, next) =>
 		{
 			throw 'Could not create user account';
 		}
-
+		var id = (result._id).toString();;
 		// assign data to the return package
 		returnPackage.success = true;
 		returnPackage.username = result.username;
@@ -796,14 +796,28 @@ app.post('/api/registerUser', async (request, response, next) =>
     response.status(500).json(encryptedPackage.compact());
     return;
 	}
-
+	
 	// Send the email to the user for verification
 	const msg = {
 		to: returnPackage.email, // Change to your recipient
 		from: 'browniepoints12345@gmail.com', // Change to your verified sender
-		subject: 'Sending with SendGrid is Fun',
-		text: 'and easy to do anywhere, even with Node.js',
-		html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+		subject: 'Welcome to Brownie Points!!',
+		html: '<div>'+
+    			'<div style="margin:0 auto;background-color:#e699ff;width:770;height:120px;border:1px solid #000;">'+
+        		'<h1 style="color:rgb(0, 0, 0);text-align:center;font-size: 50px;">Welcome to Brownie Points!</h1>'+
+    			'</div>'+
+    			'<div style="margin:0 auto;background-color:#00ffff;width:770px;height:400px;border:1px solid #000;">'+
+				'<br />'+
+				'<br />'+
+				'<p style="text-align: center;font-size: 25px;">Thank you for choosing Brownie Points to keep track all you delicious recipes! We provide the most efficent and appetizing way to create, view, update and delete your mouthwatering masterpieces on your phone.</p>'+
+				'<p style="font-weight: bold;text-align: center;font-size: 25px;">In order to login into your account you must verify your email address by clicking the button at the end of this email.</p>'+
+				'<br />'+
+				'<br />'+
+				'<form action="http://localhost:3000/verify/id='+id+'">'+
+            		'<button type="color: blue; submit" value="Verify email" style="height: 50px;width: 150px;">Verify Email</button>'+
+        		'</form>'+
+					'</div>'+
+			'</div>'
 	}
 
 	try
@@ -925,7 +939,7 @@ app.post('/api/updateUserInfo', async (request, response, next) =>
 			error : string
 		}
 	*/ 
-
+	console.log("Holooo");
 	var returnPackage = {
 		success : false,
 		error : ''
@@ -947,6 +961,7 @@ app.post('/api/updateUserInfo', async (request, response, next) =>
 	}
 	catch (e)
 	{
+		console.log(returnPackage.success);
 		returnPackage.error = e.toString();
 		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
 		response.status(500).json(encryptedPackage.compact());
@@ -954,6 +969,7 @@ app.post('/api/updateUserInfo', async (request, response, next) =>
 	}
 
 	returnPackage.success = true;
+	console.log(returnPackage.success);
 	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
 	response.status(200).json(encryptedPackage.compact());
 });
