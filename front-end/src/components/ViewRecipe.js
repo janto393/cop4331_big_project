@@ -171,7 +171,7 @@ function renderRecipe(recipe)
 				<div>
 					{recipe.author.userID === userData.userID ?
 					<div>
-						<Button variant="danger"> Delete </Button>
+						<Button variant="danger" > Delete </Button>
 						<Button> Edit </Button></div> :
 					<div>
 						<small><em>*Only the author can delete and edit this recipe*</em></small><br/>
