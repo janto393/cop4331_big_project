@@ -49,5 +49,8 @@
   "bugs": {
     "url": "https://github.com/Deadcoast/cop4331_big_project/issues"
   },
-  "homepage": "https://github.com/Deadcoast/cop4331_big_project#readme"
+  "homepage": "https://github.com/Deadcoast/cop4331_big_project#readme",
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
 }

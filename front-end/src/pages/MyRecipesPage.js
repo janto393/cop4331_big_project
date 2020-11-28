@@ -18,9 +18,7 @@ function fetchRecipes(title, category)
 		title : null,
 		category : null,
 		fetchUserRecipes : false,
-		userID : '',
-		currentPage : 1,
-		pageCapacity : 10
+		userID : ''
 	}
 
 	// filter title
@@ -107,7 +105,7 @@ class MyRecipesPage extends React.Component
 									<option>Breakfast</option>
 									<option>Lunch</option>
 									<option>Dinner</option>
-									<option>Desert</option>
+									<option>Dessert</option>
 									<option>Drinks</option>
 									<option>Snacks</option>
 								</Form.Control>
