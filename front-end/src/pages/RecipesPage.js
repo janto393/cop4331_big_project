@@ -1,12 +1,12 @@
 // React imports
 import React from 'react';
+import { Form } from 'react-bootstrap';
 
 // Component imports
 import RecipeCards from '../components/RecipeCards';
 
 // jwt imports
 import jwt_decode from 'jwt-decode';
-import { Form } from 'react-bootstrap';
 
 // environment variables
 const PORT = (process.env.PORT || 5000);
@@ -18,9 +18,7 @@ function fetchRecipes(title, category)
 		title : null,
 		category : null,
 		fetchUserRecipes : false,
-		userID : '',
-		currentPage : 1,
-		pageCapacity : 10
+		userID : ''
 	};
 
 	// filter title
@@ -107,7 +105,7 @@ class RecipesPage extends React.Component
 									<option>Breakfast</option>
 									<option>Lunch</option>
 									<option>Dinner</option>
-									<option>Desert</option>
+									<option>Dessert</option>
 									<option>Drinks</option>
 									<option>Snacks</option>
 								</Form.Control>

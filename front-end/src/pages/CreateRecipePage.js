@@ -309,7 +309,7 @@ const CreateRecipePage = () =>{
                   </Form.Group>
 
                   <Form.Group as={Col}>
-                    <Form.Check label="Deserts" type="checkbox" onClick={e => checkBox5("desert")}/>
+                    <Form.Check label="Desserts" type="checkbox" onClick={e => checkBox5("desert")}/>
                   </Form.Group>
 
                   <Form.Group as={Col}>

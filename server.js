@@ -352,23 +352,15 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 			title : string || NULL,
 			category : string || NULL,
 			fetchUserRecipes : bool,
-			userID : string,
-			currentPage : integer,
-			pageCapacity : integer
+			userID : string
 		}
 
 		Outgoing:
 		{
 			recipes : array,
-			numInPage : integer,
-			totalNumRecipes : integer,
 			error : string
 		}
 	*/
-
-	// Determines how many results have already been displayed and skips them
-	const skipOffset = (request.body.currentPage - 1) * request.body.pageCapacity;
-	const pageCapacity = request.body.pageCapacity;
 
 	var returnPackage = {
 		recipes : [],
@@ -448,7 +440,7 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 	{
 		const db = await client.db(process.env.APP_DATABASE);
 
-		var result = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).skip(Math.floor(skipOffset)).limit(Math.floor(pageCapacity)).toArray();
+		var result = await db.collection(process.env.COLLECTION_RECIPES).find(criteria).toArray();
 
 		returnPackage.recipes = result;
 
