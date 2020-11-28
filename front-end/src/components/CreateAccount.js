@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import BootstrapSwitchButton from 'bootstrap-switch-button-react';
+import Col from 'react-bootstrap/Col';
 
 // CSS imports
 import './CreateAccount.css'
@@ -136,8 +137,10 @@ function Register()
 			<div>
 				<h1 className="dialog-headers">Create Account</h1>
 			</div>
+			<br />
 			<div className="form-div">
-				<Form>
+				{/* <Form>
+					<Form.Row>
 					<Form.Group>
 						<Form.Label className="form-label">Username</Form.Label>
 						<Form.Control required type="text" className="register-text-input" placeholder="Username" id="username" ref={(c)=> username = c} />
@@ -147,26 +150,31 @@ function Register()
 						<Form.Label className="form-label">Email</Form.Label>
 						<Form.Control required type="text" className="register-text-input" placeholder="Email"  id="email" ref={(c) => email = c} />
 					</Form.Group>
+					</Form.Row>
 
-					<Form.Group>
+					<Form.Row >
+					<Form.Group as={Col}>
 						<Form.Label className="form-label">First Name</Form.Label>
 						<Form.Control required type="text" className="register-text-input" placeholder="Firstname" id="firstname" ref={(c) => firstname = c} />
 					</Form.Group>
-
-					<Form.Group>
+					
+					<Form.Group as={Col}>
 						<Form.Label className="form-label">Last Name</Form.Label>
 						<Form.Control type="text" className="register-text-input" placeholder="Lastname" id="lastname" ref={(c) => lastname = c} />
 					</Form.Group>
+					</Form.Row>
 
-					<Form.Group>
+					<Form.Row>
+					<Form.Group as={Col}>
 						<Form.Label className="form-label">Password</Form.Label>
 						<Form.Control required type="password" className="register-text-input" placeholder="Password" id="password" ref={(c) => password = c} />
 					</Form.Group>
 
-					<Form.Group>
+					<Form.Group as={Col}>
 						<Form.Label className="form-label">Confirm Password</Form.Label>
 						<Form.Control required type="password" className="register-text-input" placeholder="Confirm Password" id="confirmPassword" ref={(c) => confirmPassword = c} />
 					</Form.Group>
+					</Form.Row>
 
 					<Form.Group>
 						<Form.Label className="form-label">Unit System</Form.Label>
@@ -177,13 +185,75 @@ function Register()
 					<div className="submit-div">
 						<Button variant="primary" size="lg" onClick={doCreation}>Create Account</Button>
 					</div>
+				</Form> */}
+
+				<Form>
+					<Form.Row>
+					{/* <Form.Group as={Col md={3}}> */}
+					<Col lg={8}>
+						<Form.Label className="form-label">Username</Form.Label>
+						<Form.Control required type="text" className="register-text-input" placeholder="Username" id="username" ref={(c)=> username = c} />
+					{/* </Form.Group> */}
+					</Col>
+
+					<Col md={4}>
+						<Form.Label className="form-label">First Name</Form.Label>
+						<Form.Control required type="text" className="register-text-input" placeholder="Firstname" id="firstname" ref={(c) => firstname = c} />
+					</Col>
+					</Form.Row>
+
+
+					<Form.Row >
+					<Col lg={8}>
+						<Form.Label className="form-label">Email</Form.Label>
+						<Form.Control required type="text" className="register-text-input" placeholder="Email"  id="email" ref={(c) => email = c} />
+						<br />
+					</Col>
+					
+					<Col md={4}>
+						<Form.Label className="form-label">Last Name</Form.Label>
+						<Form.Control type="text" className="register-text-input" placeholder="Lastname" id="lastname" ref={(c) => lastname = c} />
+					</Col>
+					</Form.Row>
+
+
+					<Form.Row>
+					{/* {/* <Col md={6}>
+						<Form.Label className="form-label">Unit System</Form.Label>
+						
+						{/* <BootstrapSwitchButton onstyle="primary" offstyle="primary" width={100} checked={true} onlabel="Metric" offlabel="Imperial" onChange={changeMeasurementSystem} /> */}
+					{/* </Col> */}  
+					<Col md={6}>
+						<Form.Label className="form-label">Password</Form.Label>
+						<Form.Control required type="password" className="register-text-input" placeholder="Password" id="password" ref={(c) => password = c} />
+					</Col>
+
+					<Col md={6}>
+						<Form.Label className="form-label">Confirm Password</Form.Label>
+						<Form.Control required type="password" className="register-text-input" placeholder="Confirm Password" id="confirmPassword" ref={(c) => confirmPassword = c} />
+					</Col>
+					</Form.Row>
+
+
+					<br />
+					<br />
+					<br />
+					<div className="submit-div">
+						<Form.Label className="form-label">Unit System</Form.Label>
+						<BootstrapSwitchButton className="measurement-switch" onstyle="primary" offstyle="primary" width={100} checked={true} onlabel="Metric" offlabel="Imperial" onChange={changeMeasurementSystem} />
+						<br />
+						<br />
+						<Button variant="primary" size="lg" onClick={doCreation}>Create Account</Button>
+					</div>
 				</Form>
 			</div>
 
 				<br />
+				<div className="returnLogIn">
 				<Link className="returnLogIn" to="/">Return to Login</Link>
 				<br />
 				<span className="error-message">{message}</span>
+				</div>
 		</div>
 		</div>
 	);

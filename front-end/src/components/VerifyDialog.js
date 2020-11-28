@@ -67,14 +67,14 @@ class VerifyDialog extends React.Component
 	render()
 	{
 		return (
-			<div>
-				<div style={{margin:"0 auto",backgroundColor:"#e699ff",width:"770",height:"120px",border:"1px solid #000"}}>
-					<h1 style={{color:"rgb(0, 0, 0)",fontSize: "50px"}}>Your email has been verified!!</h1>
-				</div>
-				<div style={{margin:"0 auto",backgroundColor:"#00ffff",width:"770px", height:"300px", border:"1px solid #000"}}>
+			<div className="emailVerification-fluid">
+				<div className="verifiedMessage">
+					<h1 className="text">Your email has been verified!</h1>
+				{/* </div> */}
+				{/* <div className="body" style={{margin:"0 auto",backgroundColor:"#00ffff",width:"770px", height:"300px", border:"1px solid #000"}}> */}
 					<br />
-					<p style={{fontSize: "25px"}}>Press the link to continue to the login page to start making your mouthwatering recipes.</p>
-					<a style={{fontSize: "25px"}} href="http://localhost:3000">
+					<p className="text">Please press the link to continue to the login page and start making your mouthwatering recipes.</p>
+					<a className="text" href="http://localhost:3000">
 						Go to Login
 					</a>
 				</div>
