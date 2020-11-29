@@ -891,11 +891,12 @@ app.post('/api/SendResetPasswordEmail', async (request, response, next) =>
     	response.status(500).json(encryptedPackage.compact());
     	return;
 	}
-
+	var email = result.email; 
+	returnPackage.userID = result._id;
 
 		// Send the email to the user for verification
 		const msg = {
-			to: returnPackage.email, // Change to your recipient
+			to: email, // Change to your recipient
 			from: 'browniepoints12345@gmail.com', // Change to your verified sender
 			subject: 'Reset Password',
 			html: '<div>'+
@@ -904,7 +905,7 @@ app.post('/api/SendResetPasswordEmail', async (request, response, next) =>
 					'</div>'+
 					'<div style="margin:0 auto;background-color:#00ffff;width:770px;height:400px;border:1px solid #000;">'+
 
-					'<a style="font-weight: bold; text-align: center;font-size: 25px;" href="http://localhost:3000/      id='+id+'/" target="_blank">Verify Email</a>'+
+					'<a style="font-weight: bold; text-align: center;font-size: 25px;" href="http://localhost:3000/updatePassword?id='+result._id+'/">Verify Email</a>'+
 						'</div>'+
 				'</div>'
 		}
@@ -931,76 +932,6 @@ app.post('/api/SendResetPasswordEmail', async (request, response, next) =>
   response.status(200).json(encryptedPackage.compact());
 });
 
-
-
-
-// Reset Password Endpoint
-app.post('/api/resetPassword', async (request, response, next) =>
-{
-	/*
-		Incoming:
-		{
-
-			password : string
-		}
-
-		Outgoing:
-		{
-			userID : string,
-			success : bool,
-			error : string
-		}
-	*/
-
-  var returnPackage = {
-		success : false,
-		error : ''
-	};
-
-  // Update user record. 
-  try
-  {
-		const db = await client.db(process.env.APP_DATABASE);
-
-		const searchUser = {
-			_id : request.body.id
-		}
-
-		const updatePackage = {
-			$set : {
-				password : request.body.password
-			}
-		}
-
-		await db.collection(process.env.COLLECTION_USERS).updateOne(searchUser, updatePackage);
-
-		result = await db.collection(process.env.COLLECTION_USERS).findOne(searchUser);
-
-		if (result)
-		{
-			returnPackage.userID = result._id;
-		}
-		else
-		{
-			returnPackage.error = 'Credentials invalid'
-			const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
-			response.status(404).json(encryptedPackage.compact());
-			return;
-		}
-  }
-  catch(e)
-  {
-		returnPackage.error = e.toString();
-		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
-    response.status(500).json(encryptedPackage.compact());
-    return;
-	}
-
-	returnPackage.error = 'Password Reset';
-	returnPackage.success = true;
-	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
-  response.status(200).json(encryptedPackage.compact());
-});
 
 
 // Update user information

@@ -95,8 +95,6 @@ function ForgotPassword()
 					<Form.Label>Email:</Form.Label>
 					<Form.Control required type="text" placeholder={'Email'} ref={(c) => {data.email = c}} />
 				</Form.Group>
-
-
 				<div className="submit-div">
 					<Button variant="outline-primary" onClick={doReset}>Send Email</Button>
 				</div>

@@ -1,6 +1,9 @@
 // React imports
-import React from 'react';
+import React, { useState } from 'react';
 import jwt_decode from 'jwt-decode';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
+import { Link } from 'react-router-dom';
 
 // enviornment variables
 const PORT = (process.env.PORT || 5000);
@@ -17,7 +20,7 @@ async function resetPassword(userID, password)
 
 	try
 	{
-		const response = fetch('http://localhost:' + PORT + '/api/resetPassword',
+		const response = fetch('http://localhost:' + PORT + '/api/updateUserInfo',
 			{
 				method:'POST', 
 				body : JSON.stringify(criteria),
@@ -32,18 +35,26 @@ async function resetPassword(userID, password)
 		return;
 	}
 }
-class UpdatePassword extends React.Component
+function UpdatePassword()
 {
-    constructor()
-	{
-		super();
+	const [message, setMessage] = useState('');
 
-		// container for any message needing to be displayed in the component
-		this.message = '';
-    }
-    
-    componentDidMount()
+	const changeMessage = (newMessage) =>
 	{
+		setMessage(newMessage);
+	}
+	var password;
+	var confirmPassword;
+
+	const update = (event) =>
+	{
+		event.preventDefault();
+
+		if (password === '')
+		{
+			changeMessage('New Password is required');
+			return;
+		}
 		// bring the URI to local scope
 		const uri = window.location;
 
@@ -51,25 +62,41 @@ class UpdatePassword extends React.Component
 		const regex = /id=[[a-zA-Z0-9]+/;
 		const extracted = regex.exec(uri);
 
-        const userID = extracted[0].slice(3);
-        var password;
-		console.log(userID);
+		const userID = extracted[0].slice(3);
+		var extractedData = {
+			password : password
+		}
 
-		// TODO: fetch API (look at view Recipe for guidance)
-		resetPassword(userID)
+		resetPassword(userID, extractedData.password)
 			.then(response => response.json())
-			.then(json => this.setState({newinfo : jwt_decode(json)}));
-    }
+			.then(json => setMessage(jwt_decode(json).error));
+
+	}
+
+	return(
+		<div>
+		<Form>
+		<Form.Group controlId="password">
+			<Form.Label>New Password:</Form.Label>
+			<Form.Control type="password" placeholder={'Password'} ref={(c) => password = c} />
+		</Form.Group>
+		<Form.Group controlId="ConfirmPassword">
+			<Form.Label>Confirm New Password:</Form.Label>
+			<Form.Control type="password" placeholder={'Confirm Password'} ref={(c) => confirmPassword = c} />
+		</Form.Group>
+		<div className="submit-div">
+			<Button variant="outline-primary" onClick={update}>Submit</Button>
+		</div>
+		</Form>
+		<div className="message-div">
+				<span>{message}</span>
+			</div>
+		<div className="link-div">
+			<Link to="/">Return to Login</Link>
+		</div>
+	</div>
+	);
+
     
-    render(){
-        return (
-            <div>
-                <Form.Group controlId="username">
-					<Form.Label>Password:</Form.Label>
-					<Form.Control type="username" placeholder={this.userData.username}  />
-				</Form.Group>
-            </div>
-        );
-    }
 }
 export default UpdatePassword;

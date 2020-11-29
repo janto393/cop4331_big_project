@@ -43,9 +43,6 @@ const DefaultContainer = () => (
 				<Route path="/viewRecipe" exact>
 					<ViewRecipePage />
 				</Route>
-        <Route path="/updatePassword" exact>
-						<UpdatePasswordPage />
-					</Route>
         <Redirect to="/recipes" />
   </div>
 )
@@ -67,8 +64,9 @@ function App()
 					<Route path="/verify" exact>
 						<VerifyEmailPage />
 					</Route>
-
-          
+          <Route path="/updatePassword" exact>
+						<UpdatePasswordPage />
+					</Route>
           <Route>
             <DefaultContainer />
           </Route>
