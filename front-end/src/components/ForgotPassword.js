@@ -14,7 +14,7 @@ function resetPassword(request)
 {
 	try
 	{
-		return fetch('https://brownie-points-4331-6.herokuapp.com/api/resetPassword',
+		return fetch('https://brownie-points-4331-6.herokuapp.com:' + process.env.PORT + '/api/resetPassword',
 			{
 				method:'POST',
 				body : JSON.stringify(request),

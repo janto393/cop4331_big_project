@@ -19,7 +19,7 @@ async function fetchRecipe(id)
 	// fetch the recipe from the database
 	try
 	{
-		const response = fetch('https://brownie-points-4331-6.herokuapp.com/api/fetchRecipeByID',
+		const response = fetch('https://brownie-points-4331-6.herokuapp.com:' + process.env.PORT + '/api/fetchRecipeByID',
 			{
 				method:'POST',
 				body : JSON.stringify(criteria),

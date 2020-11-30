@@ -20,7 +20,7 @@ function updateUserRecord(userData)
 
 	try
 	{
-		const response = fetch('https://brownie-points-4331-6.herokuapp.com/api/updateUserInfo',
+		const response = fetch('https://brownie-points-4331-6.herokuapp.com:' + process.env.PORT + '/api/updateUserInfo',
 			{
 				method:'POST',
 				body : JSON.stringify(apiPayload),

@@ -107,7 +107,7 @@ const CreateRecipePage = () =>{
 
       try
       {
-				const response = await fetch('https://brownie-points-4331-6.herokuapp.com/api/createRecipe',
+				const response = await fetch('https://brownie-points-4331-6.herokuapp.com:' + process.env.PORT + '/api/createRecipe',
 				{method:'POST',body:JSON.stringify(newRecipe),headers:{'Content-Type': 'application/json'}});
 				
 				var txt = await response.text();

@@ -93,7 +93,7 @@ function Register()
 		// Call the register endpont and process data
 		try
 		{
-			const response = await fetch('https://brownie-points-4331-6.herokuapp.com/api/registerUser',
+			const response = await fetch('https://brownie-points-4331-6.herokuapp.com:' + process.env.PORT + '/api/registerUser',
 				{
 					method : 'POST',
 					body : JSON.stringify(apiPayload),
