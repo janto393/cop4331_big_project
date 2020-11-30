@@ -43,20 +43,9 @@ if (process.env.NODE_ENV === 'production')
 
   app.get('*', (req, res) => 
 	{
-    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.js'));
+    res.sendFile(__dirname, 'frontend', 'build', 'index.html');
   });
 }
-
-///////////////////////////////////////////////////
-// For Heroku deployment
-app.use(express.static(path.join(__dirname, 'frontend', 'build')));
-
-///////////////////////////////////////////////////
-// For Heroku deployment
-app.get('*', (req, res) => 
-{
-  res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'))
-});
 
 // Access Control Logic
 app.use((request, response, next) => 
