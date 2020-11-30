@@ -12,10 +12,6 @@
     "type": "git",
     "url": "git+https://github.com/Deadcoast/cop4331_big_project.git"
   },
-  "engines": {
-    "node": "15.2.1",
-    "npm": "6.14.8"
-  },
   "keywords": [],
   "author": "Joseph Badio, Anthony Mompoint",
   "contributors": [
@@ -40,11 +36,9 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "heroku": "^7.47.3",
     "mongodb": "^3.6.3",
     "njwt": "^1.0.0",
     "nodemon": "^2.0.6",
-    "react-icons": "^3.11.0",
     "sendgrid": "^5.2.3"
   },
   "license": "ISC",
