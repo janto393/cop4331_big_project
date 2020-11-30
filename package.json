@@ -4,9 +4,9 @@
   "description": "Cooking app for COP4331 big project. Fall 2020.",
   "main": "server.js",
   "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js",
-    "dev": "concurrently \"nodemon server.js\" \"cd frontend && npm run start\"",
-    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install frontend && npm run build frontend"
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false cd front-end && npm install && npm run build"
   },
   "repository": {
     "type": "git",
