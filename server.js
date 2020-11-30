@@ -15,9 +15,6 @@ const JWT = require('njwt');
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-// Deployment setup
-const BASE_URI = 'https://brownie-points-4331-6.herokuapp.com';
-
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -61,7 +58,7 @@ app.use((request, response, next) =>
 
 
 // Create new recipe endpoint. 
-app.post(BASE_URI + '/api/createRecipe', async (request, response, next) =>
+app.post('/api/createRecipe', async (request, response, next) =>
 {	
 	/*
 		Incoming:
@@ -161,7 +158,7 @@ app.post(BASE_URI + '/api/createRecipe', async (request, response, next) =>
 
 
 // delete recipe endpoint
-app.post(BASE_URI + '/api/deleteRecipe', async (request, response, next) =>
+app.post('/api/deleteRecipe', async (request, response, next) =>
 {
 	/*
 		Incoming:
@@ -215,7 +212,7 @@ app.post(BASE_URI + '/api/deleteRecipe', async (request, response, next) =>
 
 
 // Fetch recipe by id
-app.post(BASE_URI + '/api/fetchRecipeByID', async (request, response, next) => {
+app.post('/api/fetchRecipeByID', async (request, response, next) => {
 	/*
 		Incoming:
 		{
@@ -357,7 +354,7 @@ app.post(BASE_URI + '/api/fetchRecipeByID', async (request, response, next) => {
 
 
 // Fetches recipes according to title
-app.post(BASE_URI + '/api/fetchRecipes', async (request, response, next) => {
+app.post('/api/fetchRecipes', async (request, response, next) => {
 	/*
 		Incoming:
 		{
@@ -484,7 +481,7 @@ app.post(BASE_URI + '/api/fetchRecipes', async (request, response, next) => {
 
 
 // login endpoint
-app.post(BASE_URI + '/api/login', async (request, response, next) => 
+app.post('/api/login', async (request, response, next) => 
 {
 	/*
 		Incoming:
@@ -581,7 +578,7 @@ app.post(BASE_URI + '/api/login', async (request, response, next) =>
 
 
 // Modify Recipe Endpoint
-app.post(BASE_URI + '/api/modifyRecipe', async (request, response, next) =>
+app.post('/api/modifyRecipe', async (request, response, next) =>
 {
 	/*
 		Incoming (NULL indicates no change in field):
@@ -706,7 +703,7 @@ app.post(BASE_URI + '/api/modifyRecipe', async (request, response, next) =>
 
 
 // Register Endpoint
-app.post(BASE_URI + '/api/registerUser', async (request, response, next) =>
+app.post('/api/registerUser', async (request, response, next) =>
 {
 	/*
 		Incoming:
@@ -849,7 +846,7 @@ app.post(BASE_URI + '/api/registerUser', async (request, response, next) =>
 
 
 // Reset Password Endpoint
-app.post(BASE_URI + '/api/resetPassword', async (request, response, next) =>
+app.post('/api/resetPassword', async (request, response, next) =>
 {
 	/*
 		Incoming:
@@ -932,7 +929,7 @@ app.post(BASE_URI + '/api/resetPassword', async (request, response, next) =>
 
 
 // Update user information
-app.post(BASE_URI + '/api/updateUserInfo', async (request, response, next) =>
+app.post('/api/updateUserInfo', async (request, response, next) =>
 {
 	/*
 		Incoming:
