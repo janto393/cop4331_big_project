@@ -12,7 +12,7 @@ async function deleteRecipe(id)
 
     try
 	{
-		const response = fetch('https://brownie-points-4331-6.herokuapp.com:' + process.env.PORT + '/api/deleteRecipe',
+		const response = fetch('https://brownie-points-4331-6.herokuapp.com/api/deleteRecipe',
 			{
 				method:'POST', 
 				body : JSON.stringify(criteria),

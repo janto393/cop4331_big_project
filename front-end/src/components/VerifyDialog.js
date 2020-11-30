@@ -17,7 +17,7 @@ async function isVerified(userID)
 
 	try
 	{
-		const response = fetch('https://brownie-points-4331-6.herokuapp.com:' + process.env.PORT + '/api/updateUserInfo',
+		const response = fetch('https://brownie-points-4331-6.herokuapp.com/api/updateUserInfo',
 			{
 				method:'POST', 
 				body : JSON.stringify(criteria),
