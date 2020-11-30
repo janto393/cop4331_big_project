@@ -16,7 +16,7 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 // Deployment setup
-const BASE_URI = 'https://brownie-points-4331-6.herokuapp.com/';
+const BASE_URI = 'https://brownie-points-4331-6.herokuapp.com';
 
 const app = express();
 app.use(cors());
