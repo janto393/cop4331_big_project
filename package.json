@@ -13,8 +13,8 @@
     "url": "git+https://github.com/Deadcoast/cop4331_big_project.git"
   },
   "engines": {
-    "node": "15.x",
-    "npm": "6.x"
+    "node": "15.2.1",
+    "npm": "6.14.8"
   },
   "keywords": [],
   "author": "Joseph Badio, Anthony Mompoint",
