@@ -1,38 +1,35 @@
 // React imports
 import React, { useState } from 'react';
-import jwt_decode from 'jwt-decode';
-import Form from 'react-bootstrap/Form';
+import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
+
+import jwt_decode from 'jwt-decode';
 
 // enviornment variables
 const PORT = (process.env.PORT || 5000);
 
-async function resetPassword(userID, password)
+async function ResetPassword(data)
 {
-	// create a criteria package
 	const criteria = {
-		userID : userID,
+		userID : data.userID,
 		newInfo : {
-			password : password
+			password : data.password.value
 		}
 	};
 
 	try
 	{
-		const response = fetch('http://localhost:' + PORT + '/api/updateUserInfo',
+		return fetch('http://localhost:' + PORT + '/api/updatePassword',
 			{
 				method:'POST', 
 				body : JSON.stringify(criteria),
 				headers : {'Content-Type': 'application/json'}
 			});
-
-		return response;
 	}
 	catch(e)
 	{
-		console.log(e.toString());
-		return;
+		return 'Could not call API';
 	}
 }
 function UpdatePassword()
@@ -43,16 +40,23 @@ function UpdatePassword()
 	{
 		setMessage(newMessage);
 	}
-	var password;
-	var confirmPassword;
+	var incoming = {
+		password:'',
+		confirmPassword:''
+	}
 
 	const update = (event) =>
 	{
 		event.preventDefault();
 
-		if (password === '')
+		if (incoming.password === '')
 		{
 			changeMessage('New Password is required');
+			return;
+		}
+		if (incoming.password.value !== incoming.confirmPassword.value)
+		{
+			changeMessage('Passwords do not match.');
 			return;
 		}
 		// bring the URI to local scope
@@ -63,11 +67,12 @@ function UpdatePassword()
 		const extracted = regex.exec(uri);
 
 		const userID = extracted[0].slice(3);
-		var extractedData = {
-			password : password
-		}
+		const data = {
+			userID : userID,
+			password : incoming.password,
+		};
 
-		resetPassword(userID, extractedData.password)
+		ResetPassword(data)
 			.then(response => response.json())
 			.then(json => setMessage(jwt_decode(json).error));
 
@@ -78,11 +83,11 @@ function UpdatePassword()
 		<Form>
 		<Form.Group controlId="password">
 			<Form.Label>New Password:</Form.Label>
-			<Form.Control type="password" placeholder={'Password'} ref={(c) => password = c} />
+			<Form.Control type="password" placeholder={'Password'} ref={(c) => incoming.password = c} />
 		</Form.Group>
 		<Form.Group controlId="ConfirmPassword">
 			<Form.Label>Confirm New Password:</Form.Label>
-			<Form.Control type="password" placeholder={'Confirm Password'} ref={(c) => confirmPassword = c} />
+			<Form.Control type="password" placeholder={'Confirm Password'} ref={(c) => incoming.confirmPassword = c} />
 		</Form.Group>
 		<div className="submit-div">
 			<Button variant="outline-primary" onClick={update}>Submit</Button>

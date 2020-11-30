@@ -933,6 +933,55 @@ app.post('/api/SendResetPasswordEmail', async (request, response, next) =>
 });
 
 
+// Update password
+app.post('/api/updatePassword', async (request, response, next) =>
+{
+	/*
+		Incoming:
+		{
+			userID : string,
+			newInfo : json package
+		}
+
+		Outgoing:
+		{
+			success : bool,
+			error : string
+		}
+	*/ 
+	var returnPackage = {
+		success : false,
+		error : ''
+	}
+
+	const criteria = {
+		_id : ObjectID(request.body.userID)
+	}
+
+	const updatePackage = {
+		$set : request.body.newInfo
+	}
+
+	try
+	{
+		const db = await client.db(process.env.APP_DATABASE);
+
+		await db.collection(process.env.COLLECTION_USERS).updateOne(criteria, updatePackage);
+	}
+	catch (e)
+	{
+		returnPackage.error = e.toString();
+		const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+		response.status(500).json(encryptedPackage.compact());
+		return;
+	}
+	returnPackage.error = 'Password has been reset';
+	returnPackage.success = true;
+	const encryptedPackage = JWT.create(returnPackage, process.env.JWT_KEY);
+	response.status(200).json(encryptedPackage.compact());
+});
+
+
 
 // Update user information
 app.post('/api/updateUserInfo', async (request, response, next) =>
