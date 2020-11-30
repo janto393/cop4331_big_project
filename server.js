@@ -1,15 +1,11 @@
 // Program dependencies
+const express = require('express');
+require('dotenv').config();
 const bodyParser = require('body-parser');
 const unitConversion = require('convert-units');
-const { metric } = require('convert-units/lib/definitions/length');
 const cors = require('cors');
-const { response, request } = require('express');
-require('dotenv').config();
-const express = require('express');
-const { ObjectId } = require('mongodb');
 const MongoClient = require('mongodb').MongoClient;
 const ObjectID = require('mongodb').ObjectId;
-const path = require('path');
 
 // JWT utilities
 const JWT = require('njwt');
