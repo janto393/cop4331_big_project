@@ -40,19 +40,6 @@ const CreateRecipePage = () =>{
       instructions : [],
     };
 
-    
-    function buildPath(route)
-    {
-    // if (process.env.NODE_ENV === 'production') 
-    // {
-    //     return 'https://' + app_name +  '.herokuapp.com/' + route;
-    // }
-    // else
-    // {        
-        return 'http://localhost:5000' + route;
-    // }
-    }
-
     const addRecipe = async event => 
     {
 			event.preventDefault();
@@ -120,7 +107,7 @@ const CreateRecipePage = () =>{
 
       try
       {
-				const response = await fetch( buildPath('/api/createRecipe'),
+				const response = await fetch('https://brownie-points-4331-6.herokuapp.com/api/createRecipe',
 				{method:'POST',body:JSON.stringify(newRecipe),headers:{'Content-Type': 'application/json'}});
 				
 				var txt = await response.text();

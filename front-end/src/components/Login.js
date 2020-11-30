@@ -10,9 +10,6 @@ import './Login.css';
 // JWT includes
 import jwt_decode from 'jwt-decode';
 
-// enviornment variables
-const PORT = (process.env.PORT || 5000);
-
 function Login()
 {
 	var username, password;
@@ -44,7 +41,7 @@ function Login()
 		// try to do the login
 		try
 		{
-			const response = await fetch('http://localhost:' + PORT + '/api/login',
+			const response = await fetch('https://brownie-points-4331-6.herokuapp.com/api/login',
 				{
 					method:'POST',
 					body : JSON.stringify(apiPayload),

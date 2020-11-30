@@ -18,6 +18,9 @@ const JWT = require('njwt');
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
+// Deployment setup
+const BASE_URI = 'https://brownie-points-4331-6.herokuapp.com/';
+
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
@@ -31,6 +34,29 @@ const url = process.env.MONGODB_URI;
 // Initialize database object and connect
 const client = new MongoClient(url, { useUnifiedTopology: true });
 client.connect();
+
+// Server static assets if in production
+if (process.env.NODE_ENV === 'production') 
+{
+  // Set static folder
+  app.use(express.static('frontend/build'));
+
+  app.get('*', (req, res) => 
+	{
+    res.sendFile(path.resolve(__dirname, 'frontend', 'build', 'index.html'));
+  });
+}
+
+///////////////////////////////////////////////////
+// For Heroku deployment
+app.use(express.static(path.join(__dirname, 'frontend', 'build')));
+
+///////////////////////////////////////////////////
+// For Heroku deployment
+app.get('*', (req, res) => 
+{
+  res.sendFile(path.join(__dirname, 'frontend', 'build', 'index.html'))
+});
 
 // Access Control Logic
 app.use((request, response, next) => 
@@ -49,7 +75,7 @@ app.use((request, response, next) =>
 
 
 // Create new recipe endpoint. 
-app.post('/api/createRecipe', async (request, response, next) =>
+app.post(BASE_URI + '/api/createRecipe', async (request, response, next) =>
 {	
 	/*
 		Incoming:
@@ -149,7 +175,7 @@ app.post('/api/createRecipe', async (request, response, next) =>
 
 
 // delete recipe endpoint
-app.post('/api/deleteRecipe', async (request, response, next) =>
+app.post(BASE_URI + '/api/deleteRecipe', async (request, response, next) =>
 {
 	/*
 		Incoming:
@@ -203,7 +229,7 @@ app.post('/api/deleteRecipe', async (request, response, next) =>
 
 
 // Fetch recipe by id
-app.post('/api/fetchRecipeByID', async (request, response, next) => {
+app.post(BASE_URI + '/api/fetchRecipeByID', async (request, response, next) => {
 	/*
 		Incoming:
 		{
@@ -345,7 +371,7 @@ app.post('/api/fetchRecipeByID', async (request, response, next) => {
 
 
 // Fetches recipes according to title
-app.post('/api/fetchRecipes', async (request, response, next) => {
+app.post(BASE_URI + '/api/fetchRecipes', async (request, response, next) => {
 	/*
 		Incoming:
 		{
@@ -472,7 +498,7 @@ app.post('/api/fetchRecipes', async (request, response, next) => {
 
 
 // login endpoint
-app.post('/api/login', async (request, response, next) => 
+app.post(BASE_URI + '/api/login', async (request, response, next) => 
 {
 	/*
 		Incoming:
@@ -569,7 +595,7 @@ app.post('/api/login', async (request, response, next) =>
 
 
 // Modify Recipe Endpoint
-app.post('/api/modifyRecipe', async (request, response, next) =>
+app.post(BASE_URI + '/api/modifyRecipe', async (request, response, next) =>
 {
 	/*
 		Incoming (NULL indicates no change in field):
@@ -694,7 +720,7 @@ app.post('/api/modifyRecipe', async (request, response, next) =>
 
 
 // Register Endpoint
-app.post('/api/registerUser', async (request, response, next) =>
+app.post(BASE_URI + '/api/registerUser', async (request, response, next) =>
 {
 	/*
 		Incoming:
@@ -837,7 +863,7 @@ app.post('/api/registerUser', async (request, response, next) =>
 
 
 // Reset Password Endpoint
-app.post('/api/resetPassword', async (request, response, next) =>
+app.post(BASE_URI + '/api/resetPassword', async (request, response, next) =>
 {
 	/*
 		Incoming:
@@ -920,7 +946,7 @@ app.post('/api/resetPassword', async (request, response, next) =>
 
 
 // Update user information
-app.post('/api/updateUserInfo', async (request, response, next) =>
+app.post(BASE_URI + '/api/updateUserInfo', async (request, response, next) =>
 {
 	/*
 		Incoming:
@@ -1290,4 +1316,6 @@ async function processCategories(incoming)
 	return returnPackage;
 }
 
-app.listen(PORT); // start Node + Expresponses server on port 5000
+app.listen(PORT, () => {
+	console.log('Server Listening on port ' + PORT);
+});

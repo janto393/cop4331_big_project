@@ -7,8 +7,6 @@ import BootstrapSwitchButton from 'bootstrap-switch-button-react';
 // CSS imports
 import './Settings.css';
 
-const PORT = (process.env.PORT || 5000)
-
 function updateUserRecord(userData)
 {
 	const apiPayload = {
@@ -22,7 +20,7 @@ function updateUserRecord(userData)
 
 	try
 	{
-		const response = fetch('http://localhost:' + PORT + '/api/updateUserInfo',
+		const response = fetch('https://brownie-points-4331-6.herokuapp.com/api/updateUserInfo',
 			{
 				method:'POST',
 				body : JSON.stringify(apiPayload),

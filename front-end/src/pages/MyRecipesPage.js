@@ -36,7 +36,7 @@ function fetchRecipes(title, category)
 	// fetch the recipes from the database
 	try
 	{
-		const response = fetch('http://localhost:' + PORT + '/api/fetchRecipes',
+		const response = fetch('https://brownie-points-4331-6.herokuapp.com/api/fetchRecipes',
 			{
 				method:'POST',
 				body : JSON.stringify(criteria),

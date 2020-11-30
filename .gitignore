@@ -7,3 +7,6 @@ front-end/debug.log
 # ignore environment variables
 .env
 sendgrid.env
+
+# production
+#/build

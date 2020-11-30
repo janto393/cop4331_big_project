@@ -3,9 +3,6 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
-// enviornment variables
-const PORT = (process.env.PORT || 5000);
-
 async function deleteRecipe(id)
 {
     // create a criteria package
@@ -15,7 +12,7 @@ async function deleteRecipe(id)
 
     try
 	{
-		const response = fetch('http://localhost:' + PORT + '/api/deleteRecipe',
+		const response = fetch('https://brownie-points-4331-6.herokuapp.com/api/deleteRecipe',
 			{
 				method:'POST', 
 				body : JSON.stringify(criteria),

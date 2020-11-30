@@ -9,8 +9,6 @@ import './ViewRecipe.css';
 // jwt imports
 import jwt_decode from 'jwt-decode';
 
-const PORT = (process.env.PORT || 5000);
-
 async function fetchRecipe(id)
 {
 	// create a criteria package
@@ -21,7 +19,7 @@ async function fetchRecipe(id)
 	// fetch the recipe from the database
 	try
 	{
-		const response = fetch('http://localhost:' + PORT + '/api/fetchRecipeByID',
+		const response = fetch('https://brownie-points-4331-6.herokuapp.com/api/fetchRecipeByID',
 			{
 				method:'POST',
 				body : JSON.stringify(criteria),

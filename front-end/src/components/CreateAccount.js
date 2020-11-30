@@ -14,9 +14,6 @@ import jwt_decode from 'jwt-decode';
 // Misc. imports
 // const passwordHash = require('password-hash');
 
-// environment variables
-const PORT = (process.env.PORT || 5000);
-
 function Register()
 {
 	var username = '';
@@ -96,7 +93,7 @@ function Register()
 		// Call the register endpont and process data
 		try
 		{
-			const response = await fetch('http://localhost:' + PORT + '/api/registerUser',
+			const response = await fetch('https://brownie-points-4331-6.herokuapp.com/api/registerUser',
 				{
 					method : 'POST',
 					body : JSON.stringify(apiPayload),
