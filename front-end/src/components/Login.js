@@ -41,7 +41,7 @@ function Login()
 		// try to do the login
 		try
 		{
-			const response = await fetch('https://brownie-points-4331-6.herokuapp.com:' + process.env.PORT + '/api/login',
+			const response = await fetch('https://brownie-points-4331-6.herokuapp.com/api/login',
 				{
 					method:'POST',
 					body : JSON.stringify(apiPayload),
