@@ -22,3 +22,18 @@
 	font-family: "Courier New", Courier, monospace;
 	margin: auto;
 }
+
+.delete-recipe-button
+{
+	padding: 50%;
+}
+
+.button-container
+{
+	padding: 2%;
+}
+
+.outter-button-container
+{
+	display: inline;
+}
