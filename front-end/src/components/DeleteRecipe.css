@@ -1,7 +1,7 @@
 .alert-box
 {
 	display: block;
-	  width: 55%;
+	  width: 60%;
 	  margin: auto;
 	  text-align: center;
 	  padding: 1.5%;
@@ -18,7 +18,7 @@
 
 .question
 {
-    text-align: left;
+    text-align: center;
 	font-family: "Courier New", Courier, monospace;
 	margin: auto;
 }

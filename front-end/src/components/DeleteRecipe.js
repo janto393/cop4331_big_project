@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import buildPath from '../scripts/buildPath';
 
+import './DeleteRecipe.css'
+
 async function deleteRecipe(id)
 {
     // create a criteria package
@@ -73,9 +75,11 @@ class DeleteRecipe extends React.Component
         return(
             <div className="alert-box">
                 <h1 className="question">Are you sure you want to delete the current recipe?</h1>
+                <br />
                 <Link to='/recipes'>
                     <Button type="button" className="btn btn-info" onClick={() => deleteRecipe(this.recipeID)}>Yes</Button>
                 </Link>
+                <br />
                 <br />
                 <Link to='/recipes'>
                     <Button type="button" className="btn btn-info">No</Button>
