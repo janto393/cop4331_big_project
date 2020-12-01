@@ -1,9 +1,15 @@
 // React imports
 import React from 'react';
 import { Form } from 'react-bootstrap';
+import Col from 'react-bootstrap/Col';
+import Container from 'react-bootstrap/Container';
+
+
 
 // Component imports
 import RecipeCards from '../components/RecipeCards';
+
+import './MyRecipesPage.css';
 
 // JWT imports
 import jwt_decode from 'jwt-decode';
@@ -92,13 +98,17 @@ class MyRecipesPage extends React.Component
 		return (
 			<div>
 				<div className="searchbar-div">
+					<Container>
 					<Form>
 						<Form.Row>
 
+						<Col lg={8}>
 							<Form.Group>
 								<Form.Control type="text" placeholder="Recipe Title" onChange={handleTitleChange} />
 							</Form.Group>
+						</Col>
 							
+						<Col md={3}>
 							<Form.Group>
 								<Form.Control as="select" onChange={handleCategoryChange}>
 									<option>Any Category</option>
@@ -110,9 +120,11 @@ class MyRecipesPage extends React.Component
 									<option>Snacks</option>
 								</Form.Control>
 							</Form.Group>
+						</Col>
 
 						</Form.Row>
 					</Form>
+					</Container>
 				</div>
 				<RecipeCards recipes={this.state.data} />
 			</div>

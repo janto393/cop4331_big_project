@@ -84,23 +84,23 @@ class Settings extends React.Component
 				</Form.Group>
 
 				<Form.Group controlId="email">
-					<Form.Label>Email</Form.Label>
+					<Form.Label>Email:</Form.Label>
 					<Form.Control type="email" placeholder={this.userData.email} readOnly />
 				</Form.Group>
 
 				<Form.Group controlId="firstname">
-					<Form.Label>Firstname:</Form.Label>
+					<Form.Label>First Name:</Form.Label>
 					<Form.Control type="text" placeholder={this.userData.firstname} ref={(c) => newData.firstname = c} />
 				</Form.Group>
 
 				<Form.Group controlId="lastname">
-					<Form.Label>Lastname:</Form.Label>
+					<Form.Label>Last Name:</Form.Label>
 					<Form.Control type="text" placeholder={this.userData.lastname} ref={(c) => newData.lastname = c} />
 				</Form.Group>
 
 				<Form.Group controlId="unitSystem">
 					<div >
-						<Form.Label>Measurement System</Form.Label>
+						<Form.Label>Measurement System:</Form.Label>
 						<br />
 						<BootstrapSwitchButton onstyle="primary" offstyle="primary" width={100} checked={this.userData.usesMetric} onlabel='Metric' offlabel='Imperial' onChange={(checked) => {this.userData.usesMetric = checked}} />
 					</div>
