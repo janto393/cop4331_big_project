@@ -2,9 +2,7 @@
 import React from 'react';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
-
-// enviornment variables
-const PORT = (process.env.PORT || 5000);
+import buildPath from '../scripts/buildPath';
 
 async function deleteRecipe(id)
 {
@@ -15,7 +13,7 @@ async function deleteRecipe(id)
 
     try
 	{
-		const response = fetch('http://localhost:' + PORT + '/api/deleteRecipe',
+		const response = fetch(buildPath('/api/deleteRecipe'),
 			{
 				method:'POST', 
 				body : JSON.stringify(criteria),

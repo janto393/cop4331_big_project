@@ -10,6 +10,8 @@ import uploadImage from '../scripts/uploadImage';
 // jwt imports
 import jwt_decode from 'jwt-decode';
 
+import buildPath from '../scripts/buildPath';
+
 const CreateRecipePage = () =>{
 
     const [message,setMessage] = useState('');
@@ -39,19 +41,6 @@ const CreateRecipePage = () =>{
       ingredients : [{ingredient:"", quantity: 0, unit: ""}],
       instructions : [],
     };
-
-    
-    function buildPath(route)
-    {
-    // if (process.env.NODE_ENV === 'production') 
-    // {
-    //     return 'https://' + app_name +  '.herokuapp.com/' + route;
-    // }
-    // else
-    // {        
-        return 'http://localhost:5000' + route;
-    // }
-    }
 
     const addRecipe = async event => 
     {

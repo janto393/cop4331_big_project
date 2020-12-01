@@ -9,7 +9,7 @@ import './ViewRecipe.css';
 // jwt imports
 import jwt_decode from 'jwt-decode';
 
-const PORT = (process.env.PORT || 5000);
+import buildPath from '../scripts/buildPath';
 
 async function fetchRecipe(id)
 {
@@ -21,7 +21,7 @@ async function fetchRecipe(id)
 	// fetch the recipe from the database
 	try
 	{
-		const response = fetch('http://localhost:' + PORT + '/api/fetchRecipeByID',
+		const response = fetch(buildPath('fetchRecipeByID'),
 			{
 				method:'POST',
 				body : JSON.stringify(criteria),

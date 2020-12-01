@@ -5,8 +5,8 @@ import jwt_decode from 'jwt-decode';
 // CSS imports
 import './VerifyDialog.css';
 
-// enviornment variables
-const PORT = (process.env.PORT || 5000);
+import buildPath from '../scripts/buildPath';
+
 async function isVerified(userID)
 {
 	// create a criteria package
@@ -19,7 +19,7 @@ async function isVerified(userID)
 
 	try
 	{
-		const response = fetch('http://localhost:' + PORT + '/api/updateUserInfo',
+		const response = fetch(buildPath('updateUserInfo'),
 			{
 				method:'POST', 
 				body : JSON.stringify(criteria),
