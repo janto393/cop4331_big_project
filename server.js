@@ -924,7 +924,7 @@ app.post('/api/SendResetPasswordEmail', async (request, response, next) =>
 								'<p style="color:rgb(255, 255, 255); font-family: Courier New; text-align: center; font-size: 25px;">Here is your link to reset your password.</p>'+
 								'<br />'+
 								'<br />'+
-								'<a style="color:rgb(2, 6, 10); font-family: Courier New; font-weight: bold; text-align: center; font-size: 25px;" href="' + BUILD_PATH + '/api/updatePassword?id='+result._id+'/">Reset Password</a>'+
+								'<a style="color:rgb(2, 6, 10); font-family: Courier New; font-weight: bold; text-align: center; font-size: 25px;" href="' + BUILD_PATH + '/UpdatePassword?id='+result._id+'/">Reset Password</a>'+
 							'</div>'+
 						'</div>'
 		}
