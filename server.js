@@ -28,6 +28,18 @@ const PORT = process.env.PORT || 5000;
 app.set('port', PORT);
 const url = process.env.MONGODB_URI;
 
+// Server static assets if in production
+if (process.env.NODE_ENV === 'production') 
+{
+  // Set static folder
+  app.use(express.static(path.join(__dirname, 'front-end', 'build')));
+
+  app.get('*', (req, res) => 
+	{
+    res.sendFile(path.join(__dirname, 'front-end', 'build', 'index.html'));
+	});
+}
+
 // Initialize database object and connect
 const client = new MongoClient(url, { useUnifiedTopology: true });
 client.connect();

@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "node server.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false cd front-end && npm install && npm run build"
   },
   "repository": {
     "type": "git",
@@ -42,7 +43,6 @@
     "mongodb": "^3.6.3",
     "njwt": "^1.0.0",
     "nodemon": "^2.0.6",
-    "react-icons": "^3.11.0",
     "sendgrid": "^5.2.3"
   },
   "license": "ISC",
