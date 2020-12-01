@@ -28,6 +28,8 @@ const PORT = process.env.PORT || 5000;
 app.set('port', PORT);
 const url = process.env.MONGODB_URI;
 
+var BUILD_PATH;
+
 // Server static assets if in production
 if (process.env.NODE_ENV === 'production') 
 {
@@ -38,6 +40,12 @@ if (process.env.NODE_ENV === 'production')
 	{
     res.sendFile(path.join(__dirname, 'front-end', 'build', 'index.html'));
 	});
+
+	BUILD_PATH = 'https://brownie-points-4331-6.herokuapp.com';
+}
+else
+{
+	BUILD_PATH = 'http://localhost:5000';
 }
 
 // Initialize database object and connect
@@ -823,7 +831,7 @@ app.post('/api/registerUser', async (request, response, next) =>
 							'<p style="color:rgb(255, 255, 255); font-family: Courier New; font-weight: bold; text-align: center; font-size: 25px;">In order to login into your account you must verify your email address by clicking the button at the end of this email.</p>'+
 							'<br />'+
 							'<br />'+
-							'<a style="color:rgb(2, 6, 10); font-family: Courier New; font-weight: bold; text-align: center; font-size: 25px;" href="http://localhost:3000/verify?id=id/" target="_blank">Click Here to Verify Email!</a>'+
+							'<a style="color:rgb(2, 6, 10); font-family: Courier New; font-weight: bold; text-align: center; font-size: 25px;" href="' + BUILD_PATH + '/verify?id=' + id + '" target="_blank">Click Here to Verify Email!</a>'+
 						'</div>'+
 					'</div>'
 	}
@@ -910,14 +918,15 @@ app.post('/api/SendResetPasswordEmail', async (request, response, next) =>
 			from: 'browniepoints12345@gmail.com', // Change to your verified sender
 			subject: 'Reset Password',
 			html: '<div>'+
-					'<div style="margin:0 auto;background-color:#e699ff;width:770;height:120px;border:1px solid #000;">'+
-					'<h1 style="color:rgb(0, 0, 0);text-align:center;font-size: 50px;">Click the link to reset your password.</h1>'+
-					'</div>'+
-					'<div style="margin:0 auto;background-color:#00ffff;width:770px;height:400px;border:1px solid #000;">'+
-
-					'<a style="font-weight: bold; text-align: center;font-size: 25px;" href="http://localhost:3000/updatePassword?id='+result._id+'/">Verify Email</a>'+
-						'</div>'+
-				'</div>'
+							'<div style="width: 60%; margin: auto; text-align: center; padding: 3%; border: 3px solid black; border-radius: 10%; margin: 0; position: absolute; top: 50%; left: 50%; -ms-transform: translate(-50%, -50%); transform: translate(-50%, -50%); background-color: rgb(177, 28, 28);">'+
+								'<h1 style="color:rgb(247, 240, 240); font-family: Courier New; text-align:center; font-size: 50px;">Hello from Brownie Points!</h1>'+
+								'<br />'+
+								'<p style="color:rgb(255, 255, 255); font-family: Courier New; text-align: center; font-size: 25px;">Here is your link to reset your password.</p>'+
+								'<br />'+
+								'<br />'+
+								'<a style="color:rgb(2, 6, 10); font-family: Courier New; font-weight: bold; text-align: center; font-size: 25px;" href="' + BUILD_PATH + '/api/updatePassword?id='+result._id+'/">Reset Password</a>'+
+							'</div>'+
+						'</div>'
 		}
 	
 		try

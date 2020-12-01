@@ -15,7 +15,7 @@ function SendResetPasswordEmail(request)
 {
 	try
 	{
-		return fetch(buildPath('resetPassword'),
+		return fetch(buildPath('SendResetPasswordEmail'),
 			{
 				method:'POST',
 				body : JSON.stringify(request),
