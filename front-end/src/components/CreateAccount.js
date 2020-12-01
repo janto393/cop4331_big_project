@@ -185,6 +185,7 @@ function Register()
 					<br />
 					<div className="submit-div">
 						<Form.Label className="form-label">Unit System</Form.Label>
+						<br />
 						<BootstrapSwitchButton className="measurement-switch" onstyle="primary" offstyle="primary" width={100} checked={true} onlabel="Metric" offlabel="Imperial" onChange={changeMeasurementSystem} />
 						<br />
 						<br />

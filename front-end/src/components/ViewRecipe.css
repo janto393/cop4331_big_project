@@ -16,3 +16,10 @@
 	max-height: 30%;
 	max-width: 100%;
 }
+
+.delete-button-container
+{
+	padding: 2%;
+	text-align: center;
+	margin: auto;
+}

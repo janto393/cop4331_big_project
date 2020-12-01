@@ -4,6 +4,8 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 import buildPath from '../scripts/buildPath';
 
+import './DeleteRecipe.css'
+
 async function deleteRecipe(id)
 {
     // create a criteria package
@@ -13,7 +15,7 @@ async function deleteRecipe(id)
 
     try
 	{
-		const response = fetch(buildPath('/api/deleteRecipe'),
+		const response = fetch(buildPath('deleteRecipe'),
 			{
 				method:'POST', 
 				body : JSON.stringify(criteria),
@@ -70,16 +72,24 @@ class DeleteRecipe extends React.Component
 
     render()
     {
+			const handleDelete = () =>
+			{
+				deleteRecipe(this.recipeID);
+			};
+
         return(
-            <div>
-                <h1>Are you sure you want to delete the current recipe?</h1>
-                <Link to='/recipes'>
-                    <Button type="button" className="btn btn-info" onClick={() => deleteRecipe(this.recipeID)}>Yes</Button>
-                </Link>
+            <div className="alert-box">
+                <h1 className="question">Are you sure you want to delete the current recipe?</h1>
                 <br />
-                <Link to='/recipes'>
-                    <Button type="button" className="btn btn-info">No</Button>
-                </Link>
+								<div className="outter-button-container">
+										<Link to='/recipes'>
+											<Button variant="danger" type="button" className="btn btn-info" onClick={handleDelete}>Yes</Button>
+										</Link>
+										<span>        </span>
+										<Link to='/recipes'>
+											<Button type="button" className="btn btn-info">No</Button>
+										</Link>`
+								</div>
             </div>
         );
     }
