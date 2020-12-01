@@ -144,7 +144,29 @@ function renderRecipe(recipe)
 	}
 
 	var userData = JSON.parse(localStorage.getItem('user_data'));
-	// console.log(recipe.recipeID);
+
+	const renderDeleteButton = () =>
+	{
+		if (recipe.author.userID === userData.userID)
+		{
+			return (
+				<div className="delete-button-container">
+					<Link to={'/DeleteRecipe?id=' + recipe.recipeID}>
+						<Button variant="danger"> Delete </Button>
+					</Link>
+				</div>
+			);
+		}
+		else
+		{
+			return (
+				<div>
+
+				</div>
+			);
+		}
+	};
+
 	return (
 		<div className="recipe-div">
 			<div className="recipe-title-div">
@@ -172,19 +194,7 @@ function renderRecipe(recipe)
 					</ListGroup>
 				</div>
 				<div>
-					{recipe.author.userID === userData.userID ?
-					<div>
-						<Link to={'/DeleteRecipe?id=' + recipe.recipeID}>
-							<Button variant="danger"> Delete </Button>
-						</Link>
-						<Button> Edit </Button></div> :
-					<div>
-						<small><em>*Only the author can delete and edit this recipe*</em></small><br/>
-						<Button disabled='true' variant="danger"> Delete </Button>
-						<Button disabled='true'> Edit </Button>
-					</div>
-					}
-					
+					{renderDeleteButton()}
 				</div>
 			</div>
 		</div>
