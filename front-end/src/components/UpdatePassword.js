@@ -5,6 +5,7 @@ import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
 import jwt_decode from 'jwt-decode';
+import buildPath from '../scripts/buildPath';
 
 // enviornment variables
 const PORT = (process.env.PORT || 5000);
@@ -20,7 +21,7 @@ async function ResetPassword(data)
 
 	try
 	{
-		return fetch('http://localhost:' + PORT + '/api/updatePassword',
+		return fetch(buildPath('updatePassword'),
 			{
 				method:'POST', 
 				body : JSON.stringify(criteria),
