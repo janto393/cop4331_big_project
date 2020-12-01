@@ -109,7 +109,7 @@ const CreateRecipePage = () =>{
 
       try
       {
-				const response = await fetch( buildPath('/api/createRecipe'),
+				const response = await fetch( buildPath('createRecipe'),
 				{method:'POST',body:JSON.stringify(newRecipe),headers:{'Content-Type': 'application/json'}});
 				
 				var txt = await response.text();
