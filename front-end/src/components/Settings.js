@@ -77,6 +77,10 @@ class Settings extends React.Component
 
 		return (
 			<div className="settings-dialog">
+				{/* <div className="settingsHeader"> */}
+					<h1 className="settingsHeader">Settings</h1>
+				{/* </div> */}
+
 				<Form.Group controlId="username">
 					<Form.Label>Username:</Form.Label>
 					<Form.Control type="username" placeholder={this.userData.username} readOnly />

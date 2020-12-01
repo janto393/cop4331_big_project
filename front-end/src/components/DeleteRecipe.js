@@ -71,8 +71,8 @@ class DeleteRecipe extends React.Component
     render()
     {
         return(
-            <div>
-                <h1>Are you sure you want to delete the current recipe?</h1>
+            <div className="alert-box">
+                <h1 className="question">Are you sure you want to delete the current recipe?</h1>
                 <Link to='/recipes'>
                     <Button type="button" className="btn btn-info" onClick={() => deleteRecipe(this.recipeID)}>Yes</Button>
                 </Link>

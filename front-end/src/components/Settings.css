@@ -4,11 +4,20 @@
 	background-color: white;
 	margin: auto;
 	padding: 5%;
+	font-family: "Courier New", Courier, monospace;
+}
+
+.settingsHeader
+{
+	font-family: "Courier New", Courier, monospace;
+	font-weight: bold;
+	text-align: center;
 }
 
 .submit-div
 {
 	text-align: center;
+	font-family: "Courier New", Courier, monospace;
 }
 
 .measurement-dropdown
