@@ -9,14 +9,13 @@ import './ForgotPassword.css';
 
 // jwt imports
 import jwt_decode from 'jwt-decode';
-
-const PORT = (process.env.PORT || 5000);
+import buildPath from '../scripts/buildPath';
 
 function resetPassword(request)
 {
 	try
 	{
-		return fetch('http://localhost:' + PORT + '/api/resetPassword',
+		return fetch(buildPath('resetPassword'),
 			{
 				method:'POST',
 				body : JSON.stringify(request),

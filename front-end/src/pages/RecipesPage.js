@@ -13,8 +13,7 @@ import './RecipesPage.css';
 // jwt imports
 import jwt_decode from 'jwt-decode';
 
-// environment variables
-const PORT = (process.env.PORT || 5000);
+import buildPath from '../scripts/buildPath';
 
 function fetchRecipes(title, category)
 {
@@ -41,7 +40,7 @@ function fetchRecipes(title, category)
 	// fetch the recipes from the database
 	try
 	{
-		const response = fetch('http://localhost:' + PORT + '/api/fetchRecipes',
+		const response = fetch(buildPath('fetchRecipes'),
 			{
 				method:'POST',
 				body : JSON.stringify(criteria),

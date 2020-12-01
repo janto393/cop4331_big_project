@@ -6,8 +6,7 @@ import BootstrapSwitchButton from 'bootstrap-switch-button-react';
 
 // CSS imports
 import './Settings.css';
-
-const PORT = (process.env.PORT || 5000)
+import buildPath from '../scripts/buildPath';
 
 function updateUserRecord(userData)
 {
@@ -22,7 +21,7 @@ function updateUserRecord(userData)
 
 	try
 	{
-		const response = fetch('http://localhost:' + PORT + '/api/updateUserInfo',
+		const response = fetch(buildPath('updateUserInfo'),
 			{
 				method:'POST',
 				body : JSON.stringify(apiPayload),

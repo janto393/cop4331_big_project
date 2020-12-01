@@ -9,9 +9,7 @@ import './Login.css';
 
 // JWT includes
 import jwt_decode from 'jwt-decode';
-
-// enviornment variables
-const PORT = (process.env.PORT || 5000);
+import buildPath from '../scripts/buildPath';
 
 function Login()
 {
@@ -44,7 +42,7 @@ function Login()
 		// try to do the login
 		try
 		{
-			const response = await fetch('http://localhost:' + PORT + '/api/login',
+			const response = await fetch(buildPath('login'),
 				{
 					method:'POST',
 					body : JSON.stringify(apiPayload),

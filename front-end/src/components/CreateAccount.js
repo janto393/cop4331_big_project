@@ -12,11 +12,11 @@ import './CreateAccount.css'
 // JWT imports
 import jwt_decode from 'jwt-decode';
 
+// Script imports
+import buildPath from '../scripts/buildPath';
+
 // Misc. imports
 // const passwordHash = require('password-hash');
-
-// environment variables
-const PORT = (process.env.PORT || 5000);
 
 function Register()
 {
@@ -97,7 +97,7 @@ function Register()
 		// Call the register endpont and process data
 		try
 		{
-			const response = await fetch('http://localhost:' + PORT + '/api/registerUser',
+			const response = await fetch(buildPath('registerUser'),
 				{
 					method : 'POST',
 					body : JSON.stringify(apiPayload),
