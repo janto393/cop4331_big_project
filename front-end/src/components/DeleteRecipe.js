@@ -31,7 +31,8 @@ async function deleteRecipe(id)
         // Route back to recipes
         else
         {
-            return;
+					window.location.href = "/myrecipes";
+					return;
         }	
     }
 	catch(e)

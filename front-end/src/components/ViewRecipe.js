@@ -1,6 +1,6 @@
 // React imports
 import React from 'react';
-import { Image, ListGroup, Button, Alert } from 'react-bootstrap';
+import { Image, ListGroup, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 // CSS imports
