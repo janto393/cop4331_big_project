@@ -7,6 +7,17 @@ import './VerifyDialog.css';
 
 import buildPath from '../scripts/buildPath';
 
+// Server static assets if in production
+var BUILD_PATH;
+if (process.env.NODE_ENV === 'production') 
+{
+	BUILD_PATH = 'https://brownie-points-4331-6.herokuapp.com';
+}
+else
+{
+	BUILD_PATH = 'http://localhost:3000';
+}
+
 async function isVerified(userID)
 {
 	// create a criteria package
@@ -70,11 +81,9 @@ class VerifyDialog extends React.Component
 			<div className="emailVerification-fluid">
 				<div className="verifiedMessage">
 					<h1 className="text">Your email has been verified!</h1>
-				{/* </div> */}
-				{/* <div className="body" style={{margin:"0 auto",backgroundColor:"#00ffff",width:"770px", height:"300px", border:"1px solid #000"}}> */}
 					<br />
 					<p className="text">Please press the link to continue to the login page and start making your mouthwatering recipes.</p>
-					<a className="text" href="http://localhost:3000">
+					<a className="text" href={BUILD_PATH}>
 						Go to Login
 					</a>
 				</div>
