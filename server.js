@@ -45,7 +45,7 @@ if (process.env.NODE_ENV === 'production')
 }
 else
 {
-	BUILD_PATH = 'http://localhost:5000';
+	BUILD_PATH = 'http://localhost:3000';
 }
 
 // Initialize database object and connect

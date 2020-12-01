@@ -4,6 +4,9 @@ import { Form } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
 import { Link } from 'react-router-dom';
 
+// CSS imports
+import './UpdatePassword.css';
+
 import jwt_decode from 'jwt-decode';
 import buildPath from '../scripts/buildPath';
 
@@ -80,27 +83,33 @@ function UpdatePassword()
 	}
 
 	return(
-		<div>
-		<Form>
-		<Form.Group controlId="password">
-			<Form.Label>New Password:</Form.Label>
-			<Form.Control type="password" placeholder={'Password'} ref={(c) => incoming.password = c} />
-		</Form.Group>
-		<Form.Group controlId="ConfirmPassword">
-			<Form.Label>Confirm New Password:</Form.Label>
-			<Form.Control type="password" placeholder={'Confirm Password'} ref={(c) => incoming.confirmPassword = c} />
-		</Form.Group>
-		<div className="submit-div">
-			<Button variant="outline-primary" onClick={update}>Submit</Button>
-		</div>
-		</Form>
-		<div className="message-div">
-				<span>{message}</span>
+		<div className="update-password-page">
+			<div className="update-password-dialog">
+				<Form>
+					<Form.Group controlId="password">
+						<Form.Label>New Password:</Form.Label>
+						<Form.Control type="password" placeholder={'Password'} ref={(c) => incoming.password = c} />
+					</Form.Group>
+
+					<Form.Group controlId="ConfirmPassword">
+			 			<Form.Label>Confirm New Password:</Form.Label>
+						<Form.Control type="password" placeholder={'Confirm Password'} ref={(c) => incoming.confirmPassword = c} />
+					</Form.Group>
+
+					<div className="submit-div">
+						<Button variant="outline-primary" onClick={update}>Submit</Button>
+					</div>
+				</Form>
+
+				<div className="message-div">
+						<span>{message}</span>
+				</div>
+				
+				<div className="link-div">
+					<Link to="/">Return to Login</Link>
+				</div>
 			</div>
-		<div className="link-div">
-			<Link to="/">Return to Login</Link>
 		</div>
-	</div>
 	);
 
     
