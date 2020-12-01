@@ -1,39 +1,91 @@
+.container-fluid 
+{
+	background: url("./img/registration_background.jpg") no-repeat center fixed;
+	background-size: cover;
+	min-height: 100vh;
+	height: 100%;
+	width: 100vw;
+}
+
 .register-dialog
 {
-	border: 3px solid black;
-	margin: auto;
+	  display: block;
+	  width: 55%;
+	  margin: auto;
+	  text-align: center;
+	  padding: 1.5%;
+	  border: 3px solid black;
+	  border-radius: 10%;
+	  margin: 0;
+	  position: absolute;
+	  top: 50%;
+	  left: 50%;
+	  -ms-transform: translate(-50%, -50%);
+	  transform: translate(-50%, -50%);
+	  background-color: white;
+}
+
+.dialog-headers
+{
 	text-align: center;
-	width: 60%;
-	display: block;
 }
 
 .register-text-input
 {
-	font-size: 16pt;
-	padding: 12px 20px;
-	border-radius: 5%;
-	border: 3px solid lightgray;
+	font-family: "Courier New", Courier, monospace;
+	border-radius: 0%;
+	width: 80%;
+	text-align: center;
+	margin: auto;
+	border: 1px solid gray;
 }
 
 .create-account-form
 {
 	text-align: left;
+	font-family: "Courier New", Courier, monospace;
 	margin: auto;
 }
 
-.measurement-switch-div
+.measurement-switch
 {
-	padding: 5%;
+	padding: 2.5%;
 }
 
 .form-div
 {
-	text-align: left;
-	margin: auto;
+	text-align: center;
+	font-family: "Courier New", Courier, monospace;
 }
 
 .form-label
 {
 	font-size: 16pt;
-	padding: 2px 5px;
+	font-family: "Courier New", Courier, monospace;
+	font-weight: bold;
+	text-align: center;
+	/* padding: 0.5% 1%; */
+}
+
+.submit-div
+{
+	font-family: "Courier New", Courier, monospace;
+}
+
+.dialog-headers 
+{
+	font-size: 30pt;
+	font-family: "Courier New", Courier, monospace;
+	font-weight: bold;
+}
+
+.returnLogIn 
+{
+	font-family: "Courier New", Courier, monospace;
+	text-align: center;
+}
+
+.error-message
+{
+	font-style: normal red;
 }

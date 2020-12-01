@@ -1,6 +1,6 @@
 // React imports
 import React from 'react';
-import { Image, ListGroup } from 'react-bootstrap';
+import { Image, ListGroup, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 // CSS imports
@@ -9,7 +9,7 @@ import './ViewRecipe.css';
 // jwt imports
 import jwt_decode from 'jwt-decode';
 
-const PORT = (process.env.PORT || 5000);
+import buildPath from '../scripts/buildPath';
 
 async function fetchRecipe(id)
 {
@@ -21,7 +21,7 @@ async function fetchRecipe(id)
 	// fetch the recipe from the database
 	try
 	{
-		const response = fetch('http://localhost:' + PORT + '/api/fetchRecipeByID',
+		const response = fetch(buildPath('fetchRecipeByID'),
 			{
 				method:'POST',
 				body : JSON.stringify(criteria),
@@ -36,6 +36,7 @@ async function fetchRecipe(id)
 		return;
 	}
 }
+
 
 function renderCategory(category, index)
 {
@@ -114,6 +115,8 @@ function renderInstruction(instruction, index)
 	);
 }
 
+
+
 // takes a json package with the shematic of the return
 // package from the fetchRecipByID API endpoint
 function renderRecipe(recipe)
@@ -140,6 +143,30 @@ function renderRecipe(recipe)
 		);
 	}
 
+	var userData = JSON.parse(localStorage.getItem('user_data'));
+
+	const renderDeleteButton = () =>
+	{
+		if (recipe.author.userID === userData.userID)
+		{
+			return (
+				<div className="delete-button-container">
+					<Link to={'/DeleteRecipe?id=' + recipe.recipeID}>
+						<Button variant="danger"> Delete </Button>
+					</Link>
+				</div>
+			);
+		}
+		else
+		{
+			return (
+				<div>
+
+				</div>
+			);
+		}
+	};
+
 	return (
 		<div className="recipe-div">
 			<div className="recipe-title-div">
@@ -165,6 +192,9 @@ function renderRecipe(recipe)
 					<ListGroup className="instructions-list">
 						{recipe.instructions.map(renderInstruction)}
 					</ListGroup>
+				</div>
+				<div>
+					{renderDeleteButton()}
 				</div>
 			</div>
 		</div>

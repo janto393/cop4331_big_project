@@ -6,8 +6,7 @@ import BootstrapSwitchButton from 'bootstrap-switch-button-react';
 
 // CSS imports
 import './Settings.css';
-
-const PORT = (process.env.PORT || 5000)
+import buildPath from '../scripts/buildPath';
 
 function updateUserRecord(userData)
 {
@@ -22,7 +21,7 @@ function updateUserRecord(userData)
 
 	try
 	{
-		const response = fetch('http://localhost:' + PORT + '/api/updateUserInfo',
+		const response = fetch(buildPath('updateUserInfo'),
 			{
 				method:'POST',
 				body : JSON.stringify(apiPayload),
@@ -78,29 +77,33 @@ class Settings extends React.Component
 
 		return (
 			<div className="settings-dialog">
+				{/* <div className="settingsHeader"> */}
+					<h1 className="settingsHeader">Settings</h1>
+				{/* </div> */}
+
 				<Form.Group controlId="username">
 					<Form.Label>Username:</Form.Label>
 					<Form.Control type="username" placeholder={this.userData.username} readOnly />
 				</Form.Group>
 
 				<Form.Group controlId="email">
-					<Form.Label>Email</Form.Label>
+					<Form.Label>Email:</Form.Label>
 					<Form.Control type="email" placeholder={this.userData.email} readOnly />
 				</Form.Group>
 
 				<Form.Group controlId="firstname">
-					<Form.Label>Firstname:</Form.Label>
+					<Form.Label>First Name:</Form.Label>
 					<Form.Control type="text" placeholder={this.userData.firstname} ref={(c) => newData.firstname = c} />
 				</Form.Group>
 
 				<Form.Group controlId="lastname">
-					<Form.Label>Lastname:</Form.Label>
+					<Form.Label>Last Name:</Form.Label>
 					<Form.Control type="text" placeholder={this.userData.lastname} ref={(c) => newData.lastname = c} />
 				</Form.Group>
 
 				<Form.Group controlId="unitSystem">
 					<div >
-						<Form.Label>Measurement System</Form.Label>
+						<Form.Label>Measurement System:</Form.Label>
 						<br />
 						<BootstrapSwitchButton onstyle="primary" offstyle="primary" width={100} checked={this.userData.usesMetric} onlabel='Metric' offlabel='Imperial' onChange={(checked) => {this.userData.usesMetric = checked}} />
 					</div>

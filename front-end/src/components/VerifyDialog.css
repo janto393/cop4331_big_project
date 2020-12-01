@@ -1,0 +1,32 @@
+.emailVerification-fluid 
+{
+    background: url("./img/tableSetting.jpg") no-repeat center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    height: 100%;
+    width: 100vw;
+}
+
+.verifiedMessage
+{
+    display: block;
+    width: 40%;
+	margin: auto;
+	text-align: center;
+	padding: 3%;
+	border: 3px solid black;
+	border-radius: 10%;
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	background-color: white;
+    font-family: "Courier New", Courier, monospace;
+}
+
+.text
+{
+    font-family: "Courier New", Courier, monospace;
+}

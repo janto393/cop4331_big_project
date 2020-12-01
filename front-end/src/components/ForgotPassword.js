@@ -9,14 +9,13 @@ import './ForgotPassword.css';
 
 // jwt imports
 import jwt_decode from 'jwt-decode';
-
-const PORT = (process.env.PORT || 5000);
+import buildPath from '../scripts/buildPath';
 
 function SendResetPasswordEmail(request)
 {
 	try
 	{
-		return fetch('http://localhost:' + PORT + '/api/SendResetPasswordEmail',
+		return fetch(buildPath('resetPassword'),
 			{
 				method:'POST',
 				body : JSON.stringify(request),
@@ -80,6 +79,7 @@ function ForgotPassword()
 	}
 
 	return (
+		<div className="forgotpwpage-fluid">
 		<div className="forgot-password-dialog">
 			<Form>
 				<div className="dialog-header-div">
@@ -105,6 +105,7 @@ function ForgotPassword()
 			<div className="link-div">
 				<Link to="/">Return to Login</Link>
 			</div>
+		</div>
 		</div>
 	);
 }

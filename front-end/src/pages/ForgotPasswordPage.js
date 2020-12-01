@@ -6,7 +6,7 @@ import ForgotPassword from '../components/ForgotPassword';
 const ForgotPasswordPage = () =>
 {
 	return (
-		<div>
+		<div className="forgotPw">
 			<ForgotPassword />
 		</div>
 	);
