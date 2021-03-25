@@ -1,8 +1,26 @@
-# Getting Started with Create React App
+# Brownie Points Front-end Server
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This is the root directory for the front-end server of Brownie Points.
 
-## Available Scripts
+## Starting the React Server
+
+### Requirements
+
+You will need a bash terminal with NPM and Node.js installed.
+
+### Starting the Server
+
+To start the server, run the following commands
+
+- `sudo npm install`
+  - you must run the command with `sudo` to allow npm to create a `node_modules` directory and generate a `package-lock.json` file
+- `npm start`
+
+### Note
+
+The front-end server will not be fully functional without a correctly configured Express server running. To run the Express server, follow [these directions](../README.md).
+
+## Available NPM Scripts
 
 In the project directory, you can run:
 
